@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "998693616871",
+    "project_id": "project-management-18ec8",
+    "storage_bucket": "project-management-18ec8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998693616871:android:5bbd72513492171ee57642",
+        "android_client_info": {
+          "package_name": "com.ezzy.projectmanagement"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998693616871-605cbnmb2012j80862kf61v3lq4itdp7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNoHfVFhALMaCoKbs8Q5UAFvP_kbisfxw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998693616871-605cbnmb2012j80862kf61v3lq4itdp7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

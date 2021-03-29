@@ -4,6 +4,7 @@ const val hilt_version = "2.33-beta"
 object BuildPlugins {
     private object Version {
         const val buildToolsVersion = "4.1.2"
+        const val gsmVersion = "4.3.5"
     }
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Version.buildToolsVersion}"
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
@@ -14,6 +15,8 @@ object BuildPlugins {
     const val kotlinKapt = "kotlin-kapt"
     const val daggerPlugin = "dagger.hilt.android.plugin"
     const val navigationSafeArgs = "androidx.navigation.safeargs.kotlin"
+    const val googleServices = "com.google.gms:google-services:${Version.gsmVersion}"
+    const val googleServicesPlugin = "com.google.gms.google-services"
 }
 
 object AndroidSDK {
@@ -66,4 +69,12 @@ object Dependencies {
     const val multiDex = "androidx.multidex:multidex:${Versions.multidexVersion}"
     const val sdpAndroid = "com.intuit.sdp:sdp-android:${Versions.sdpAndroidVersion}"
     const val sspAndroid = "com.intuit.ssp:ssp-android:${Versions.sdpAndroidVersion}"
+
+    const val firebase = "com.google.firebase:firebase-bom:${Versions.firebaseVersion}"
+    const val firebaseAnalytics = "com.google.firebase:firebase-analytics-ktx"
+    const val firebaseFireStore = "com.google.firebase:firebase-firestore-ktx"
+    const val firebaseStorage = "com.google.firebase:firebase-storage-ktx"
+    const val firebaseAuth = "com.google.firebase:firebase-auth-ktx"
+    const val firebaseUiAuth = "com.firebaseui:firebase-ui-auth:${Versions.firebaseUiVersion}"
+    const val firebaseUiForFirestore = "com.firebaseui:firebase-ui-firestore:${Versions.firebaseUiVersion}"
 }

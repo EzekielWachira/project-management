@@ -4,6 +4,7 @@ plugins {
     id(BuildPlugins.kotlinKapt)
     id(BuildPlugins.daggerPlugin)
     id(BuildPlugins.navigationSafeArgs)
+    id(BuildPlugins.googleServicesPlugin)
 }
 
 android {
@@ -84,5 +85,14 @@ dependencies {
 
     implementation(Dependencies.sdpAndroid)
     implementation(Dependencies.sspAndroid)
+
+    //Firebase
+    implementation(platform(Dependencies.firebase))
+    implementation(Dependencies.firebaseAnalytics)
+    implementation(Dependencies.firebaseFireStore)
+    implementation(Dependencies.firebaseStorage)
+    implementation(Dependencies.firebaseAuth)
+    implementation(Dependencies.firebaseUiAuth)
+    implementation(Dependencies.firebaseUiForFirestore)
 
 }
