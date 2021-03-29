@@ -1,0 +1,17 @@
+object Versions {
+    const val constrainLayoutVersion = "2.0.4"
+    const val materialDesignVersion = "1.3.0"
+    const val appCompatVersion = "1.2.0"
+    const val navVersion = "2.3.3"
+    const val lifecycleVersion = "2.3.0"
+    const val roomVersion = "2.2.6"
+    const val coroutinesVersion = "1.4.2"
+    const val workVersion = "2.5.0"
+    const val coreKtxVersion = "1.3.2"
+    const val multidexVersion = "2.0.1"
+    const val glideVersion = "4.12.0"
+    const val timberVersion = "4.7.1"
+    const val circleImageViewVersion = "3.1.0"
+    const val sdpAndroidVersion = "1.0.6"
+    const val legacySupportVersion = "1.0.0"
+}
