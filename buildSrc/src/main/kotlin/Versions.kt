@@ -16,4 +16,5 @@ object Versions {
     const val legacySupportVersion = "1.0.0"
     const val firebaseVersion = "26.8.0"
     const val firebaseUiVersion = "7.1.1"
+    const val coroutinesForFirebaseVersion = "1.1.1"
 }

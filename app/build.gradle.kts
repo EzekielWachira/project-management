@@ -94,5 +94,6 @@ dependencies {
     implementation(Dependencies.firebaseAuth)
     implementation(Dependencies.firebaseUiAuth)
     implementation(Dependencies.firebaseUiForFirestore)
+    implementation(Dependencies.coroutinesForFirebase)
 
 }

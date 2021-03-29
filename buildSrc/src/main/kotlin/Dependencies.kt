@@ -77,4 +77,5 @@ object Dependencies {
     const val firebaseAuth = "com.google.firebase:firebase-auth-ktx"
     const val firebaseUiAuth = "com.firebaseui:firebase-ui-auth:${Versions.firebaseUiVersion}"
     const val firebaseUiForFirestore = "com.firebaseui:firebase-ui-firestore:${Versions.firebaseUiVersion}"
+    const val coroutinesForFirebase = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.coroutinesForFirebaseVersion}"
 }
