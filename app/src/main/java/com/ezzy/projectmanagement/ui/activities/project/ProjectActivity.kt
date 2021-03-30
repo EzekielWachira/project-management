@@ -58,6 +58,9 @@ class ProjectActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
+            R.id.actionSearch -> {
+                makeToast("Search")
+            }
             R.id.actionChatroom -> {
                 makeToast("chatrooms")
             }

@@ -41,13 +41,13 @@ class ProjectFragment : Fragment() {
 
     private val tabSelectedListener = object : TabLayout.OnTabSelectedListener {
         override fun onTabSelected(tab: TabLayout.Tab?) {
-            if (tab != null) {
+            tab?.let {
                 binding.projectViewPager.currentItem = tab.position
             }
         }
 
         override fun onTabUnselected(tab: TabLayout.Tab?) {
-            TODO("Not yet implemented")
+            tab?.let { return }
         }
 
         override fun onTabReselected(tab: TabLayout.Tab?) {
