@@ -15,8 +15,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ProjectActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var authUser: FirebaseUser
+//    @Inject
+//    lateinit var authUser: FirebaseUser
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
 

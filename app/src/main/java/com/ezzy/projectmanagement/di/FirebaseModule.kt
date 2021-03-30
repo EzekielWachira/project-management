@@ -26,7 +26,7 @@ object FirebaseModule {
     @Singleton
     fun provideAuthUi() : AuthUI = AuthUI.getInstance()
 
-    @Provides
-    @Singleton
-    fun provideAuthUser(firebaseAuth: FirebaseAuth) : FirebaseUser = firebaseAuth!!.currentUser
+//    @Provides
+//    @Singleton
+//    fun provideAuthUser(firebaseAuth: FirebaseAuth) : FirebaseUser = firebaseAuth!!.currentUser
 }
