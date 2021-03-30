@@ -6,8 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ezzy.projectmanagement.R
+import com.ezzy.projectmanagement.adapters.viewpager.ProjectViewPagerAdapter
 import com.ezzy.projectmanagement.databinding.FragmentProfileBinding
 import com.ezzy.projectmanagement.databinding.FragmentProjectBinding
+import com.ezzy.projectmanagement.util.Constants.TAB_TITLES
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class ProjectFragment : Fragment() {
 
@@ -20,7 +24,36 @@ class ProjectFragment : Fragment() {
             inflater, container, false
         )
 
+        binding.projectViewPager.apply {
+            adapter = ProjectViewPagerAdapter(this@ProjectFragment)
+        }
+
+        TabLayoutMediator(
+            binding.projectTabLayout, binding.projectViewPager
+        ) { tab: TabLayout.Tab, position: Int ->
+            tab.text = TAB_TITLES[position]
+        }.attach()
+
+        binding.projectTabLayout.addOnTabSelectedListener(tabSelectedListener)
+
         return binding.root
+    }
+
+    private val tabSelectedListener = object : TabLayout.OnTabSelectedListener {
+        override fun onTabSelected(tab: TabLayout.Tab?) {
+            if (tab != null) {
+                binding.projectViewPager.currentItem = tab.position
+            }
+        }
+
+        override fun onTabUnselected(tab: TabLayout.Tab?) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onTabReselected(tab: TabLayout.Tab?) {
+            TODO("Not yet implemented")
+        }
+
     }
 
     override fun onDestroy() {

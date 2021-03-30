@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.project.ProjectFragment">
 
     <LinearLayout
@@ -12,18 +12,18 @@
         android:orientation="vertical">
 
         <com.google.android.material.tabs.TabLayout
+            android:id="@+id/projectTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/projectTabLayout"
-            app:tabIndicatorColor="@color/white"
+            app:tabIndicatorColor="@color/orange"
             app:tabIndicatorGravity="bottom"
-            app:tabMode="scrollable"
-            app:tabTextColor="@color/orange"/>
+            app:tabMode="auto"
+            app:tabTextColor="@color/orange" />
 
         <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/projectViewPager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/projectViewPager"/>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
