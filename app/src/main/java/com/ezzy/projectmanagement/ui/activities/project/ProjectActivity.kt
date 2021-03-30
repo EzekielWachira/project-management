@@ -13,6 +13,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityProjectBinding
 import com.ezzy.projectmanagement.ui.activities.auth.LoginActivity
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -24,6 +25,8 @@ class ProjectActivity : AppCompatActivity() {
 //    lateinit var authUser: FirebaseUser
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
+    @Inject
+    lateinit var authUI: AuthUI
 
     private lateinit var binding : ActivityProjectBinding
     private lateinit var projectNavHostContainer : FragmentContainerView
@@ -62,7 +65,15 @@ class ProjectActivity : AppCompatActivity() {
                 makeToast("Organizations")
             }
             R.id.actionLogout -> {
-                makeToast("Logout")
+                authUI.signOut(this).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        makeToast("Logged out successfully")
+                        startActivity(
+                            Intent(this, LoginActivity::class.java)
+                        )
+                        finish()
+                    }
+                }
             }
         }
         return super.onOptionsItemSelected(item)
