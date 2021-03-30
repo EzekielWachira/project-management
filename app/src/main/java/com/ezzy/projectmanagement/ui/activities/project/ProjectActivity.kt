@@ -3,6 +3,8 @@ package com.ezzy.projectmanagement.ui.activities.project
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.findNavController
@@ -39,34 +41,32 @@ class ProjectActivity : AppCompatActivity() {
             makeToast("You are already logged in")
         }
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.projectNavHostContainer) as NavHostFragment
         val navController = this.findNavController(R.id.projectNavHostContainer)
-
-//        projectNavHostContainer = binding.projectNavHostContainer
 
         binding.bottomNavigation.setupWithNavController(
             navController
         )
     }
-//
-//    private fun setUpBottomNavigation() {
-//        binding.bottomNavigation.setOnNavigationItemReselectedListener { menuItem ->
-//            when(menuItem.itemId) {
-//                R.id.projectFragment -> {
-//
-//                }
-//                R.id.activityFragment -> {
-//                    TODO("push navigation fragments")
-//                }
-//                R.id.calendarFragment -> {
-//                    TODO("push navigation fragments")
-//                }
-//                R.id.profileFragment -> {
-//                    TODO("push navigation fragments")
-//                }
-//            }
-//        }
-//    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.top_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.actionChatroom -> {
+                makeToast("chatrooms")
+            }
+            R.id.actionOrganization -> {
+                makeToast("Organizations")
+            }
+            R.id.actionLogout -> {
+                makeToast("Logout")
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     private fun makeToast(message : String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
