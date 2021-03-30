@@ -48,7 +48,6 @@ dependencies {
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.appCompat)
     implementation(Dependencies.materialComponents)
-    implementation(Dependencies.constraintlayout)
     testImplementation(TestLibraries.jUnit)
     androidTestImplementation(TestLibraries.testRunner)
     androidTestImplementation(TestLibraries.espresso)

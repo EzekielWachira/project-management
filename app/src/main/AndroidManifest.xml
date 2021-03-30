@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectManagement">
         <activity android:name=".ui.activities.auth.LoginActivity"></activity>
-        <activity android:name=".ui.activities.ProjectActivity">
+        <activity android:name=".ui.activities.project.ProjectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

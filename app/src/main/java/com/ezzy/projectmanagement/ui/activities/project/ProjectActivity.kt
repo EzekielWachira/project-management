@@ -1,14 +1,12 @@
-package com.ezzy.projectmanagement.ui.activities
+package com.ezzy.projectmanagement.ui.activities.project
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityProjectBinding
 import com.ezzy.projectmanagement.ui.activities.auth.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

@@ -6,13 +6,12 @@ import android.os.Bundle
 import android.widget.Toast
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityLoginBinding
-import com.ezzy.projectmanagement.ui.activities.ProjectActivity
+import com.ezzy.projectmanagement.ui.activities.project.ProjectActivity
 import com.ezzy.projectmanagement.util.Constants.SIGN_IN_REQUEST_CODE
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
