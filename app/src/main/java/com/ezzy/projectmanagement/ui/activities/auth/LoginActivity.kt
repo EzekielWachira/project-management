@@ -45,7 +45,8 @@ class LoginActivity : AppCompatActivity() {
         startActivityForResult(
             authUI.createSignInIntentBuilder()
                 .setAvailableProviders(providers)
-                .setIsSmartLockEnabled(false)
+                .setIsSmartLockEnabled(true)
+                .setTheme(R.style.Theme_ProjectManagement)
                 .build(),
             SIGN_IN_REQUEST_CODE
         )
@@ -58,7 +59,9 @@ class LoginActivity : AppCompatActivity() {
             if (resultCode == RESULT_OK) {
                 val user = firebaseAuth.currentUser
                 startActivity(
-                    Intent(this, ProjectActivity::class.java)
+                    Intent(this, ProjectActivity::class.java).apply {
+                        putExtra("user", user)
+                    }
                 )
             } else {
                 if (response == null){
