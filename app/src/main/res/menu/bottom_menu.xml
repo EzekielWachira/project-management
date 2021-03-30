@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/actionProjects"
+        android:id="@+id/projectFragment2"
         android:icon="@drawable/ic_folder_open"
         android:title="@string/projects" />
     <item
-        android:id="@+id/action"
+        android:id="@+id/activityFragment2"
         android:icon="@drawable/ic_auto_graph"
         android:title="@string/activity" />
     <item
-        android:id="@+id/actionCalendar"
+        android:id="@+id/calendarFragment2"
         android:icon="@drawable/ic_date_range"
         android:title="@string/calendar" />
     <item
-        android:id="@+id/actionProfile"
+        android:id="@+id/profileFragment2"
         android:icon="@drawable/ic_account_circle"
         android:title="@string/profile" />
 </menu>
