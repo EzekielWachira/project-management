@@ -16,6 +16,8 @@
     <string name="project_description">Project description</string>
     <string name="project_stage">Project stage</string>
     <string name="add_members">Add members</string>
+    <string name="start_date">start date</string>
+    <string name="end_date">end date</string>
     <string-array name="project_stages">
         <item>Initial</item>
         <item>Ongoing</item>
