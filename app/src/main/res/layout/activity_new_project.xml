@@ -6,4 +6,98 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.newproject.NewProjectActivity">
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/project_details"
+        android:textSize="@dimen/_16ssp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:id="@+id/projectDetailsTextView"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:id="@+id/projectTitleHolder"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintTop_toTopOf="@+id/projectDetailsTextView"
+        android:layout_marginTop="@dimen/_30sdp"
+        app:counterEnabled="true"
+        app:counterMaxLength="50"
+        app:endIconMode="clear_text"
+        android:hint="@string/project_title"
+        app:startIconDrawable="@drawable/ic_new_folder"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        tools:layout_editor_absoluteY="107dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/projectTitleEditText"
+             />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/projectDescriptionHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/projectTitleHolder"
+        app:layout_constraintEnd_toEndOf="@+id/projectTitleHolder"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/projectTitleHolder"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:endIconMode="clear_text"
+        android:hint="@string/project_description"
+        app:startIconDrawable="@drawable/ic_info"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/projectDescriptionEditText"
+            android:inputType="textMultiLine"
+             />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/projectStageHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/projectDescriptionHolder"
+        android:hint="@string/project_stage"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/projectDescriptionHolder"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:startIconDrawable="@drawable/ic_info"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        >
+
+        <AutoCompleteTextView
+            android:id="@+id/projectStageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="none"
+            android:text="@string/project_stage" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/buttonAddMember"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:drawableStart="@drawable/ic_add_circle_"
+        android:drawablePadding="@dimen/_10sdp"
+        android:text="@string/add_members"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintStart_toStartOf="@+id/projectStageHolder"
+        app:layout_constraintTop_toBottomOf="@+id/projectStageHolder" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

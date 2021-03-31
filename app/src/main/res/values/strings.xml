@@ -11,4 +11,14 @@
     <string name="logout">Logout</string>
     <string name="search">Search</string>
     <string name="new_project">New Project</string>
+    <string name="project_title">Project title</string>
+    <string name="project_details">Project details</string>
+    <string name="project_description">Project description</string>
+    <string name="project_stage">Project stage</string>
+    <string name="add_members">Add members</string>
+    <string-array name="project_stages">
+        <item>Initial</item>
+        <item>Ongoing</item>
+        <item>Completed</item>
+    </string-array>
 </resources>
