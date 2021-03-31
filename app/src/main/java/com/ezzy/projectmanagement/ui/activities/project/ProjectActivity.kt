@@ -13,6 +13,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityProjectBinding
 import com.ezzy.projectmanagement.ui.activities.auth.LoginActivity
+import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,6 +59,11 @@ class ProjectActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
+            R.id.actionNewProject -> {
+                startActivity(
+                    Intent(this, NewProjectActivity::class.java)
+                )
+            }
             R.id.actionSearch -> {
                 makeToast("Search")
             }
