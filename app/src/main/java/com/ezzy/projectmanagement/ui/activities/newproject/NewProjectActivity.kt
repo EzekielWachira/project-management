@@ -8,6 +8,7 @@ import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityNewProjectBinding
 import com.ezzy.projectmanagement.ui.bottomsheet.OptionsBottomSheet
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,22 +30,27 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
         }
 
         binding.startDateEditText.setOnClickListener {
-            showDatePicker("Select project start date")
+            showDatePicker("Select project start date", binding.startDateEditText)
         }
 
         binding.endDateEditText.setOnClickListener {
-            showDatePicker("Select project end date")
+            showDatePicker("Select project end date", binding.endDateEditText)
         }
 
     }
 
-    private fun showDatePicker(title : String) {
+    private fun showDatePicker(title : String, editText: TextInputEditText) {
         val datePicker = MaterialDatePicker.Builder.datePicker().apply {
             setTitleText(title)
             setInputMode(MaterialDatePicker.INPUT_MODE_TEXT)
             setSelection(MaterialDatePicker.todayInUtcMilliseconds())
         }.build()
         datePicker.show(supportFragmentManager, "DATE_PICKER")
+
+        datePicker.addOnPositiveButtonClickListener {
+            val date = datePicker.headerText
+            editText.setText(date)
+        }
     }
 
     override fun onResume() {
