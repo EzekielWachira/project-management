@@ -8,75 +8,73 @@
 
 
     <TextView
+        android:id="@+id/projectDetailsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/_10sdp"
         android:text="@string/project_details"
         android:textSize="@dimen/_16ssp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:id="@+id/projectDetailsTextView"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
         android:id="@+id/projectTitleHolder"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginEnd="@dimen/_10sdp"
-        app:layout_constraintTop_toTopOf="@+id/projectDetailsTextView"
         android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:hint="@string/project_title"
         app:counterEnabled="true"
         app:counterMaxLength="50"
         app:endIconMode="clear_text"
-        android:hint="@string/project_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/projectDetailsTextView"
         app:startIconDrawable="@drawable/ic_new_folder"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         tools:layout_editor_absoluteY="107dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/projectTitleEditText"
-             />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/projectDescriptionHolder"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/projectTitleHolder"
-        app:layout_constraintEnd_toEndOf="@+id/projectTitleHolder"
         android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginEnd="@dimen/_10sdp"
-        app:layout_constraintTop_toBottomOf="@+id/projectTitleHolder"
         android:layout_marginTop="@dimen/_10sdp"
-        app:endIconMode="clear_text"
+        android:layout_marginEnd="@dimen/_10sdp"
         android:hint="@string/project_description"
-        app:startIconDrawable="@drawable/ic_info"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        >
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="@+id/projectTitleHolder"
+        app:layout_constraintStart_toStartOf="@+id/projectTitleHolder"
+        app:layout_constraintTop_toBottomOf="@+id/projectTitleHolder"
+        app:startIconDrawable="@drawable/ic_info">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/projectDescriptionEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/projectDescriptionEditText"
-            android:inputType="textMultiLine"
-             />
+            android:inputType="textMultiLine" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/projectStageHolder"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/projectDescriptionHolder"
-        android:hint="@string/project_stage"
-        android:layout_marginEnd="@dimen/_10sdp"
-        app:layout_constraintTop_toBottomOf="@+id/projectDescriptionHolder"
         android:layout_marginTop="@dimen/_10sdp"
-        app:startIconDrawable="@drawable/ic_info"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        >
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:hint="@string/project_stage"
+        app:layout_constraintStart_toStartOf="@+id/projectDescriptionHolder"
+        app:layout_constraintTop_toBottomOf="@+id/projectDescriptionHolder"
+        app:startIconDrawable="@drawable/ic_info">
 
         <AutoCompleteTextView
             android:id="@+id/projectStageTextView"
@@ -89,16 +87,17 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
+        android:id="@+id/dateHolders"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/dateHolders"
         app:layout_constraintTop_toBottomOf="@+id/projectStageHolder">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/startDateWrapper"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -111,10 +110,9 @@
             app:startIconDrawable="@drawable/ic_date_range">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/startDateEditText"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -130,8 +128,8 @@
             app:startIconDrawable="@drawable/ic_date_range">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
                 android:id="@+id/endDateEditText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
