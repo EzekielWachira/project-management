@@ -2,6 +2,8 @@ package com.ezzy.projectmanagement.ui.activities.newproject
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.ezzy.projectmanagement.R
@@ -21,14 +23,6 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
         binding = ActivityNewProjectBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.buttonAddMember.setOnClickListener {
-            supportFragmentManager?.let {
-                OptionsBottomSheet.newInstance(Bundle()).apply {
-                    show(it, tag)
-                }
-            }
-        }
-
         binding.showBottomSheet.setOnClickListener {
             supportFragmentManager?.let {
                 OptionsBottomSheet.newInstance(Bundle()).apply {
@@ -45,6 +39,18 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
             showDatePicker("Select project end date", binding.endDateEditText)
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.new_project_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.actionSave -> makeToast("Save clicked")
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun showDatePicker(title : String, editText: TextInputEditText) {
