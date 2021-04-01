@@ -53,8 +53,8 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
             showDatePicker("Select project end date", binding.endDateEditText)
         }
 
-        projectViewModel.isError.observe(this, Observer {
-            if (it) {
+        projectViewModel.isError.observe(this, Observer { isError ->
+            if (isError) {
                 makeToast(projectViewModel.errorMessage.toString())
             } else {
                 makeToast("Project added succesfully")

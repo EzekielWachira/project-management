@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/_10sdp"
+    android:background="@drawable/snackbar_bg"
+    >
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    android:layout_width="match_parent"
     android:padding="@dimen/_10sdp"
     android:layout_height="wrap_content">
 
 
-    <ImageView
-        android:id="@+id/dropSnackbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_line"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+
 
     <TextView
         android:id="@+id/teamMembersTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/team_members"
+        android:textColor="@color/black"
         android:textSize="@dimen/_16sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dropSnackbar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/layoutMembers"
@@ -80,14 +81,6 @@
 
         </LinearLayout>
 
-        <Button
-            android:layout_weight="3"
-            app:icon="@drawable/ic_add_circle_"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Add"
-            android:textSize="@dimen/_14ssp"
-            android:textAllCaps="false"/>
 
 
     </LinearLayout>
@@ -97,6 +90,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_70sdp"
+        android:visibility="gone"
         android:layout_marginTop="@dimen/_5sdp"
         android:gravity="center_vertical"
         android:weightSum="10"
@@ -177,25 +171,71 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/attach_document"
+        android:layout_marginTop="@dimen/_5sdp"
         android:textSize="@dimen/_14ssp"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         android:id="@+id/attachDocTxt"/>
 
     <LinearLayout
-        android:layout_width="@dimen/_60sdp"
-        android:layout_height="@dimen/_60sdp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/wheat_bg"
-        android:padding="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_80sdp"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@+id/attachDocTxt"
-        app:layout_constraintTop_toBottomOf="@+id/attachDocTxt">
+        app:layout_constraintTop_toBottomOf="@+id/attachDocTxt"
+        android:weightSum="100">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_attach_file"/>
+        <LinearLayout
+            android:layout_weight="25"
+            android:layout_width="0dp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_height="@dimen/_60sdp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/wheat_bg"
+            android:padding="@dimen/_10sdp"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_attach_file"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="25"
+            android:layout_width="0dp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_height="@dimen/_60sdp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/wheat_bg"
+            android:padding="@dimen/_10sdp"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_person_add"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="25"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_60sdp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/wheat_bg"
+            android:padding="@dimen/_10sdp"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_business"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

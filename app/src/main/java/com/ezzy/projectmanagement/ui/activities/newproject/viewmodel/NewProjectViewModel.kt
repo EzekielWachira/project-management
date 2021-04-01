@@ -32,7 +32,7 @@ class NewProjectViewModel @Inject constructor(
                     Log.d(TAG, "addProject: Success")
                 }.addOnFailureListener{
                     Log.d(TAG, "addProject: ${it.message}")
-                }
+                }.await()
             isError.postValue(false)
         } catch (e : Exception) {
             isError.postValue(true)

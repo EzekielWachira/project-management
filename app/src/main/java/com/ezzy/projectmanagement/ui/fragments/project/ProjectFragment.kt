@@ -12,7 +12,9 @@ import com.ezzy.projectmanagement.databinding.FragmentProjectBinding
 import com.ezzy.projectmanagement.util.Constants.TAB_TITLES
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProjectFragment : Fragment() {
 
     private var _binding : FragmentProjectBinding? = null

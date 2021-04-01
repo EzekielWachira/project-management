@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.FragmentActivityBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ActivityFragment : Fragment() {
 
     private var _binding : FragmentActivityBinding? = null

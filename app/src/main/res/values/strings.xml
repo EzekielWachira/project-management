@@ -19,7 +19,7 @@
     <string name="start_date">start date</string>
     <string name="end_date">end date</string>
     <string name="team_members">Team members</string>
-    <string name="attach_document">Attach document</string>
+    <string name="attach_document">Attach document, add members, assign org</string>
     <string name="save">Save</string>
     <string-array name="project_stages">
         <item>Initial</item>
