@@ -2,26 +2,38 @@ package com.ezzy.projectmanagement.ui.activities.newproject
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityNewProjectBinding
+import com.ezzy.projectmanagement.model.Project
+import com.ezzy.projectmanagement.ui.activities.newproject.viewmodel.NewProjectViewModel
 import com.ezzy.projectmanagement.ui.bottomsheet.OptionsBottomSheet
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+private const val TAG = "NewProjectActivity"
 @AndroidEntryPoint
 class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickListener {
 
     private lateinit var binding : ActivityNewProjectBinding
+    private lateinit var projectViewModel: NewProjectViewModel
+    @Inject
+    lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNewProjectBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        projectViewModel = NewProjectViewModel(application, firebaseFirestore)
 
         binding.showBottomSheet.setOnClickListener {
             supportFragmentManager?.let {
@@ -39,6 +51,16 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
             showDatePicker("Select project end date", binding.endDateEditText)
         }
 
+        projectViewModel.isError.observe(this, Observer {
+            if (it) {
+                Log.d(TAG, "FIREBASE: ${projectViewModel.errorMessage.toString()}")
+                makeToast(projectViewModel.errorMessage.toString())
+            } else {
+                makeToast("Project added succesfully")
+            }
+        })
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -48,7 +70,27 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.actionSave -> makeToast("Save clicked")
+            R.id.actionSave -> {
+
+                if (isEmpty(binding.projectTitleEditText.text.toString()) ||
+                    isEmpty(binding.projectDescriptionEditText.text.toString()) ||
+                    isEmpty(binding.projectStageTextView.text.toString()) ||
+                    isEmpty(binding.startDateEditText.text.toString()) ||
+                    isEmpty(binding.endDateEditText.text.toString())
+                ) {
+                    makeToast("Please fill out all the fields")
+                } else {
+                    val project = Project(
+                        binding.projectTitleEditText.text.toString(),
+                        binding.projectDescriptionEditText.text.toString(),
+                        binding.projectStageTextView.text.toString(),
+                        binding.startDateEditText.text.toString(),
+                        binding.endDateEditText.text.toString()
+                    )
+                    Log.d(TAG, "PROJECTS: ${project}")
+                    projectViewModel.addProject(project)
+                }
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -79,6 +121,10 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
             "add" -> makeToast("Button add clicked")
             else -> makeToast("Nothing was clicked")
         }
+    }
+
+    private fun isEmpty(string: String): Boolean {
+        return string.isEmpty()
     }
 
     private fun makeToast(message : String) {
