@@ -14,7 +14,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class OptionsBottomSheet : BottomSheetDialogFragment() {
 
-    private lateinit var btnAdd : ImageButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,7 +21,6 @@ class OptionsBottomSheet : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view =  inflater.inflate(R.layout.new_project_bottom_sheet, container, false)
-        btnAdd = view.findViewById(R.id.btnAdd)
 
         return view
     }
@@ -33,11 +31,7 @@ class OptionsBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun setUpViews() {
-        btnAdd.setOnClickListener {
-            dismissAllowingStateLoss()
-            mListener?.onItemClick("add")
-            makeToast("btn add clicked")
-        }
+
     }
 
     private var mListener: ItemClickListener? = null

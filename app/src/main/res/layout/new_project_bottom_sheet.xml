@@ -1,75 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/_10sdp"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <ImageView
+        android:id="@+id/dropSnackbar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:src="@drawable/ic_line"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:weightSum="100"
-        >
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/teamMembersTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/team_members"
+        android:textSize="@dimen/_16sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dropSnackbar" />
+
+    <LinearLayout
+        android:weightSum="10"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/teamMembersTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="90">
+            android:layout_weight="7"
+            android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:src="@drawable/ezzy"
-                android:layout_marginEnd="@dimen/_5sdp"/>
+                app:civ_border_color="@color/lightGrey"
+                app:civ_border_width="@dimen/_1sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                app:civ_border_overlay="true"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:src="@drawable/ezzy"
-                android:layout_marginEnd="@dimen/_5sdp"/>
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
-                android:src="@drawable/ezzy"
-                android:layout_marginEnd="@dimen/_5sdp"/>
+                app:civ_border_color="@color/lightGrey"
+                app:civ_border_width="@dimen/_1sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                app:civ_border_overlay="true"/>
 
             <LinearLayout
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
-                android:gravity="center"
-                android:background="@drawable/placeholder_bg">
+                android:padding="@dimen/_2sdp"
+                android:background="@drawable/placeholder_background"
+                android:gravity="center">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="+3"
-                    android:textSize="@dimen/_16ssp"
-                    android:layout_gravity="center_vertical|center_horizontal"/>
+                    android:text="+2"
+                    android:textSize="@dimen/_14ssp"/>
 
             </LinearLayout>
 
-
         </LinearLayout>
 
-
-        <ImageButton
-            android:id="@+id/btnAdd"
+        <Button
+            android:layout_weight="3"
+            app:icon="@drawable/ic_add_circle_"
             android:layout_width="0dp"
-            android:layout_weight="10"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:src="@drawable/ic_add_circle_"
-            android:textAllCaps="false"
-            android:textSize="@dimen/_12ssp" />
+            android:text="Add"
+            android:textSize="@dimen/_14ssp"
+            android:textAllCaps="false"/>
+
 
     </LinearLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

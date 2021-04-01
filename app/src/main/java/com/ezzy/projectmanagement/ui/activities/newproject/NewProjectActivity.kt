@@ -29,6 +29,14 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
             }
         }
 
+        binding.showBottomSheet.setOnClickListener {
+            supportFragmentManager?.let {
+                OptionsBottomSheet.newInstance(Bundle()).apply {
+                    show(it, tag)
+                }
+            }
+        }
+
         binding.startDateEditText.setOnClickListener {
             showDatePicker("Select project start date", binding.startDateEditText)
         }
