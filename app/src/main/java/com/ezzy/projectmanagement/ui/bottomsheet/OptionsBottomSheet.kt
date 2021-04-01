@@ -8,12 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.Toast
 import com.ezzy.projectmanagement.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class OptionsBottomSheet : BottomSheetDialogFragment() {
 
+    private lateinit var layoutAddMember : LinearLayout
+    private lateinit var layoutAttachFile : LinearLayout
+    private lateinit var layoutAddOrg : LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,7 +25,9 @@ class OptionsBottomSheet : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view =  inflater.inflate(R.layout.new_project_bottom_sheet, container, false)
-
+        layoutAddMember = view.findViewById(R.id.layoutAddMember)
+        layoutAttachFile = view.findViewById(R.id.layoutAttachFile)
+        layoutAddOrg = view.findViewById(R.id.layoutAddOrg)
         return view
     }
 
@@ -31,7 +37,9 @@ class OptionsBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun setUpViews() {
-
+        layoutAttachFile.setOnClickListener {
+            mListener?.onItemClick("attachFile")
+        }
     }
 
     private var mListener: ItemClickListener? = null

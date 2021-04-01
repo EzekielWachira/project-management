@@ -13,6 +13,7 @@ import com.ezzy.projectmanagement.databinding.ActivityNewProjectBinding
 import com.ezzy.projectmanagement.model.Project
 import com.ezzy.projectmanagement.ui.activities.newproject.viewmodel.NewProjectViewModel
 import com.ezzy.projectmanagement.ui.bottomsheet.OptionsBottomSheet
+import com.ezzy.projectmanagement.ui.dialogs.AddMembersDialog
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
@@ -118,7 +119,9 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
 
     override fun onItemClick(item: String) {
         when(item){
-            "add" -> makeToast("Button add clicked")
+            "attachFile" -> AddMembersDialog().show(
+                supportFragmentManager, "ATTACH_FILE"
+            )
             else -> makeToast("Nothing was clicked")
         }
     }

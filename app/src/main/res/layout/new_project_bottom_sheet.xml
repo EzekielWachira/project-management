@@ -186,6 +186,7 @@
         android:weightSum="100">
 
         <LinearLayout
+            android:id="@+id/layoutAttachFile"
             android:layout_weight="25"
             android:layout_width="0dp"
             android:layout_marginEnd="@dimen/_5sdp"
@@ -202,6 +203,7 @@
 
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layoutAddMember"
             android:layout_weight="25"
             android:layout_width="0dp"
             android:layout_marginEnd="@dimen/_5sdp"
@@ -218,6 +220,7 @@
 
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layoutAddOrg"
             android:layout_weight="25"
             android:layout_width="0dp"
             android:layout_height="@dimen/_60sdp"
