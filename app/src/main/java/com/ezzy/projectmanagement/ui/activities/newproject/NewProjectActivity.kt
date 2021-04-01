@@ -33,6 +33,8 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
         binding = ActivityNewProjectBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.title = "New Project"
+
         projectViewModel = NewProjectViewModel(application, firebaseFirestore)
 
         binding.showBottomSheet.setOnClickListener {
