@@ -1,6 +1,7 @@
 package com.ezzy.projectmanagement.ui.activities.newproject.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -18,7 +19,7 @@ class NewProjectViewModel @Inject constructor(
     app: Application,
     val firebaseFirestore: FirebaseFirestore
 ) : AndroidViewModel (app){
-
+    private  val TAG = "NewProjectViewModel"
     private val _isError = MutableLiveData<Boolean>()
     val isError get() = _isError
     private val _errorMessage = MutableLiveData<String>()
@@ -26,7 +27,12 @@ class NewProjectViewModel @Inject constructor(
 
     fun addProject(project: Project) = viewModelScope.launch {
         try {
-            firebaseFirestore.collection(PROJECT_COLLECTION).add(project).await()
+            firebaseFirestore.collection(PROJECT_COLLECTION).add(project)
+                .addOnSuccessListener {
+                    Log.d(TAG, "addProject: Success")
+                }.addOnFailureListener{
+                    Log.d(TAG, "addProject: ${it.message}")
+                }
             isError.postValue(false)
         } catch (e : Exception) {
             isError.postValue(true)

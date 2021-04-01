@@ -55,7 +55,6 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
 
         projectViewModel.isError.observe(this, Observer {
             if (it) {
-                Log.d(TAG, "FIREBASE: ${projectViewModel.errorMessage.toString()}")
                 makeToast(projectViewModel.errorMessage.toString())
             } else {
                 makeToast("Project added succesfully")
@@ -89,7 +88,6 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
                         binding.startDateEditText.text.toString(),
                         binding.endDateEditText.text.toString()
                     )
-                    Log.d(TAG, "PROJECTS: ${project}")
                     projectViewModel.addProject(project)
                 }
             }
