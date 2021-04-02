@@ -22,6 +22,9 @@
     <string name="attach_document">Attach document, add members, assign org</string>
     <string name="save">Save</string>
     <string name="search_people">Search people</string>
+    <string name="search_organizations">search organizations</string>
+    <string name="done">Done</string>
+    <string name="organization_name">Organization name</string>
     <string-array name="project_stages">
         <item>Initial</item>
         <item>Ongoing</item>

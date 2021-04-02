@@ -37,8 +37,11 @@ class OptionsBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun setUpViews() {
-        layoutAttachFile.setOnClickListener {
+        layoutAddMember.setOnClickListener {
             mListener?.onItemClick("attachFile")
+        }
+        layoutAddOrg.setOnClickListener {
+            mListener?.onItemClick("addOrg")
         }
     }
 
