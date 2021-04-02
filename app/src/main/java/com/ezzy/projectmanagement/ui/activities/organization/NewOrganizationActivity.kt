@@ -71,20 +71,6 @@ class NewOrganizationActivity : AppCompatActivity() {
                             dialog?.dismiss()
                         }
                     }
-//                    if (options[which] == TAKE_PHOTO) {
-//                        val takePictureIntent = Intent(
-//                            android.provider.MediaStore.ACTION_IMAGE_CAPTURE
-//                        )
-//                        startActivityIfNeeded(takePictureIntent, TAKE_IMAGE_REQUEST_CODE)
-//                    } else if(options[which] == PICK_FROM_GALLERY) {
-//                        val photoIntent = Intent(
-//                            Intent.ACTION_PICK,
-//                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-//                        )
-//                        startActivityIfNeeded(photoIntent, PICK_PHOTO_REQUEST_CODE)
-//                    } else if (options[which] == CANCEL) {
-//                        dialog?.dismiss()
-//                    }
                 }
             })
             show()
@@ -155,10 +141,6 @@ class NewOrganizationActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         requestPermissions()
     }
-
-//    val dialogInterface = DialogInterface.OnClickListener { dialog, which ->
-//        TODO("Not yet implemented")
-//    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater?.inflate(R.menu.top_menu, menu)
