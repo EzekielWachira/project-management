@@ -23,10 +23,10 @@
         >
 
         <ImageView
+            android:id="@+id/orgImage"
             android:layout_width="@dimen/_80sdp"
             android:layout_height="@dimen/_80sdp"
-            android:src="@drawable/ic_add_photo"
-            android:id="@+id/orgImage"/>
+            android:src="@drawable/ic_add_photo" />
 
     </LinearLayout>
 

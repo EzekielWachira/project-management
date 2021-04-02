@@ -12,6 +12,11 @@
         android:icon="@drawable/ic_new_folder"
         app:showAsAction="ifRoom"/>
 
+    <item android:id="@+id/actionNewOrg"
+        android:title="@string/new_organization"
+        app:showAsAction="never"/>
+
+
     <item android:id="@+id/actionChatroom"
         android:title="@string/your_chatrooms"
         android:icon="@drawable/ic_chat"

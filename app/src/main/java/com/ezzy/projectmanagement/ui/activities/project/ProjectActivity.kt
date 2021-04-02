@@ -14,6 +14,7 @@ import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityProjectBinding
 import com.ezzy.projectmanagement.ui.activities.auth.LoginActivity
 import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
+import com.ezzy.projectmanagement.ui.activities.organization.NewOrganizationActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,6 +67,9 @@ class ProjectActivity : AppCompatActivity() {
             }
             R.id.actionSearch -> {
                 makeToast("Search")
+            }
+            R.id.actionNewOrg -> {
+                startActivity(Intent(this, NewOrganizationActivity::class.java))
             }
             R.id.actionChatroom -> {
                 makeToast("chatrooms")
