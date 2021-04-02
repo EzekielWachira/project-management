@@ -51,28 +51,26 @@ class NewOrganizationActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.apply {
             title = CHOOSE_IMAGE
-            setItems(options, object : DialogInterface.OnClickListener {
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-                    when(options[which]){
-                        TAKE_PHOTO -> {
-                            val takePictureIntent = Intent(
-                                MediaStore.ACTION_IMAGE_CAPTURE
-                            )
-                            startActivityIfNeeded(takePictureIntent, TAKE_IMAGE_REQUEST_CODE)
-                        }
-                        PICK_FROM_GALLERY -> {
-                            val photoIntent = Intent(
-                                Intent.ACTION_PICK,
-                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                            )
-                            startActivityIfNeeded(photoIntent, PICK_PHOTO_REQUEST_CODE)
-                        }
-                        CANCEL -> {
-                            dialog?.dismiss()
-                        }
+            setItems(options) { dialog, which ->
+                when (options[which]) {
+                    TAKE_PHOTO -> {
+                        val takePictureIntent = Intent(
+                            MediaStore.ACTION_IMAGE_CAPTURE
+                        )
+                        startActivityIfNeeded(takePictureIntent, TAKE_IMAGE_REQUEST_CODE)
+                    }
+                    PICK_FROM_GALLERY -> {
+                        val photoIntent = Intent(
+                            Intent.ACTION_PICK,
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                        )
+                        startActivityIfNeeded(photoIntent, PICK_PHOTO_REQUEST_CODE)
+                    }
+                    CANCEL -> {
+                        dialog?.dismiss()
                     }
                 }
-            })
+            }
             show()
         }
     }
