@@ -1,7 +1,6 @@
 package com.ezzy.projectmanagement.ui.activities.organization
 
 import android.Manifest.permission
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -11,6 +10,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +42,14 @@ class NewOrganizationActivity : AppCompatActivity() {
             requestPermissions()
         }
 
+    }
+
+    private fun increaseImageSize() {
+        val layoutParams : LinearLayout.LayoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        binding.orgImage.layoutParams = layoutParams
     }
 
     private fun selectImage() {
