@@ -37,8 +37,12 @@ class NewOrganizationActivity : AppCompatActivity() {
         binding = ActivityNewOrganizationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.apply {
+            title = "Create new organization"
+            setDisplayHomeAsUpEnabled(true)
+        }
+
         binding.orgImage.setOnClickListener {
-//            selectImage()
             requestPermissions()
         }
 
