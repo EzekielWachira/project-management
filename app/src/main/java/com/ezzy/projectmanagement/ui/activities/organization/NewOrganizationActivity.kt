@@ -141,7 +141,7 @@ class NewOrganizationActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater?.inflate(R.menu.top_menu, menu)
+        menuInflater?.inflate(R.menu.new_project_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
