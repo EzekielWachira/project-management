@@ -31,5 +31,9 @@ class OrganizationViewModel @Inject constructor(
                 isSuccess.postValue(false)
             }.await()
     }
+    
+    private fun saveOrgImage() =  viewModelScope.launch { 
+            
+    }
 
 }

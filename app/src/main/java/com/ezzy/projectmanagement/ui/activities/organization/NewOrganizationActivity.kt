@@ -72,11 +72,12 @@ class NewOrganizationActivity : AppCompatActivity() {
                         startActivityIfNeeded(takePictureIntent, TAKE_IMAGE_REQUEST_CODE)
                     }
                     PICK_FROM_GALLERY -> {
-                        val photoIntent = Intent(
-                            Intent.ACTION_PICK,
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                        )
-                        startActivityIfNeeded(photoIntent, PICK_PHOTO_REQUEST_CODE)
+                        Intent(
+                            Intent.ACTION_GET_CONTENT
+                        ).apply {
+                            type = "image/*"
+                            startActivityIfNeeded(this, PICK_PHOTO_REQUEST_CODE)
+                        }
                     }
                     CANCEL -> {
                         dialog?.dismiss()
@@ -100,24 +101,27 @@ class NewOrganizationActivity : AppCompatActivity() {
                     }
                 }
                 PICK_PHOTO_REQUEST_CODE -> {
-                    data?.let {
+                    data?.data?.let { it ->
                         if (resultCode == RESULT_OK) {
-                            val imageUri : Uri? = data.data
-                            val filePathColumn = arrayOf(
-                                MediaStore.Images.Media.DATA
-                            )
-                            imageUri?.let { uri ->
-                                val cursor = contentResolver.query(
-                                    uri, filePathColumn, null, null, null
-                                )
-                                cursor?.let {
-                                    cursor.moveToFirst()
-                                    val columnIndex = it.getColumnIndex(filePathColumn[0])
-                                    val imagePath = it.getString(columnIndex)
-                                    binding.orgImage.setImageBitmap(BitmapFactory.decodeFile(imagePath))
-                                    it.close()
-                                }
+                            val imageUri : Uri = it
+                            imageUri.let { uri ->
+                                binding.orgImage.setImageURI(uri)
                             }
+//                            val filePathColumn = arrayOf(
+//                                MediaStore.Images.Media.DATA
+//                            )
+//                            imageUri?.let { uri ->
+//                                val cursor = contentResolver.query(
+//                                    uri, filePathColumn, null, null, null
+//                                )
+//                                cursor?.let {
+//                                    cursor.moveToFirst()
+//                                    val columnIndex = it.getColumnIndex(filePathColumn[0])
+//                                    val imagePath = it.getString(columnIndex)
+//                                    binding.orgImage.setImageBitmap(BitmapFactory.decodeFile(imagePath))
+//                                    it.close()
+//                                }
+//                            }
                         }
                     }
                 }

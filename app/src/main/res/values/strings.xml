@@ -26,6 +26,7 @@
     <string name="done">Done</string>
     <string name="organization_name">Organization name</string>
     <string name="new_organization">New Organization</string>
+    <string name="organization_about">Organization about</string>
     <string-array name="project_stages">
         <item>Initial</item>
         <item>Ongoing</item>
