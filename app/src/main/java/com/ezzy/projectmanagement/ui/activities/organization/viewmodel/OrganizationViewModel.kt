@@ -29,14 +29,30 @@ class OrganizationViewModel @Inject constructor(
     private val _isImageUploaded = MutableLiveData<Boolean>()
     val isImageUploaded get() = _isImageUploaded
 
-    fun addOrganization(organization: Organization) {
+    fun addOrganization(organization: Organization, fileName : String, imageUri: Uri) {
         viewModelScope.launch {
-            firebaseFirestore.collection(ORGANIZATIONS).add(organization)
-                .addOnSuccessListener {
-                    isSuccess.postValue(true)
-                }.addOnFailureListener {
-                    isSuccess.postValue(false)
-                }.await()
+            try {
+                var imagePath : String? = null
+                val storageReference = firebaseStorage.reference.child("images/${ORGANIZATIONS}/$fileName")
+                storageReference.putFile(imageUri)
+                    .addOnSuccessListener {
+                        isImageUploaded.postValue(true)
+                        storageReference.downloadUrl.addOnSuccessListener { uri ->
+                            imagePath = uri.toString()
+                            organization.imageSrc = imagePath
+                            firebaseFirestore.collection(ORGANIZATIONS).add(organization)
+                                .addOnSuccessListener {
+                                    isSuccess.postValue(true)
+                                }.addOnFailureListener {
+                                    isSuccess.postValue(false)
+                                }
+                        }
+                    }.addOnFailureListener {
+                        isImageUploaded.postValue(false)
+                    }.await()
+            } catch (e: Exception) {
+                isImageUploaded.postValue(false)
+            }
         }
     }
     

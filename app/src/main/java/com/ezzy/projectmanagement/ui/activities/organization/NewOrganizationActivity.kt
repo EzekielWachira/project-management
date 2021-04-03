@@ -187,13 +187,15 @@ class NewOrganizationActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.actionSave -> {
                 picImageUri?.let { imageUri ->
-                    val image = orgViewModel.saveOrgImage(imageUri.getNameFromUri(this, imageUri), imageUri)
                     val organization = Organization(
                         binding.orgName.text.toString(),
-                        image,
+                        null,
                         binding.orgAbout.text.toString()
                     )
-                    orgViewModel.addOrganization(organization)
+                    orgViewModel.addOrganization(
+                        organization,
+                        imageUri.getNameFromUri(this, imageUri), imageUri
+                    )
                 }
             }
         }
