@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
@@ -19,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityNewOrganizationBinding
+import com.ezzy.projectmanagement.model.Organization
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
 import com.ezzy.projectmanagement.util.Constants.CANCEL
 import com.ezzy.projectmanagement.util.Constants.CHOOSE_IMAGE
@@ -34,6 +36,7 @@ import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+private const val TAG = "NewOrganizationActivity"
 @AndroidEntryPoint
 class NewOrganizationActivity : AppCompatActivity() {
 
@@ -51,7 +54,7 @@ class NewOrganizationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.apply {
-            title = "Create new organization"
+            title = "New organization"
             setDisplayHomeAsUpEnabled(true)
         }
 
@@ -66,6 +69,14 @@ class NewOrganizationActivity : AppCompatActivity() {
                 makeToast("Image uploaded successfully")
             } else {
                 makeToast("Couldn't upload image")
+            }
+        })
+
+        orgViewModel.isSuccess.observe(this, Observer { isSuccess ->
+            if (isSuccess) {
+                makeToast("organization added successfully")
+            } else {
+                makeToast("Error saving organization")
             }
         })
 
@@ -121,6 +132,7 @@ class NewOrganizationActivity : AppCompatActivity() {
                             val bitMap = data.extras?.get("data") as Bitmap
                             binding.orgImage.setImageBitmap(bitMap)
                             picImageUri = bitMap.convertToUri(this, bitMap)
+                            Log.d(TAG, "PHOTO: $picImageUri")
                         }
                     }
                 }
@@ -175,7 +187,13 @@ class NewOrganizationActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.actionSave -> {
                 picImageUri?.let { imageUri ->
-                    orgViewModel.saveOrgImage(imageUri.getNameFromUri(this, imageUri), imageUri)
+                    val image = orgViewModel.saveOrgImage(imageUri.getNameFromUri(this, imageUri), imageUri)
+                    val organization = Organization(
+                        binding.orgName.text.toString(),
+                        image,
+                        binding.orgAbout.text.toString()
+                    )
+                    orgViewModel.addOrganization(organization)
                 }
             }
         }
