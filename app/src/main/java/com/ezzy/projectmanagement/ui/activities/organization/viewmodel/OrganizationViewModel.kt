@@ -32,8 +32,8 @@ class OrganizationViewModel @Inject constructor(
             }.await()
     }
     
-    private fun saveOrgImage() =  viewModelScope.launch { 
-            
+    private fun saveOrgImage(fileName : String) =  viewModelScope.launch {
+            firebaseStorage.reference.child()
     }
 
 }

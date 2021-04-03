@@ -25,12 +25,14 @@ import com.ezzy.projectmanagement.util.Constants.PICK_PHOTO_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.REQUEST_PERMISSION_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_IMAGE_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_PHOTO
+import com.ezzy.projectmanagement.util.convertToUri
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NewOrganizationActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityNewOrganizationBinding
+    private var picImageUri : Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,6 +99,7 @@ class NewOrganizationActivity : AppCompatActivity() {
                         if (resultCode == RESULT_OK) {
                             val bitMap = data.extras?.get("data") as Bitmap
                             binding.orgImage.setImageBitmap(bitMap)
+                            picImageUri = bitMap.convertToUri(this, bitMap)
                         }
                     }
                 }
@@ -106,22 +109,8 @@ class NewOrganizationActivity : AppCompatActivity() {
                             val imageUri : Uri = it
                             imageUri.let { uri ->
                                 binding.orgImage.setImageURI(uri)
+                                picImageUri = uri
                             }
-//                            val filePathColumn = arrayOf(
-//                                MediaStore.Images.Media.DATA
-//                            )
-//                            imageUri?.let { uri ->
-//                                val cursor = contentResolver.query(
-//                                    uri, filePathColumn, null, null, null
-//                                )
-//                                cursor?.let {
-//                                    cursor.moveToFirst()
-//                                    val columnIndex = it.getColumnIndex(filePathColumn[0])
-//                                    val imagePath = it.getString(columnIndex)
-//                                    binding.orgImage.setImageBitmap(BitmapFactory.decodeFile(imagePath))
-//                                    it.close()
-//                                }
-//                            }
                         }
                     }
                 }
