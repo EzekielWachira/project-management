@@ -1,9 +1,11 @@
 package com.ezzy.projectmanagement.util
 
 import android.content.Context
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import java.io.ByteArrayOutputStream
 
 fun Bitmap.convertToUri(context: Context, bitmap: Bitmap) : Uri {
@@ -14,8 +16,29 @@ fun Bitmap.convertToUri(context: Context, bitmap: Bitmap) : Uri {
     )
     return Uri.parse(path)
 }
-//
-//fun Uri.getNameFromUri(uri: Uri) : String {
-//    var name : String? = null
-//    if (uri.scheme.equals("content"))
-//}
+
+fun Uri.getNameFromUri(context: Context, uri: Uri) : String {
+    var name : String? = null
+    if (uri.scheme.equals("content")) {
+        val cursor: Cursor? = context.contentResolver.query(
+            uri, null, null, null, null
+        )
+        try {
+            cursor?.let {
+                if (it.moveToFirst()){
+                    name = it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                }
+            }
+        } finally {
+            cursor?.close()
+        }
+    }
+    if (name == null) {
+        name = uri.path
+        val cut = name?.lastIndexOf("/")
+        if (cut != -1) {
+            name = name?.substring(cut!!.plus(1))
+        }
+    }
+    return name.toString()
+}

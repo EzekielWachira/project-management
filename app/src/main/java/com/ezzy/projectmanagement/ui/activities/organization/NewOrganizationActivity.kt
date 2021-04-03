@@ -28,6 +28,7 @@ import com.ezzy.projectmanagement.util.Constants.REQUEST_PERMISSION_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_IMAGE_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_PHOTO
 import com.ezzy.projectmanagement.util.convertToUri
+import com.ezzy.projectmanagement.util.getNameFromUri
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
@@ -174,7 +175,7 @@ class NewOrganizationActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.actionSave -> {
                 picImageUri?.let { imageUri ->
-                    orgViewModel.saveOrgImage(imageUri., imageUri)
+                    orgViewModel.saveOrgImage(imageUri.getNameFromUri(this, imageUri), imageUri)
                 }
             }
         }
