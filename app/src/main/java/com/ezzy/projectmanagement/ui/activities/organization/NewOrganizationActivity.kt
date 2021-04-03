@@ -16,8 +16,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityNewOrganizationBinding
+import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
 import com.ezzy.projectmanagement.util.Constants.CANCEL
 import com.ezzy.projectmanagement.util.Constants.CHOOSE_IMAGE
 import com.ezzy.projectmanagement.util.Constants.PICK_FROM_GALLERY
@@ -26,13 +28,21 @@ import com.ezzy.projectmanagement.util.Constants.REQUEST_PERMISSION_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_IMAGE_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_PHOTO
 import com.ezzy.projectmanagement.util.convertToUri
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class NewOrganizationActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityNewOrganizationBinding
     private var picImageUri : Uri? = null
+    @Inject
+    lateinit var firebaseStorage : FirebaseStorage
+    @Inject
+    lateinit var firestore: FirebaseFirestore
+    lateinit var orgViewModel : OrganizationViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,9 +54,19 @@ class NewOrganizationActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
+        orgViewModel = OrganizationViewModel(application, firestore, firebaseStorage)
+
         binding.orgImage.setOnClickListener {
             requestPermissions()
         }
+
+        orgViewModel.isImageUploaded.observe(this, Observer {
+            if (it) {
+                makeToast("Image uploaded successfully")
+            } else {
+                makeToast("Couldn't upload image")
+            }
+        })
 
     }
 
@@ -153,7 +173,9 @@ class NewOrganizationActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.actionSave -> {
-                makeToast("Action save")
+                picImageUri?.let { imageUri ->
+                    orgViewModel.saveOrgImage(imageUri., imageUri)
+                }
             }
         }
         return super.onOptionsItemSelected(item)

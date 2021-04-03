@@ -14,3 +14,8 @@ fun Bitmap.convertToUri(context: Context, bitmap: Bitmap) : Uri {
     )
     return Uri.parse(path)
 }
+//
+//fun Uri.getNameFromUri(uri: Uri) : String {
+//    var name : String? = null
+//    if (uri.scheme.equals("content"))
+//}

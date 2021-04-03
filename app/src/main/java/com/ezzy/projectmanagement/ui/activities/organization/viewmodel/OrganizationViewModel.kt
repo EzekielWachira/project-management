@@ -1,6 +1,7 @@
 package com.ezzy.projectmanagement.ui.activities.organization.viewmodel
 
 import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -22,8 +23,10 @@ class OrganizationViewModel @Inject constructor(
 
     private val _isSuccess = MutableLiveData<Boolean>()
     val isSuccess get() = _isSuccess
+    private val _isImageUploaded = MutableLiveData<Boolean>()
+    val isImageUploaded get() = _isImageUploaded
 
-    private fun addOrganization(organization: Organization) = viewModelScope.launch {
+    fun addOrganization(organization: Organization) = viewModelScope.launch {
         firebaseFirestore.collection(ORGANIZATIONS).add(organization)
             .addOnSuccessListener {
                 isSuccess.postValue(true)
@@ -32,8 +35,18 @@ class OrganizationViewModel @Inject constructor(
             }.await()
     }
     
-    private fun saveOrgImage(fileName : String) =  viewModelScope.launch {
-            firebaseStorage.reference.child()
+    fun saveOrgImage(fileName : String, imageUri: Uri) =  viewModelScope.launch {
+        try {
+            firebaseStorage.reference.child("images/${ORGANIZATIONS}/$fileName")
+                .putFile(imageUri)
+                .addOnSuccessListener {
+                    isImageUploaded.postValue(true)
+                }.addOnFailureListener{
+                    isImageUploaded.postValue(false)
+                }.await()
+        } catch (e : Exception) {
+            isImageUploaded.postValue(false)
+        }
     }
 
 }
