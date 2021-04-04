@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-private const val TAG = "OrganizationViewModel"
 @HiltViewModel
 class OrganizationViewModel @Inject constructor(
     app: Application,
