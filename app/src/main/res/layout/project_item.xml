@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardElevation="@dimen/_5sdp"
-    app:cardCornerRadius="@dimen/_5sdp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:padding="@dimen/_5sdp"
-    android:layout_height="match_parent">
+    app:cardCornerRadius="@dimen/_3sdp"
+    app:cardElevation="@dimen/_5sdp">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,189 +17,185 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:padding="@dimen/_5sdp"
+            android:weightSum="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:weightSum="1"
-            android:padding="@dimen/_5sdp"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/_40sdp"
-                android:layout_weight="0.1"
                 android:layout_gravity="start"
+                android:layout_weight="0.1"
                 app:srcCompat="@drawable/ic_launcher_background" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.8"
-                android:padding="@dimen/_5sdp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="@dimen/_5sdp">
 
                 <TextView
+                    android:id="@+id/projectNameTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Voice recognition"
                     android:textSize="@dimen/_12ssp"
-                    android:id="@+id/projectNameTextView"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/companyTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Google"
-                    android:id="@+id/companyTextView"/>
+                    android:text="Google" />
 
             </LinearLayout>
+
             <ImageButton
-                android:layout_weight="0.1"
+                android:id="@+id/starButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_star_border"
-                android:id="@+id/starButton"
-                android:background="@null"/>
+                android:layout_weight="0.1"
+                android:background="@null"
+                android:src="@drawable/ic_star_border" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/statusLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/statusLayout"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/projectItemTopLayout"
-            >
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/projectItemTopLayout">
 
             <com.google.android.material.chip.ChipGroup
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/statusChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="In progress"
-                    android:id="@+id/statusChip"/>
+                    android:text="In progress" />
 
             </com.google.android.material.chip.ChipGroup>
 
         </LinearLayout>
 
         <TextView
+            android:id="@+id/numberStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Task done: 3/10"
-            app:layout_constraintStart_toStartOf="@id/statusLayout"
-            app:layout_constraintTop_toBottomOf="@id/statusLayout"
-            android:textStyle="bold"
             android:layout_marginStart="@dimen/_5sdp"
-            android:id="@+id/numberStatus"/>
+            android:text="Task done: 3/10"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/statusLayout"
+            app:layout_constraintTop_toBottomOf="@id/statusLayout" />
 
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/projectProgress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="50"
             android:layout_margin="@dimen/_5sdp"
+            android:progress="50"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.461"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/numberStatus" />
 
         <com.google.android.material.chip.ChipGroup
+            android:id="@+id/tagChipgroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/tagChipgroup"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/projectProgress"
             android:paddingStart="@dimen/_5sdp"
             android:paddingEnd="@dimen/_5sdp"
-        >
-
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Android App"
-            app:chipCornerRadius="@dimen/_3sdp"
-            app:chipBackgroundColor="@color/green"
-            android:textColor="@color/white"/>
-
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Firebase"
-            app:chipCornerRadius="@dimen/_3sdp"
-            app:chipBackgroundColor="@color/blue"
-            android:textColor="@color/white"/>
-
-    </com.google.android.material.chip.ChipGroup>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tagChipgroup"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="horizontal"
-        android:id="@+id/peopleLayout"
-        android:weightSum="100">
-
-
-        <com.google.android.material.chip.ChipGroup
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/peopleChipGroup"
-            android:layout_weight="60"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_5sdp"
-            >
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/projectProgress">
 
             <com.google.android.material.chip.Chip
                 android:layout_width="wrap_content"
-                android:text="John Doe"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="Android App"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/green"
+                app:chipCornerRadius="@dimen/_3sdp" />
 
             <com.google.android.material.chip.Chip
                 android:layout_width="wrap_content"
-                android:text="John Doe"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="Firebase"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/blue"
+                app:chipCornerRadius="@dimen/_3sdp" />
 
         </com.google.android.material.chip.ChipGroup>
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/peopleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tagChipgroup">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/peopleLayout"
-        android:background="@drawable/timeline_bg"
-        android:layout_marginStart="@dimen/_5sdp"
-        android:padding="@dimen/_5sdp"
-        android:gravity="center"
-        >
 
-        <TextView
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/peopleChipGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_weight="60">
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="John Doe" />
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="John Doe" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Due date:"
-            android:layout_gravity="center_vertical"
-            android:drawableStart="@drawable/ic_date_range"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="@dimen/_12ssp"
-            android:text="12 Apr"
+            android:background="@drawable/timeline_bg"
+            android:gravity="center"
             android:layout_marginStart="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:textColor="@color/orange"/>
-    </LinearLayout>
+            android:padding="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/peopleLayout">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:drawableStart="@drawable/ic_date_range"
+                android:text="Due date:" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:text="12 Apr"
+                android:textColor="@color/orange"
+                android:textSize="@dimen/_12ssp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
