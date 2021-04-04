@@ -34,6 +34,7 @@ import com.ezzy.projectmanagement.util.getNameFromUri
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val TAG = "NewOrganizationActivity"
@@ -100,10 +101,11 @@ class NewOrganizationActivity : AppCompatActivity() {
             setItems(options) { dialog, which ->
                 when (options[which]) {
                     TAKE_PHOTO -> {
-                        val takePictureIntent = Intent(
+                        Intent(
                             MediaStore.ACTION_IMAGE_CAPTURE
-                        )
-                        startActivityIfNeeded(takePictureIntent, TAKE_IMAGE_REQUEST_CODE)
+                        ).apply {
+                            startActivityIfNeeded(this, TAKE_IMAGE_REQUEST_CODE)
+                        }
                     }
                     PICK_FROM_GALLERY -> {
                         Intent(
@@ -132,7 +134,7 @@ class NewOrganizationActivity : AppCompatActivity() {
                             val bitMap = data.extras?.get("data") as Bitmap
                             binding.orgImage.setImageBitmap(bitMap)
                             picImageUri = bitMap.convertToUri(this, bitMap)
-                            Log.d(TAG, "PHOTO: $picImageUri")
+                            Timber.d("PHOTO: $picImageUri")
                         }
                     }
                 }
