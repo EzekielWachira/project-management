@@ -1,6 +1,8 @@
 package com.ezzy.projectmanagement.model
 
+import java.io.Serializable
+
 data class User(
-    private val name: String? = null,
-    private val email: String? = null
+    val name: String? = null,
+    val email: String? = null
 )

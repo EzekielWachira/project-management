@@ -17,4 +17,5 @@ object Constants {
     const val CANCEL ="Cancel"
     const val CHOOSE_IMAGE = "Choose an image"
     const val REQUEST_PERMISSION_CODE = 10
+    const val USERS = "users"
 }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityLoginBinding
+import com.ezzy.projectmanagement.model.User
 import com.ezzy.projectmanagement.ui.activities.project.ProjectActivity
 import com.ezzy.projectmanagement.util.Constants.SIGN_IN_REQUEST_CODE
 import com.firebase.ui.auth.AuthUI
@@ -41,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
             AuthUI.IdpConfig.EmailBuilder().build()
         )
 
-        startActivityForResult(
+        startActivityIfNeeded(
             authUI.createSignInIntentBuilder()
                 .setAvailableProviders(providers)
                 .setIsSmartLockEnabled(true)
