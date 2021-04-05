@@ -18,6 +18,10 @@ import com.ezzy.projectmanagement.util.Constants.USERS
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.*
@@ -61,7 +65,9 @@ class AddMembersDialog : DialogFragment() {
                 searchMembers(searchText.toLowerCase(Locale.getDefault()))
             }
 
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(s: Editable?) {
+                searchMembers(s.toString().toLowerCase(Locale.getDefault()))
+            }
 
         })
 
@@ -85,7 +91,9 @@ class AddMembersDialog : DialogFragment() {
                         membersAdapter.differ.submitList(
                             it.result!!.toObjects(User::class.java)
                         )
-                        Timber.d("USER:=>>  ${it.result!!.toObjects(User::class.java)}")
+                        Timber.d("USER:=>>  ${it.result!!.size()}")
+                    } else {
+                        Toast.makeText(context, "Error searching members", Toast.LENGTH_SHORT).show()
                     }
                 }.addOnFailureListener {
                     Toast.makeText(context, "Error searching members", Toast.LENGTH_SHORT).show()
