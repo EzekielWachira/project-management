@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -29,9 +30,9 @@ class NewProjectViewModel @Inject constructor(
         try {
             firebaseFirestore.collection(PROJECT_COLLECTION).add(project)
                 .addOnSuccessListener {
-                    Log.d(TAG, "addProject: Success")
+                    Timber.d("addProject: Success")
                 }.addOnFailureListener{
-                    Log.d(TAG, "addProject: ${it.message}")
+                    Timber.d("addProject: ${it.message}")
                 }.await()
             isError.postValue(false)
         } catch (e : Exception) {

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/_5sdp"
+   >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:src="@drawable/ezzy"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/memberImage"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <TextView
+        android:id="@+id/memberName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="john Doe"
+        android:textSize="@dimen/_13ssp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:layout_marginStart="@dimen/_5sdp"
+        app:layout_constraintStart_toEndOf="@+id/memberImage" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="john@gmail.com"
+        android:id="@+id/memberEmail"
+        app:layout_constraintStart_toStartOf="@id/memberName"
+        app:layout_constraintTop_toBottomOf="@id/memberName"
+         />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
