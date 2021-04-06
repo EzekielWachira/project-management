@@ -101,21 +101,6 @@ class AddMembersDialog : DialogFragment() {
                 }.addOnFailureListener {
                     Toast.makeText(context, "Error searching members", Toast.LENGTH_SHORT).show()
                 }
-//            firestore.collection(USERS).orderBy("name")
-//                .startAt(name).endAt("${name}\uf8ff")
-//                .get()
-//                .addOnCompleteListener {
-//                    if (it.isSuccessful) {
-//                        membersAdapter.differ.submitList(
-//                            it.result!!.toObjects(User::class.java)
-//                        )
-//                        Timber.d("USER:=>>  ${it.result!!.size()}")
-//                    } else {
-//                        Toast.makeText(context, "Error searching members", Toast.LENGTH_SHORT).show()
-//                    }
-//                }.addOnFailureListener {
-//                    Toast.makeText(context, "Error searching members", Toast.LENGTH_SHORT).show()
-//                }
         } catch (e : Exception) {
             Toast.makeText(context, e.message.toString(), Toast.LENGTH_LONG).show()
         }
