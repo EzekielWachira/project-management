@@ -22,6 +22,7 @@ class DialogViewModel @Inject constructor(
 
     fun searchMembers (name: String) {
         try {
+            _isSearching.postValue(true)
             firestore.collection(USERS).whereEqualTo("name", name)
                 .get()
                 .addOnCompleteListener {
@@ -32,7 +33,6 @@ class DialogViewModel @Inject constructor(
                             val member = User(snapshot.getString("name"), snapshot.getString("email"))
                             results.add(member)
                         }
-                            Timber.d("MEMBER: >> $results")
                         _members.postValue(results)
                         Timber.d("USERS ==>> $members")
                     }

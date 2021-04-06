@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
@@ -42,6 +43,7 @@ class AddMembersDialog : DialogFragment() {
     private lateinit var doneButton : Button
     private lateinit var searchEditText : TextInputEditText
     private lateinit var peopleRecyclerview: RecyclerView
+    private lateinit var progressBar: ProgressBar
     @Inject
     lateinit var firestore: FirebaseFirestore
     lateinit var membersAdapter: SearchMembersAdapter
@@ -59,6 +61,7 @@ class AddMembersDialog : DialogFragment() {
             doneButton = view.findViewById(R.id.buttonDone)!!
             searchEditText = view.findViewById(R.id.searchPeopleEditText)
             peopleRecyclerview = view.findViewById(R.id.peopleRecyclerview)
+            progressBar = view.findViewById(R.id.searchPpleprogressBar)
         }
 
         setUpRecyclerView()
@@ -92,6 +95,14 @@ class AddMembersDialog : DialogFragment() {
         dialogViewModel.members.observe(this, { users ->
             Timber.d("USER DATA: >> $users")
             membersAdapter.differ.submitList(users!!)
+        })
+
+        dialogViewModel.isSearching.observe(this, { isSearching ->
+            if (isSearching){
+                progressBar.visibility = View.VISIBLE
+            } else {
+                progressBar.visibility = View.INVISIBLE
+            }
         })
 
         builder.setView(view)

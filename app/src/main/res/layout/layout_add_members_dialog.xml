@@ -58,11 +58,13 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:layout_height="@dimen/_100sdp"
         android:id="@+id/peopleRecyclerview"
-        app:layout_constraintTop_toBottomOf="@id/chipLayout"/>
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_100sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/chipLayout"
+        tools:layout_editor_absoluteX="13dp" />
 
     <com.google.android.material.button.MaterialButton
         android:layout_width="wrap_content"
@@ -74,6 +76,18 @@
         android:layout_marginTop="@dimen/_5sdp"
         app:layout_constraintEnd_toEndOf="@id/peopleRecyclerview"
         />
+
+    <ProgressBar
+        android:id="@+id/searchPpleprogressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="37dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/peopleRecyclerview"
+        app:layout_constraintEnd_toEndOf="@+id/peopleRecyclerview"
+        app:layout_constraintStart_toStartOf="@+id/peopleRecyclerview"
+        app:layout_constraintTop_toTopOf="@+id/peopleRecyclerview" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
