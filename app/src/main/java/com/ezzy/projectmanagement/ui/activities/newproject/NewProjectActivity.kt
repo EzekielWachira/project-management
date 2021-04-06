@@ -33,7 +33,7 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
     private lateinit var projectViewModel: NewProjectViewModel
     @Inject
     lateinit var firebaseFirestore: FirebaseFirestore
-    var members : MutableList<User>? = null
+    var members = mutableListOf<User>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +45,7 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
         projectViewModel = NewProjectViewModel(application, firebaseFirestore)
 
         binding.showBottomSheet.setOnClickListener {
-            supportFragmentManager?.let {
+            supportFragmentManager.let {
                 OptionsBottomSheet.newInstance(Bundle()).apply {
                     show(it, tag)
                 }
@@ -72,7 +72,7 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
     }
 
     fun addMembers(user: User) {
-        members?.add(user)
+        members.add(user)
         Timber.d("MEMBERS : =>>> $members")
     }
 

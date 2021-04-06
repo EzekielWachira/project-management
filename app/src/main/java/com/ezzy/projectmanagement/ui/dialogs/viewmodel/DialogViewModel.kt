@@ -16,9 +16,9 @@ class DialogViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var _isSearching = MutableLiveData<Boolean>()
-    val isSearching : LiveData<Boolean> = _isSearching
+    val isSearching : LiveData<Boolean> get()  = _isSearching
     private var _members = MutableLiveData<List<User>>()
-    val members get() = _members
+    val members : LiveData<List<User>> get() = _members
 
     fun searchMembers (name: String) {
         try {
@@ -26,16 +26,18 @@ class DialogViewModel @Inject constructor(
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful){
+                        _isSearching.postValue(false)
+                        val results = mutableListOf<User>()
                         for (snapshot in it.result!!){
                             val member = User(snapshot.getString("name"), snapshot.getString("email"))
-                            val results = mutableListOf<User>()
                             results.add(member)
-                            Timber.d("MEMBER: >> $results")
-                            _members.value = results
                         }
-                        Timber.d("USERS ==>> $_members")
+                            Timber.d("MEMBER: >> $results")
+                        _members.postValue(results)
+                        Timber.d("USERS ==>> $members")
                     }
                 }.addOnFailureListener {
+                    _isSearching.postValue(true)
                     Timber.e("Error searching members")
                 }
         } catch (e : Exception) {

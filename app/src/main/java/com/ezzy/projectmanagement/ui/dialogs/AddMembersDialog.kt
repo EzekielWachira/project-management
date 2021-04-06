@@ -6,7 +6,9 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
@@ -58,12 +60,8 @@ class AddMembersDialog : DialogFragment() {
             searchEditText = view.findViewById(R.id.searchPeopleEditText)
             peopleRecyclerview = view.findViewById(R.id.peopleRecyclerview)
         }
-        membersAdapter = SearchMembersAdapter()
 
-        peopleRecyclerview.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = membersAdapter
-        }
+        setUpRecyclerView()
 
         membersAdapter.setOnclickListener {
             Timber.d("THE SUSER: $it")
@@ -81,14 +79,19 @@ class AddMembersDialog : DialogFragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val searchText: String = searchEditText.text.toString()
                 Timber.d("SEARCH QUERY: =>> $searchText")
-                searchMembers(searchText.toLowerCase(Locale.getDefault()))
+                dialogViewModel.searchMembers(searchText.toLowerCase(Locale.getDefault()))
             }
 
             override fun afterTextChanged(s: Editable?) {
                 Timber.d("SEARCH QUERY ss: =>> ${s.toString().toLowerCase(Locale.getDefault())}")
-                searchMembers(s.toString().toLowerCase(Locale.getDefault()))
+                dialogViewModel.searchMembers(s.toString().toLowerCase(Locale.getDefault()))
             }
 
+        })
+
+        dialogViewModel.members.observe(this, { users ->
+            Timber.d("USER DATA: >> $users")
+            membersAdapter.differ.submitList(users!!)
         })
 
         builder.setView(view)
@@ -96,14 +99,13 @@ class AddMembersDialog : DialogFragment() {
         return builder.create()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun setUpRecyclerView() {
+        membersAdapter = SearchMembersAdapter()
 
-//        dialogViewModel.members.observe(viewLifecycleOwner, {
-//            membersAdapter.differ.submitList(it)
-//        })
-
-
+        peopleRecyclerview.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = membersAdapter
+        }
     }
 
     private fun searchMembers (name: String) {
