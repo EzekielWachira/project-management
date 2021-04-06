@@ -17,7 +17,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.adapters.viewpager.SearchMembersAdapter
 import com.ezzy.projectmanagement.model.User
+import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
+import com.ezzy.projectmanagement.ui.activities.project.ProjectActivity
 import com.ezzy.projectmanagement.ui.dialogs.viewmodel.DialogViewModel
+import com.ezzy.projectmanagement.util.Constants.TAKE_IMAGE_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.USERS
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
@@ -50,13 +53,23 @@ class AddMembersDialog : DialogFragment() {
             R.layout.layout_add_members_dialog, null
         )
 
-        membersAdapter = SearchMembersAdapter()
-
         view?.let {
             doneButton = view.findViewById(R.id.buttonDone)!!
             searchEditText = view.findViewById(R.id.searchPeopleEditText)
             peopleRecyclerview = view.findViewById(R.id.peopleRecyclerview)
         }
+        membersAdapter = SearchMembersAdapter()
+
+        peopleRecyclerview.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = membersAdapter
+        }
+
+        membersAdapter.setOnclickListener {
+            Timber.d("THE SUSER: $it")
+            (activity as NewProjectActivity).addMembers(it)
+        }
+
 
         doneButton.setOnClickListener {
             dialog?.dismiss()
@@ -77,11 +90,6 @@ class AddMembersDialog : DialogFragment() {
             }
 
         })
-
-        peopleRecyclerview.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = membersAdapter
-        }
 
         builder.setView(view)
 

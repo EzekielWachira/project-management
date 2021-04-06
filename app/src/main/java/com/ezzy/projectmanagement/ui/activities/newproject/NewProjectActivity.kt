@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityNewProjectBinding
 import com.ezzy.projectmanagement.model.Project
+import com.ezzy.projectmanagement.model.User
 import com.ezzy.projectmanagement.ui.activities.newproject.viewmodel.NewProjectViewModel
 import com.ezzy.projectmanagement.ui.bottomsheet.OptionsBottomSheet
 import com.ezzy.projectmanagement.ui.dialogs.AddMembersDialog
@@ -21,6 +22,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val TAG = "NewProjectActivity"
@@ -31,6 +33,7 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
     private lateinit var projectViewModel: NewProjectViewModel
     @Inject
     lateinit var firebaseFirestore: FirebaseFirestore
+    var members : MutableList<User>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +69,11 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
         })
 
 
+    }
+
+    fun addMembers(user: User) {
+        members?.add(user)
+        Timber.d("MEMBERS : =>>> $members")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
