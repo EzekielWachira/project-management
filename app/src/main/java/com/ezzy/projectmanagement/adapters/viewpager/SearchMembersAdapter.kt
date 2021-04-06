@@ -14,7 +14,7 @@ class SearchMembersAdapter : RecyclerView.Adapter<SearchMembersAdapter.ViewHolde
 
     private var onItemClickListener : ((User) -> Unit)? = null
 
-    val diffCallback = object : DiffUtil.ItemCallback<User>() {
+    private val diffCallback = object : DiffUtil.ItemCallback<User>() {
         override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
             return oldItem.email == newItem.email
         }

@@ -19,6 +19,32 @@ class DialogViewModel @Inject constructor(
     val isSearching : LiveData<Boolean> get()  = _isSearching
     private var _members = MutableLiveData<List<User>>()
     val members : LiveData<List<User>> get() = _members
+    private var _allMembers = MutableLiveData<List<User>>()
+    val allMembers : LiveData<List<User>> get() = _allMembers
+
+    fun getAllMembers() {
+        try {
+            _isSearching.postValue(true)
+            firestore.collection(USERS)
+                .get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful){
+                        _isSearching.postValue(false)
+                        val results = mutableListOf<User>()
+                        for (querySnapshot in it.result!!){
+                            val member = User(querySnapshot.getString("name"), querySnapshot.getString("email"))
+                            results.add(member)
+                        }
+                        _allMembers.postValue(results)
+                    }
+                }.addOnFailureListener {
+                    _isSearching.postValue(false)
+                    Timber.d("Error getting users")
+                }
+        } catch (e: Exception){
+            Timber.e(e.message.toString())
+        }
+    }
 
     fun searchMembers (name: String) {
         try {

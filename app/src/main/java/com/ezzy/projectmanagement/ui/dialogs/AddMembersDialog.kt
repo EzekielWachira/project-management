@@ -66,6 +66,8 @@ class AddMembersDialog : DialogFragment() {
 
         setUpRecyclerView()
 
+        dialogViewModel.getAllMembers()
+
         membersAdapter.setOnclickListener {
             Timber.d("THE SUSER: $it")
             (activity as NewProjectActivity).addMembers(it)
@@ -90,6 +92,10 @@ class AddMembersDialog : DialogFragment() {
                 dialogViewModel.searchMembers(s.toString().toLowerCase(Locale.getDefault()))
             }
 
+        })
+
+        dialogViewModel.allMembers.observe(this, { users ->
+            membersAdapter.differ.submitList(users)
         })
 
         dialogViewModel.members.observe(this, { users ->
