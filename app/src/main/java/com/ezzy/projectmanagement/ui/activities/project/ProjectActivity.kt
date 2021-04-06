@@ -16,6 +16,7 @@ import com.ezzy.projectmanagement.model.User
 import com.ezzy.projectmanagement.ui.activities.auth.LoginActivity
 import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
 import com.ezzy.projectmanagement.ui.activities.organization.NewOrganizationActivity
+import com.ezzy.projectmanagement.ui.activities.organization.OrganizationsActivity
 import com.ezzy.projectmanagement.util.Constants.USERS
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -88,7 +89,7 @@ class ProjectActivity : AppCompatActivity() {
                 makeToast("chatrooms")
             }
             R.id.actionOrganization -> {
-                makeToast("Organizations")
+                startActivity(Intent(this, OrganizationsActivity::class.java))
             }
             R.id.actionLogout -> {
                 authUI.signOut(this).addOnCompleteListener {
