@@ -1,19 +1,23 @@
 package com.ezzy.projectmanagement.ui.dialogs
 
 import android.app.AlertDialog
+import android.app.Application
 import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.adapters.viewpager.SearchMembersAdapter
 import com.ezzy.projectmanagement.model.User
+import com.ezzy.projectmanagement.ui.dialogs.viewmodel.DialogViewModel
 import com.ezzy.projectmanagement.util.Constants.USERS
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
@@ -36,6 +40,7 @@ class AddMembersDialog : DialogFragment() {
     @Inject
     lateinit var firestore: FirebaseFirestore
     lateinit var membersAdapter: SearchMembersAdapter
+     private val dialogViewModel : DialogViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -63,7 +68,7 @@ class AddMembersDialog : DialogFragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val searchText: String = searchEditText.text.toString()
                 Timber.d("SEARCH QUERY: =>> $searchText")
-                searchMembers(searchText.toLowerCase())
+                searchMembers(searchText.toLowerCase(Locale.getDefault()))
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -81,6 +86,16 @@ class AddMembersDialog : DialogFragment() {
         builder.setView(view)
 
         return builder.create()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+//        dialogViewModel.members.observe(viewLifecycleOwner, {
+//            membersAdapter.differ.submitList(it)
+//        })
+
+
     }
 
     private fun searchMembers (name: String) {
