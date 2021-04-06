@@ -7,6 +7,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import java.io.ByteArrayOutputStream
+import java.util.*
 
 fun Bitmap.convertToUri(context: Context, bitmap: Bitmap) : Uri {
     val bytes = ByteArrayOutputStream()
@@ -41,4 +42,8 @@ fun Uri.getNameFromUri(context: Context, uri: Uri) : String {
         }
     }
     return name.toString()
+}
+
+fun String.makeLowerCase(s : String) : String{
+    return s.toLowerCase(Locale.getDefault())
 }

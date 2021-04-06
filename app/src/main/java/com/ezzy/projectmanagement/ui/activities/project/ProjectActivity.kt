@@ -25,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -108,7 +109,7 @@ class ProjectActivity : AppCompatActivity() {
 
     private fun saveUserToFirebase(firebaseUser: FirebaseUser) {
         val user = User(
-            firebaseUser.displayName,
+            firebaseUser.displayName.toLowerCase(Locale.getDefault()),
             firebaseUser.email
         )
         try {

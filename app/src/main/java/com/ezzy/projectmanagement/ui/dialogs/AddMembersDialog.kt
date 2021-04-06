@@ -61,11 +61,13 @@ class AddMembersDialog : DialogFragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val searchText : String = searchEditText.text.toString()
-                searchMembers(searchText.toLowerCase(Locale.getDefault()))
+                val searchText: String = searchEditText.text.toString()
+                Timber.d("SEARCH QUERY: =>> $searchText")
+                searchMembers(searchText.toLowerCase())
             }
 
             override fun afterTextChanged(s: Editable?) {
+                Timber.d("SEARCH QUERY ss: =>> ${s.toString().toLowerCase(Locale.getDefault())}")
                 searchMembers(s.toString().toLowerCase(Locale.getDefault()))
             }
 
@@ -83,21 +85,37 @@ class AddMembersDialog : DialogFragment() {
 
     private fun searchMembers (name: String) {
         try {
-            firestore.collection(USERS).orderBy("name")
-                .startAt(name).endAt("${name}\uf8ff")
+            firestore.collection(USERS).whereEqualTo("name", name)
                 .get()
                 .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        membersAdapter.differ.submitList(
-                            it.result!!.toObjects(User::class.java)
-                        )
-                        Timber.d("USER:=>>  ${it.result!!.size()}")
-                    } else {
-                        Toast.makeText(context, "Error searching members", Toast.LENGTH_SHORT).show()
+                    if (it.isSuccessful){
+                        val members = mutableListOf<User>()
+                        for (snapshot in it.result!!){
+                            val member = User(snapshot.getString("name"), snapshot.getString("email"))
+                            Timber.d("MEMBER: >> $member")
+                            members.add(member)
+                        }
+                        Timber.d("USERS ==>> $members")
+                        membersAdapter.differ.submitList(members)
                     }
                 }.addOnFailureListener {
                     Toast.makeText(context, "Error searching members", Toast.LENGTH_SHORT).show()
                 }
+//            firestore.collection(USERS).orderBy("name")
+//                .startAt(name).endAt("${name}\uf8ff")
+//                .get()
+//                .addOnCompleteListener {
+//                    if (it.isSuccessful) {
+//                        membersAdapter.differ.submitList(
+//                            it.result!!.toObjects(User::class.java)
+//                        )
+//                        Timber.d("USER:=>>  ${it.result!!.size()}")
+//                    } else {
+//                        Toast.makeText(context, "Error searching members", Toast.LENGTH_SHORT).show()
+//                    }
+//                }.addOnFailureListener {
+//                    Toast.makeText(context, "Error searching members", Toast.LENGTH_SHORT).show()
+//                }
         } catch (e : Exception) {
             Toast.makeText(context, e.message.toString(), Toast.LENGTH_LONG).show()
         }
