@@ -54,54 +54,8 @@ class ProjectActivity : AppCompatActivity() {
         } else {
             firebaseUser = firebaseAuth.currentUser
 
+            handleUser()
 
-            var doesUserExists = false
-            try {
-                var user : User? = null
-                val users = mutableListOf<User>()
-                val authenticatedUser = User(
-                    firebaseAuth.currentUser?.displayName?.toLowerCase(Locale.getDefault()),
-                    firebaseAuth.currentUser?.email?.toLowerCase(Locale.getDefault())
-                )
-                firestore.collection(USERS).whereEqualTo(
-                    "name", firebaseAuth.currentUser?.displayName?.toLowerCase(Locale.getDefault())
-                ).get()
-                    .addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            for (docSnapShot in it.result!!) {
-                                user =
-                                    User(docSnapShot.getString("name"), docSnapShot.getString("email"))
-                                user?.let { user1 ->
-                                    users.add(user1)
-                                }
-                            }
-                            if (users.contains(authenticatedUser)) {
-                                return@addOnCompleteListener
-                            } else {
-                                firebaseAuth.currentUser?.let { fireUser ->
-                                    saveUserToFirebase(fireUser)
-                                }
-                            }
-                        } else {
-                            makeToast("search not successful")
-                        }
-                        Timber.d("USERS :>> $users")
-                    }
-                    .addOnFailureListener {
-                        makeToast("Error searching user in database")
-                    }
-            }catch (e : Exception){
-                makeToast(e.message.toString())
-            }
-
-//            Timber.d("USER DOES EXIST? : ${checkIfUserExistInDatabase()}")
-//            if (checkIfUserExistInDatabase()){
-//                makeToast("you already exist in our database")
-//            } else {
-//                firebaseAuth.currentUser?.let {
-//                     saveUserToFirebase(it)
-//                }
-//            }
             makeToast("You are already logged in")
         }
 
@@ -169,15 +123,14 @@ class ProjectActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkIfUserExistInDatabase() : Boolean {
-        var doesUserExists = false
-        var user : User? = null
-        val users = mutableListOf<User>()
-        val authenticatedUser = User(
-            firebaseAuth.currentUser?.displayName?.toLowerCase(Locale.getDefault()),
-            firebaseAuth.currentUser?.email?.toLowerCase(Locale.getDefault())
-        )
+    private fun handleUser() {
         try {
+            var user : User? = null
+            val users = mutableListOf<User>()
+            val authenticatedUser = User(
+                firebaseAuth.currentUser?.displayName?.toLowerCase(Locale.getDefault()),
+                firebaseAuth.currentUser?.email?.toLowerCase(Locale.getDefault())
+            )
             firestore.collection(USERS).whereEqualTo(
                 "name", firebaseAuth.currentUser?.displayName?.toLowerCase(Locale.getDefault())
             ).get()
@@ -190,11 +143,17 @@ class ProjectActivity : AppCompatActivity() {
                                 users.add(user1)
                             }
                         }
-                        doesUserExists = users.contains(user)
+                        if (users.contains(authenticatedUser)) {
+                            return@addOnCompleteListener
+                        } else {
+                            firebaseAuth.currentUser?.let { fireUser ->
+                                saveUserToFirebase(fireUser)
+                            }
+                        }
                     } else {
                         makeToast("search not successful")
                     }
-        Timber.d("USERS :>> $users")
+                    Timber.d("USERS :>> $users")
                 }
                 .addOnFailureListener {
                     makeToast("Error searching user in database")
@@ -202,8 +161,6 @@ class ProjectActivity : AppCompatActivity() {
         }catch (e : Exception){
             makeToast(e.message.toString())
         }
-                    Timber.d("USER EXISTS? :: ${doesUserExists}")
-        return users.contains(authenticatedUser)
     }
 
     private fun makeToast(message : String) {
