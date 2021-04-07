@@ -64,6 +64,7 @@ class OrganizationViewModel @Inject constructor(
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
+                        _isOrgLoadingSuccess.postValue(true)
                         val orgs = mutableListOf<Organization>()
                         it.result!!.forEach { documentSnapshot ->
                             val organization = Organization(

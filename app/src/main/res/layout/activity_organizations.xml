@@ -18,4 +18,16 @@
         android:id="@+id/organizationsRecyclerView"
         />
 
+    <ProgressBar
+        android:id="@+id/orgProgressBar"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/organizationsRecyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/organizationsRecyclerView"
+        app:layout_constraintStart_toStartOf="@+id/organizationsRecyclerView"
+        app:layout_constraintTop_toTopOf="@+id/organizationsRecyclerView" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
