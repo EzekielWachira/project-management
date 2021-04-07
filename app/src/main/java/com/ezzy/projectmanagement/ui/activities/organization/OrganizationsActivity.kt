@@ -8,6 +8,7 @@ import com.ezzy.projectmanagement.adapters.viewpager.OrganizationsAdapter
 import com.ezzy.projectmanagement.databinding.ActivityOrganizationsBinding
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
+import com.ezzy.projectmanagement.util.VerticalItemDecorator
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,6 +48,7 @@ class OrganizationsActivity : AppCompatActivity() {
         binding.organizationsRecyclerView.apply {
             adapter = orgAdapter
             layoutManager = LinearLayoutManager(this@OrganizationsActivity)
+            addItemDecoration(VerticalItemDecorator(5))
         }
     }
 }
