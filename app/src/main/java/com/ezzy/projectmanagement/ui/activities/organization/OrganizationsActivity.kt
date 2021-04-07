@@ -30,7 +30,10 @@ class OrganizationsActivity : AppCompatActivity() {
         binding = ActivityOrganizationsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = ORGANIZATIONS
+        supportActionBar?.apply {
+            title = ORGANIZATIONS
+            setDisplayHomeAsUpEnabled(true)
+        }
 
         organizationViewModel = OrganizationViewModel(application, firestore, storage)
 

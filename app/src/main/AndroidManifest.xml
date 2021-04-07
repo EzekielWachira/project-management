@@ -17,7 +17,9 @@
         <activity android:name=".ui.activities.organization.NewOrganizationActivity"
             android:parentActivityName=".ui.activities.project.ProjectActivity"
             />
-        <activity android:name=".ui.activities.organization.OrganizationsActivity" />
+        <activity android:name=".ui.activities.organization.OrganizationsActivity"
+            android:parentActivityName=".ui.activities.project.ProjectActivity"
+            />
         <activity
             android:name=".ui.activities.newproject.NewProjectActivity"
             android:parentActivityName=".ui.activities.project.ProjectActivity"
