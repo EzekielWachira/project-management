@@ -31,8 +31,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ProjectActivity : AppCompatActivity() {
 
-//    @Inject
-//    lateinit var authUser: FirebaseUser
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
     @Inject
@@ -56,13 +54,54 @@ class ProjectActivity : AppCompatActivity() {
         } else {
             firebaseUser = firebaseAuth.currentUser
 
-            if (checkIfUserExistInDatabase(firebaseAuth.currentUser) != true){
-                firebaseAuth.currentUser?.let {
-                     saveUserToFirebase(it)
-                }
-            } else {
-                makeToast("you already exist in our database")
+
+            var doesUserExists = false
+            try {
+                var user : User? = null
+                val users = mutableListOf<User>()
+                val authenticatedUser = User(
+                    firebaseAuth.currentUser?.displayName?.toLowerCase(Locale.getDefault()),
+                    firebaseAuth.currentUser?.email?.toLowerCase(Locale.getDefault())
+                )
+                firestore.collection(USERS).whereEqualTo(
+                    "name", firebaseAuth.currentUser?.displayName?.toLowerCase(Locale.getDefault())
+                ).get()
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            for (docSnapShot in it.result!!) {
+                                user =
+                                    User(docSnapShot.getString("name"), docSnapShot.getString("email"))
+                                user?.let { user1 ->
+                                    users.add(user1)
+                                }
+                            }
+                            if (users.contains(authenticatedUser)) {
+                                return@addOnCompleteListener
+                            } else {
+                                firebaseAuth.currentUser?.let { fireUser ->
+                                    saveUserToFirebase(fireUser)
+                                }
+                            }
+                        } else {
+                            makeToast("search not successful")
+                        }
+                        Timber.d("USERS :>> $users")
+                    }
+                    .addOnFailureListener {
+                        makeToast("Error searching user in database")
+                    }
+            }catch (e : Exception){
+                makeToast(e.message.toString())
             }
+
+//            Timber.d("USER DOES EXIST? : ${checkIfUserExistInDatabase()}")
+//            if (checkIfUserExistInDatabase()){
+//                makeToast("you already exist in our database")
+//            } else {
+//                firebaseAuth.currentUser?.let {
+//                     saveUserToFirebase(it)
+//                }
+//            }
             makeToast("You are already logged in")
         }
 
@@ -130,29 +169,41 @@ class ProjectActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkIfUserExistInDatabase(firebaseUser: FirebaseUser?) : Boolean? {
-        var doesUserExists : Boolean? = null
-        firestore.collection(USERS).whereEqualTo(
-            "name", firebaseUser?.displayName?.toLowerCase(Locale.getDefault())
-        ).get()
-            .addOnCompleteListener {
-                if (it.isSuccessful){
-                    val users = mutableListOf<User>()
-                    for (docSnapShot in it.result!!){
-                        val user = User(docSnapShot.getString("name"), docSnapShot.getString("email"))
-                        users.add(user)
+    private fun checkIfUserExistInDatabase() : Boolean {
+        var doesUserExists = false
+        var user : User? = null
+        val users = mutableListOf<User>()
+        val authenticatedUser = User(
+            firebaseAuth.currentUser?.displayName?.toLowerCase(Locale.getDefault()),
+            firebaseAuth.currentUser?.email?.toLowerCase(Locale.getDefault())
+        )
+        try {
+            firestore.collection(USERS).whereEqualTo(
+                "name", firebaseAuth.currentUser?.displayName?.toLowerCase(Locale.getDefault())
+            ).get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        for (docSnapShot in it.result!!) {
+                            user =
+                                User(docSnapShot.getString("name"), docSnapShot.getString("email"))
+                            user?.let { user1 ->
+                                users.add(user1)
+                            }
+                        }
+                        doesUserExists = users.contains(user)
+                    } else {
+                        makeToast("search not successful")
                     }
-                    val authenticatedUser = User(
-                        firebaseUser?.displayName?.toLowerCase(Locale.getDefault()),
-                        firebaseUser?.email?.toLowerCase(Locale.getDefault())
-                    )
-                    doesUserExists = users.contains(authenticatedUser)
+        Timber.d("USERS :>> $users")
                 }
-            }
-            .addOnFailureListener {
-                makeToast("Error searching user in database")
-            }
-        return doesUserExists
+                .addOnFailureListener {
+                    makeToast("Error searching user in database")
+                }
+        }catch (e : Exception){
+            makeToast(e.message.toString())
+        }
+                    Timber.d("USER EXISTS? :: ${doesUserExists}")
+        return users.contains(authenticatedUser)
     }
 
     private fun makeToast(message : String) {

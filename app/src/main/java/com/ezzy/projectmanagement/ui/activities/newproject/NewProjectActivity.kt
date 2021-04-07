@@ -100,7 +100,7 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
                         binding.startDateEditText.text.toString(),
                         binding.endDateEditText.text.toString()
                     )
-                    projectViewModel.addProject(project)
+                    projectViewModel.addProject(project, members)
                 }
             }
         }
