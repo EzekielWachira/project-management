@@ -118,7 +118,6 @@ class ProjectActivity : AppCompatActivity() {
                     makeToast("Error saving user")
                 }
         } catch (e : Exception) {
-            Timber.d("USER ERROR ${e.message.toString()}")
             makeToast(e.message.toString())
         }
     }
@@ -153,7 +152,6 @@ class ProjectActivity : AppCompatActivity() {
                     } else {
                         makeToast("search not successful")
                     }
-                    Timber.d("USERS :>> $users")
                 }
                 .addOnFailureListener {
                     makeToast("Error searching user in database")
