@@ -3,6 +3,7 @@ package com.ezzy.projectmanagement.ui.activities.organization.viewmodel
 import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ezzy.projectmanagement.model.Organization
@@ -22,9 +23,13 @@ class OrganizationViewModel @Inject constructor(
 ) : AndroidViewModel(app) {
 
     private val _isSuccess = MutableLiveData<Boolean>()
-    val isSuccess get() = _isSuccess
+    val isSuccess : LiveData<Boolean> get() = _isSuccess
     private val _isImageUploaded = MutableLiveData<Boolean>()
-    val isImageUploaded get() = _isImageUploaded
+    val isImageUploaded : LiveData<Boolean> get() = _isImageUploaded
+    private var _organizations = MutableLiveData<List<Organization>>()
+    val organizations : LiveData<List<Organization>> get() = _organizations
+    private var _isOrgLoadingSuccess = MutableLiveData<Boolean>()
+    val isOrgLoadingSuccess : LiveData<Boolean> get() = _isOrgLoadingSuccess
 
     fun addOrganization(organization: Organization, fileName : String, imageUri: Uri) {
         viewModelScope.launch {
@@ -33,23 +38,49 @@ class OrganizationViewModel @Inject constructor(
                 val storageReference = firebaseStorage.reference.child("images/${ORGANIZATIONS}/$fileName")
                 storageReference.putFile(imageUri)
                     .addOnSuccessListener {
-                        isImageUploaded.postValue(true)
+                        _isImageUploaded.postValue(true)
                         storageReference.downloadUrl.addOnSuccessListener { uri ->
                             imagePath = uri.toString()
                             organization.imageSrc = imagePath
                             firebaseFirestore.collection(ORGANIZATIONS).add(organization)
                                 .addOnSuccessListener {
-                                    isSuccess.postValue(true)
+                                    _isSuccess.postValue(true)
                                 }.addOnFailureListener {
-                                    isSuccess.postValue(false)
+                                    _isSuccess.postValue(false)
                                 }
                         }
                     }.addOnFailureListener {
-                        isImageUploaded.postValue(false)
+                        _isImageUploaded.postValue(false)
                     }.await()
             } catch (e: Exception) {
-                isImageUploaded.postValue(false)
+                _isImageUploaded.postValue(false)
             }
+        }
+    }
+
+    fun retrieveOrganizations() = viewModelScope.launch {
+        try {
+            firebaseFirestore.collection(ORGANIZATIONS)
+                .get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        val orgs = mutableListOf<Organization>()
+                        it.result!!.forEach { documentSnapshot ->
+                            val organization = Organization(
+                                documentSnapshot.getString("name"),
+                                documentSnapshot.getString("imageSrc"),
+                                documentSnapshot.getString("about")
+                            )
+                            orgs.add(organization)
+                        }
+                        _organizations.postValue(orgs)
+                    } else {  _isOrgLoadingSuccess.postValue(false) }
+                }.addOnFailureListener {
+                    _isOrgLoadingSuccess.postValue(false)
+                }
+
+        } catch (e : Exception) {
+            _isOrgLoadingSuccess.postValue(false)
         }
     }
     
@@ -60,15 +91,15 @@ class OrganizationViewModel @Inject constructor(
                 val storageReference = firebaseStorage.reference.child("images/${ORGANIZATIONS}/$fileName")
                     storageReference.putFile(imageUri)
                     .addOnSuccessListener {
-                        isImageUploaded.postValue(true)
+                        _isImageUploaded.postValue(true)
                         storageReference.downloadUrl.addOnSuccessListener { uri ->
                             imagePath = uri.toString()
                         }
                     }.addOnFailureListener {
-                        isImageUploaded.postValue(false)
+                        _isImageUploaded.postValue(false)
                     }.await()
             } catch (e: Exception) {
-                isImageUploaded.postValue(false)
+                _isImageUploaded.postValue(false)
             }
         }
         return imagePath

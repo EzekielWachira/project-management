@@ -63,7 +63,7 @@
                     android:id="@+id/projectsTextView"
                     android:gravity="center_vertical"
                     android:drawableStart="@drawable/ic_people"
-
+                />
 
             </LinearLayout>
 
