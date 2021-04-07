@@ -27,7 +27,7 @@ class SearchMembersAdapter : RecyclerView.Adapter<SearchMembersAdapter.ViewHolde
 
     val differ = AsyncListDiffer(this, diffCallback)
 
-    fun setOnclickListener(listener : (User) -> Unit) {
+    fun setOnClickListener(listener : (User) -> Unit) {
         onItemClickListener = listener
     }
 
@@ -44,10 +44,10 @@ class SearchMembersAdapter : RecyclerView.Adapter<SearchMembersAdapter.ViewHolde
         holder.itemView.apply {
             findViewById<TextView>(R.id.memberName).text = user.name
             findViewById<TextView>(R.id.memberEmail).text = user.email
-        }
-        setOnclickListener { user1 ->
-            onItemClickListener?.let {
-                it(user1)
+            setOnClickListener {
+                onItemClickListener?.let {
+                    it(user)
+                }
             }
         }
     }
