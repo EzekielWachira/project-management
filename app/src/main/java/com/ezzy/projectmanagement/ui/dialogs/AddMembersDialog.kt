@@ -70,7 +70,11 @@ class AddMembersDialog : DialogFragment() {
 
         membersAdapter.setOnclickListener {
             Timber.d("THE SUSER: $it")
-            (activity as NewProjectActivity).addMembers(it)
+            if ((activity as NewProjectActivity).members.contains(it)){
+                return@setOnclickListener
+            } else {
+                (activity as NewProjectActivity).addMembers(it)
+            }
         }
 
 

@@ -54,9 +54,14 @@ class ProjectActivity : AppCompatActivity() {
                 Intent(this, LoginActivity::class.java)
             )
         } else {
-//            firebaseUser = firebaseAuth.currentUser
-            firebaseAuth.currentUser?.let {
-                 saveUserToFirebase(it)
+            firebaseUser = firebaseAuth.currentUser
+
+            if (checkIfUserExistInDatabase(firebaseAuth.currentUser) != true){
+                firebaseAuth.currentUser?.let {
+                     saveUserToFirebase(it)
+                }
+            } else {
+                makeToast("you already exist in our database")
             }
             makeToast("You are already logged in")
         }
@@ -109,7 +114,7 @@ class ProjectActivity : AppCompatActivity() {
 
     private fun saveUserToFirebase(firebaseUser: FirebaseUser) {
         val user = User(
-            firebaseUser.displayName.toLowerCase(Locale.getDefault()),
+            firebaseUser.displayName?.toLowerCase(Locale.getDefault()),
             firebaseUser.email
         )
         try {
@@ -123,6 +128,31 @@ class ProjectActivity : AppCompatActivity() {
             Timber.d("USER ERROR ${e.message.toString()}")
             makeToast(e.message.toString())
         }
+    }
+
+    private fun checkIfUserExistInDatabase(firebaseUser: FirebaseUser?) : Boolean? {
+        var doesUserExists : Boolean? = null
+        firestore.collection(USERS).whereEqualTo(
+            "name", firebaseUser?.displayName?.toLowerCase(Locale.getDefault())
+        ).get()
+            .addOnCompleteListener {
+                if (it.isSuccessful){
+                    val users = mutableListOf<User>()
+                    for (docSnapShot in it.result!!){
+                        val user = User(docSnapShot.getString("name"), docSnapShot.getString("email"))
+                        users.add(user)
+                    }
+                    val authenticatedUser = User(
+                        firebaseUser?.displayName?.toLowerCase(Locale.getDefault()),
+                        firebaseUser?.email?.toLowerCase(Locale.getDefault())
+                    )
+                    doesUserExists = users.contains(authenticatedUser)
+                }
+            }
+            .addOnFailureListener {
+                makeToast("Error searching user in database")
+            }
+        return doesUserExists
     }
 
     private fun makeToast(message : String) {
