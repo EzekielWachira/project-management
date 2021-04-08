@@ -3,7 +3,9 @@ package com.ezzy.projectmanagement.adapters.viewpager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -37,17 +39,23 @@ class OrganizationsAdapter : RecyclerView.Adapter<OrganizationsAdapter.ViewHolde
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.organization_item, parent, false)
+                .inflate(R.layout.org_item_layout, parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val organization = differ.currentList[position]
         holder.itemView.apply {
-            findViewById<TextView>(R.id.organizationName).text = organization.name
-            val imageView = findViewById<CircleImageView>(R.id.organizationImage)
+            findViewById<TextView>(R.id.orgName).text = organization.name
+            val imageView = findViewById<ImageView>(R.id.orgImageView)
             Glide.with(context)
                 .load(organization.imageSrc)
+                .placeholder(
+                    ContextCompat.getDrawable(
+                        context.applicationContext,
+                        R.drawable.placeholder
+                    )
+                )
                 .into(imageView)
         }
     }
