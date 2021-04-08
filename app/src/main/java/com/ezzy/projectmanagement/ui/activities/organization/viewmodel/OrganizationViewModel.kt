@@ -31,7 +31,7 @@ class OrganizationViewModel @Inject constructor(
     private var _organizations = MutableLiveData<List<Organization>>()
     val organizations : LiveData<List<Organization>> get() = _organizations
     private var _isOrgLoadingSuccess = MutableLiveData<Boolean>()
-    val isOrgLoadingSuccess : LiveData<Boolean> get() = _isOrgLoadingSuccess
+    val isOrgLoadingSuccess = _isOrgLoadingSuccess
     private var _orgsSearched = MutableLiveData<List<Organization>>()
     val orgsSearched : LiveData<List<Organization>> get() = _orgsSearched
 
