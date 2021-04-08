@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="@dimen/_5sdp"
     android:layout_marginStart="@dimen/_5sdp"
     android:layout_marginEnd="@dimen/_5sdp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    app:cardCornerRadius="@dimen/_5sdp">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:padding="@dimen/_10sdp"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="@dimen/_10sdp">
 
         <ImageView
+            android:id="@+id/projectImage"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_150sdp"
-            android:src="@drawable/unnamed"
             android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/unnamed"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/projectImage"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/projectNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
@@ -30,181 +31,178 @@
             android:text="Project name"
             android:textSize="@dimen/_14ssp"
             android:textStyle="bold"
-            android:id="@+id/projectNameTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/projectImage" />
 
         <TextView
+            android:id="@+id/projectAboutTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/projectAboutTextView"
-            android:text="lorem ipsum dolor sit amet consectur lorem ipsum dolor sit amet consectur"
-            android:maxLines="2"
-            app:layout_constraintTop_toBottomOf="@id/projectNameTextView"
             android:layout_marginTop="@dimen/_5sdp"
             android:fontFamily="@font/droid_sans"
+            android:maxLines="2"
+            android:text="lorem ipsum dolor sit amet consectur lorem ipsum dolor sit amet consectur"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/projectNameTextView" />
 
 
         <com.google.android.material.chip.ChipGroup
+            android:id="@+id/projectTagsChiGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/projectTagsChiGroup"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/projectAboutTextView"
             android:layout_marginTop="@dimen/_5sdp"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/projectAboutTextView">
 
             <com.google.android.material.chip.Chip
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Android"
-                app:chipCornerRadius="@dimen/_3sdp"/>
+                app:chipCornerRadius="@dimen/_3sdp" />
 
             <com.google.android.material.chip.Chip
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Firebase"
-                app:chipCornerRadius="@dimen/_3sdp"/>
+                app:chipCornerRadius="@dimen/_3sdp" />
 
         </com.google.android.material.chip.ChipGroup>
 
         <LinearLayout
+            android:id="@+id/projectTimelineLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/projectTagsChiGroup"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/_5sdp"
-            android:id="@+id/projectTimelineLayout"
             android:orientation="horizontal"
             android:weightSum="100"
-            >
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/projectTagsChiGroup">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="50"
-                android:layout_height="wrap_content"
-                android:text="1st April 2021"
-                android:gravity="start"
                 android:id="@+id/startDateTextView"
-                android:fontFamily="@font/droid_sans"/>
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:fontFamily="@font/droid_sans"
+                android:gravity="start"
+                android:text="1st April 2021" />
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="50"
-                android:layout_height="wrap_content"
-                android:text="21st April 2021"
-                android:gravity="end"
                 android:id="@+id/endDateTextView"
-                android:fontFamily="@font/droid_sans"/>
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:fontFamily="@font/droid_sans"
+                android:gravity="end"
+                android:text="21st April 2021" />
 
         </LinearLayout>
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/projectProgressBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/projectTimelineLayout"
             android:layout_marginTop="@dimen/_5sdp"
-            app:layout_constraintStart_toStartOf="@id/projectTimelineLayout"
-            app:layout_constraintEnd_toEndOf="@id/projectTimelineLayout"
             android:progress="35"
-            android:id="@+id/projectProgressBar"/>
+            app:layout_constraintEnd_toEndOf="@id/projectTimelineLayout"
+            app:layout_constraintStart_toStartOf="@id/projectTimelineLayout"
+            app:layout_constraintTop_toBottomOf="@id/projectTimelineLayout" />
 
         <LinearLayout
+            android:id="@+id/projectSummaryLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/projectProgressBar"
             android:layout_marginTop="@dimen/_5sdp"
             android:weightSum="100"
-            android:id="@+id/projectSummaryLayout">
+            app:layout_constraintTop_toBottomOf="@id/projectProgressBar">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="50"
-                android:layout_height="wrap_content"
-                android:text="Tasks: 23/45"
-                android:gravity="start"
                 android:id="@+id/tasksDoneTextView"
-                android:fontFamily="@font/droid_sans"/>
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:fontFamily="@font/droid_sans"
+                android:gravity="start"
+                android:text="Tasks: 23/45" />
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="50"
-                android:layout_height="wrap_content"
-                android:text="30%"
-                android:textStyle="bold"
-                android:gravity="end"
                 android:id="@+id/progressPercentageTextView"
-                android:fontFamily="@font/droid_sans"/>
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:fontFamily="@font/droid_sans"
+                android:gravity="end"
+                android:text="30%"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/projectSummaryLayout"
             android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal"
             android:weightSum="100"
-            android:orientation="horizontal">
+            app:layout_constraintTop_toBottomOf="@id/projectSummaryLayout">
 
             <TextView
+                android:id="@+id/chatTotalTextView"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="50"
-                android:text="3"
                 android:drawableStart="@drawable/ic_chat"
-                android:textSize="@dimen/_13ssp"
-                android:gravity="center_vertical"
                 android:drawablePadding="@dimen/_5sdp"
-                android:id="@+id/chatTotalTextView"/>
+                android:gravity="center_vertical"
+                android:text="3"
+                android:textSize="@dimen/_13ssp" />
 
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="50"
-                android:gravity="end"
-                >
+                android:gravity="end">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:src="@drawable/ezzy"
-                    app:civ_border_width="@dimen/_2sdp"
-                    app:civ_border_color="@color/white"/>
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="@dimen/_2sdp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
-                    android:src="@drawable/cover"
                     android:layout_marginStart="@dimen/_20sdp"
-                    app:civ_border_width="@dimen/_2sdp"
-                    app:civ_border_color="@color/white"/>
+                    android:src="@drawable/cover"
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="@dimen/_2sdp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
-                    android:src="@drawable/unnamed"
                     android:layout_marginStart="@dimen/_38sdp"
-                    app:civ_border_width="@dimen/_2sdp"
-                    app:civ_border_color="@color/white"/>
+                    android:src="@drawable/unnamed"
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="@dimen/_2sdp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
-                    android:src="@drawable/drod"
                     android:layout_marginStart="@dimen/_57sdp"
-                    app:civ_border_width="@dimen/_2sdp"
-                    app:civ_border_color="@color/white"/>
+                    android:src="@drawable/drod"
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="@dimen/_2sdp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
-                    android:src="@drawable/android"
                     android:layout_marginStart="@dimen/_75sdp"
-                    app:civ_border_width="@dimen/_2sdp"
-                    app:civ_border_color="@color/white"/>
+                    android:src="@drawable/android"
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="@dimen/_2sdp" />
 
             </FrameLayout>
 
