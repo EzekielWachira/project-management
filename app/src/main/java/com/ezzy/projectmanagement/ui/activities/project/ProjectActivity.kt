@@ -56,8 +56,6 @@ class ProjectActivity : AppCompatActivity() {
             firebaseUser = firebaseAuth.currentUser
 
             handleUser()
-
-            makeToast("You are already logged in")
         }
 
         val navController = this.findNavController(R.id.projectNavHostContainer)

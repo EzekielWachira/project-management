@@ -13,6 +13,8 @@ import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,6 +32,8 @@ class OrganizationViewModel @Inject constructor(
     val organizations : LiveData<List<Organization>> get() = _organizations
     private var _isOrgLoadingSuccess = MutableLiveData<Boolean>()
     val isOrgLoadingSuccess : LiveData<Boolean> get() = _isOrgLoadingSuccess
+    private var _orgsSearched = MutableLiveData<List<Organization>>()
+    val orgsSearched : LiveData<List<Organization>> get() = _orgsSearched
 
     fun addOrganization(organization: Organization, fileName : String, imageUri: Uri) {
         viewModelScope.launch {
@@ -82,6 +86,32 @@ class OrganizationViewModel @Inject constructor(
 
         } catch (e : Exception) {
             _isOrgLoadingSuccess.postValue(false)
+        }
+    }
+
+    fun searchOrganizations(keyword : String) {
+        viewModelScope.launch {
+            try {
+                val orgs = mutableListOf<Organization>()
+                firebaseFirestore.collection(ORGANIZATIONS)
+                    .whereEqualTo("name", keyword.toLowerCase(Locale.getDefault()))
+                    .get()
+                    .addOnCompleteListener {
+                        it.result!!.forEach { documentSnapshot ->
+                            var organization = Organization(
+                                documentSnapshot.getString("name"),
+                                documentSnapshot.getString("imageUrl"),
+                                documentSnapshot.getString("about")
+                            )
+                            orgs.add(organization)
+                        }
+                        _orgsSearched.postValue(orgs)
+                    }.addOnFailureListener {
+                        Timber.d(it.message.toString())
+                    }
+            } catch ( e : Exception ){
+                Timber.d(e.message.toString())
+            }
         }
     }
     
