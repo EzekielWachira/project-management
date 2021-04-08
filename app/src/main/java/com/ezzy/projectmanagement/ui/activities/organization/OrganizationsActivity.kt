@@ -60,7 +60,7 @@ class OrganizationsActivity : AppCompatActivity() {
         binding.organizationsRecyclerView.apply {
             adapter = orgAdapter
             layoutManager = LinearLayoutManager(this@OrganizationsActivity)
-            addItemDecoration(VerticalItemDecorator(5))
+            addItemDecoration(VerticalItemDecorator(10))
         }
     }
 }
