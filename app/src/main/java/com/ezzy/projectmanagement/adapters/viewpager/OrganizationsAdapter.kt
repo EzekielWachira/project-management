@@ -1,5 +1,6 @@
 package com.ezzy.projectmanagement.adapters.viewpager
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.model.Organization
+import com.ezzy.projectmanagement.util.CommonViewHolder
 import de.hdodenhof.circleimageview.CircleImageView
 
 class OrganizationsAdapter : RecyclerView.Adapter<OrganizationsAdapter.ViewHolder>(){
@@ -62,5 +64,30 @@ class OrganizationsAdapter : RecyclerView.Adapter<OrganizationsAdapter.ViewHolde
 
     override fun getItemCount(): Int {
         return differ.currentList.size
+    }
+}
+
+
+class OrganizationViewHolder(
+    val context: Context,
+    parent: ViewGroup,
+)  : CommonViewHolder<Organization>(
+    parent, R.layout.org_item_layout
+){
+
+    private val orgNameTextView: TextView = rootView.findViewById(R.id.orgName)
+    private val orgImageView : ImageView = rootView.findViewById(R.id.orgImageView)
+
+    override fun bindItem(item: Organization?) {
+        item?.let {
+            orgNameTextView.text = it.name
+            Glide.with(context.applicationContext)
+                .load(item.imageSrc)
+                .placeholder(ContextCompat.getDrawable(
+                    context.applicationContext,
+                    R.drawable.placeholder
+                ))
+                .into(orgImageView)
+        }
     }
 }

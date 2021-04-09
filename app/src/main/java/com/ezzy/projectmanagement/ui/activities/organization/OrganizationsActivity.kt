@@ -5,13 +5,17 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ezzy.projectmanagement.adapters.viewpager.OrganizationViewHolder
 import com.ezzy.projectmanagement.adapters.viewpager.OrganizationsAdapter
 import com.ezzy.projectmanagement.databinding.ActivityOrganizationsBinding
+import com.ezzy.projectmanagement.model.Organization
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
+import com.ezzy.projectmanagement.util.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.ezzy.projectmanagement.util.VerticalItemDecorator
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,6 +29,7 @@ class OrganizationsActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityOrganizationsBinding
     private lateinit var orgAdapter : OrganizationsAdapter
+    private lateinit var organizationsAdapter: CommonRecyclerViewAdapter<Organization>
     @Inject
     lateinit var firestore: FirebaseFirestore
     @Inject
@@ -73,7 +78,8 @@ class OrganizationsActivity : AppCompatActivity() {
         })
 
         organizationViewModel.organizations.observe(this, { organizationList ->
-            orgAdapter.differ.submitList(organizationList)
+//            orgAdapter.differ.submitList(organizationList)
+            organizationsAdapter.differ.submitList(organizationList)
         })
 
         organizationViewModel.isOrgLoadingSuccess.observe(this, { isSuccess ->
@@ -85,16 +91,28 @@ class OrganizationsActivity : AppCompatActivity() {
         })
 
         organizationViewModel.orgsSearched.observe(this, { orgsList ->
-            orgAdapter.differ.submitList(orgsList)
+//            orgAdapter.differ.submitList(orgsList)
+            organizationsAdapter.differ.submitList(orgsList)
         })
+
+        organizationsAdapter.setOnClickListener {
+            makeToast("Organization: $it")
+        }
     }
 
     private fun setUpRecyclerView() {
         orgAdapter = OrganizationsAdapter()
+        organizationsAdapter = CommonRecyclerViewAdapter {
+            OrganizationViewHolder(this, it)
+        }
         binding.organizationsRecyclerView.apply {
-            adapter = orgAdapter
+            adapter = organizationsAdapter
             layoutManager = LinearLayoutManager(this@OrganizationsActivity)
             addItemDecoration(VerticalItemDecorator(10))
         }
+    }
+
+    private fun makeToast(message : String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }
