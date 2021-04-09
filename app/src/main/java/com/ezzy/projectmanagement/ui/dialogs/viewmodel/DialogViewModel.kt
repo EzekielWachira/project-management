@@ -22,6 +22,10 @@ class DialogViewModel @Inject constructor(
     private var _allMembers = MutableLiveData<List<User>>()
     val allMembers : LiveData<List<User>> get() = _allMembers
 
+    init {
+        getAllMembers()
+    }
+
     fun getAllMembers() {
         try {
             _isSearching.postValue(true)

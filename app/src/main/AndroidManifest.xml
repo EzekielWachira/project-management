@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ezzy.projectmanagement">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".BaseApplication"
@@ -14,12 +14,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectManagement">
-        <activity android:name=".ui.activities.organization.NewOrganizationActivity"
-            android:parentActivityName=".ui.activities.project.ProjectActivity"
-            />
-        <activity android:name=".ui.activities.organization.OrganizationsActivity"
-            android:parentActivityName=".ui.activities.project.ProjectActivity"
-            />
+        <activity android:name=".ui.activities.organization.OrgDetailsActivity"></activity>
+        <activity
+            android:name=".ui.activities.organization.NewOrganizationActivity"
+            android:parentActivityName=".ui.activities.project.ProjectActivity" />
+        <activity
+            android:name=".ui.activities.organization.OrganizationsActivity"
+            android:parentActivityName=".ui.activities.project.ProjectActivity" />
         <activity
             android:name=".ui.activities.newproject.NewProjectActivity"
             android:parentActivityName=".ui.activities.project.ProjectActivity"
