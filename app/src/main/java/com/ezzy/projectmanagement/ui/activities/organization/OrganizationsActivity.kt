@@ -95,7 +95,6 @@ class OrganizationsActivity : AppCompatActivity() {
         })
 
         organizationsAdapter.setOnClickListener {
-            makeToast("Organization: $it")
             Intent(this, OrgDetailsActivity::class.java).apply {
                 putExtra("organization", it)
                 startActivity(this)

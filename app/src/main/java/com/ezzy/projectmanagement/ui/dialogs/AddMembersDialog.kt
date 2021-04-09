@@ -18,6 +18,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ezzy.projectmanagement.R
+import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
+import com.ezzy.projectmanagement.adapters.viewpager.SearchMemberAdapter
 import com.ezzy.projectmanagement.adapters.viewpager.SearchMembersAdapter
 import com.ezzy.projectmanagement.model.User
 import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
@@ -46,7 +48,8 @@ class AddMembersDialog : DialogFragment() {
     private lateinit var progressBar: ProgressBar
     @Inject
     lateinit var firestore: FirebaseFirestore
-    lateinit var membersAdapter: SearchMembersAdapter
+//    lateinit var membersAdapter: SearchMembersAdapter
+    private lateinit var membersAdapter : CommonRecyclerViewAdapter<User>
      private val dialogViewModel : DialogViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -68,12 +71,14 @@ class AddMembersDialog : DialogFragment() {
 
         dialogViewModel.getAllMembers()
 
-        membersAdapter.setOnClickListener {
-            Timber.d("THE SUSER: $it")
-            if ((activity as NewProjectActivity).members.contains(it)){
-                return@setOnClickListener
-            } else {
-                (activity as NewProjectActivity).addMembers(it)
+        membersAdapter.setOnClickListener { user ->
+            Timber.d("THE SUSER: $user")
+            user?.let {
+                if ((activity as NewProjectActivity).members.contains(it)){
+                    return@setOnClickListener
+                } else {
+                    (activity as NewProjectActivity).addMembers(it)
+                }
             }
         }
 
@@ -121,7 +126,11 @@ class AddMembersDialog : DialogFragment() {
     }
 
     private fun setUpRecyclerView() {
-        membersAdapter = SearchMembersAdapter()
+        context?.let { appContext ->
+            membersAdapter = CommonRecyclerViewAdapter {
+                SearchMemberAdapter(appContext, it)
+            }
+        }
 
         peopleRecyclerview.apply {
             layoutManager = LinearLayoutManager(context)
