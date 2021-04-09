@@ -1,40 +1,28 @@
 package com.ezzy.projectmanagement.ui.dialogs
 
 import android.app.AlertDialog
-import android.app.Application
 import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
-import com.ezzy.projectmanagement.adapters.viewpager.SearchMemberAdapter
-import com.ezzy.projectmanagement.adapters.viewpager.SearchMembersAdapter
+import com.ezzy.projectmanagement.adapters.viewpager.SearchMemberViewHolder
 import com.ezzy.projectmanagement.model.User
 import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
-import com.ezzy.projectmanagement.ui.activities.project.ProjectActivity
 import com.ezzy.projectmanagement.ui.dialogs.viewmodel.DialogViewModel
-import com.ezzy.projectmanagement.util.Constants.TAKE_IMAGE_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.USERS
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -48,7 +36,6 @@ class AddMembersDialog : DialogFragment() {
     private lateinit var progressBar: ProgressBar
     @Inject
     lateinit var firestore: FirebaseFirestore
-//    lateinit var membersAdapter: SearchMembersAdapter
     private lateinit var membersAdapter : CommonRecyclerViewAdapter<User>
      private val dialogViewModel : DialogViewModel by viewModels()
 
@@ -128,7 +115,7 @@ class AddMembersDialog : DialogFragment() {
     private fun setUpRecyclerView() {
         context?.let { appContext ->
             membersAdapter = CommonRecyclerViewAdapter {
-                SearchMemberAdapter(appContext, it)
+                SearchMemberViewHolder(appContext, it)
             }
         }
 

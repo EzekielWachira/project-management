@@ -1,17 +1,16 @@
 package com.ezzy.projectmanagement.ui.activities.organization
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.adapters.viewpager.OrganizationViewHolder
-import com.ezzy.projectmanagement.adapters.viewpager.OrganizationsAdapter
 import com.ezzy.projectmanagement.databinding.ActivityOrganizationsBinding
 import com.ezzy.projectmanagement.model.Organization
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
@@ -27,7 +26,6 @@ import javax.inject.Inject
 class OrganizationsActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityOrganizationsBinding
-    private lateinit var orgAdapter : OrganizationsAdapter
     private lateinit var organizationsAdapter: CommonRecyclerViewAdapter<Organization>
     @Inject
     lateinit var firestore: FirebaseFirestore
@@ -77,7 +75,6 @@ class OrganizationsActivity : AppCompatActivity() {
         })
 
         organizationViewModel.organizations.observe(this, { organizationList ->
-//            orgAdapter.differ.submitList(organizationList)
             organizationsAdapter.differ.submitList(organizationList)
         })
 
@@ -90,7 +87,6 @@ class OrganizationsActivity : AppCompatActivity() {
         })
 
         organizationViewModel.orgsSearched.observe(this, { orgsList ->
-//            orgAdapter.differ.submitList(orgsList)
             organizationsAdapter.differ.submitList(orgsList)
         })
 
@@ -103,7 +99,6 @@ class OrganizationsActivity : AppCompatActivity() {
     }
 
     private fun setUpRecyclerView() {
-        orgAdapter = OrganizationsAdapter()
         organizationsAdapter = CommonRecyclerViewAdapter {
             OrganizationViewHolder(this, it)
         }
