@@ -1,9 +1,8 @@
-package com.ezzy.projectmanagement.util
+package com.ezzy.projectmanagement.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -46,7 +45,6 @@ class CommonRecyclerViewAdapter<T>(
 
     override fun onBindViewHolder(holder: CommonViewHolder<T>, position: Int) {
         val item = differ.currentList[position]
-//        holder.bindItem(item)
         holder.apply {
             bindItem(item)
             rootView.setOnClickListener {

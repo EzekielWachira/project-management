@@ -13,8 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.model.Organization
-import com.ezzy.projectmanagement.util.CommonViewHolder
-import de.hdodenhof.circleimageview.CircleImageView
+import com.ezzy.projectmanagement.adapters.CommonViewHolder
 
 class OrganizationsAdapter : RecyclerView.Adapter<OrganizationsAdapter.ViewHolder>(){
 

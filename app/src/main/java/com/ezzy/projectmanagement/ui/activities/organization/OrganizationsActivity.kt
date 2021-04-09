@@ -1,5 +1,6 @@
 package com.ezzy.projectmanagement.ui.activities.organization
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -7,15 +8,13 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.adapters.viewpager.OrganizationViewHolder
 import com.ezzy.projectmanagement.adapters.viewpager.OrganizationsAdapter
 import com.ezzy.projectmanagement.databinding.ActivityOrganizationsBinding
 import com.ezzy.projectmanagement.model.Organization
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
-import com.ezzy.projectmanagement.util.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.ezzy.projectmanagement.util.VerticalItemDecorator
 import com.google.firebase.firestore.FirebaseFirestore
@@ -97,6 +96,10 @@ class OrganizationsActivity : AppCompatActivity() {
 
         organizationsAdapter.setOnClickListener {
             makeToast("Organization: $it")
+            Intent(this, OrgDetailsActivity::class.java).apply {
+                putExtra("organization", it)
+                startActivity(this)
+            }
         }
     }
 

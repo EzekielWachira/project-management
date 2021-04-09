@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectManagement">
-        <activity android:name=".ui.activities.organization.OrgDetailsActivity"></activity>
+        <activity android:name=".ui.activities.organization.OrgDetailsActivity"
+            android:parentActivityName=".ui.activities.organization.OrganizationsActivity"
+            />
         <activity
             android:name=".ui.activities.organization.NewOrganizationActivity"
             android:parentActivityName=".ui.activities.project.ProjectActivity" />
