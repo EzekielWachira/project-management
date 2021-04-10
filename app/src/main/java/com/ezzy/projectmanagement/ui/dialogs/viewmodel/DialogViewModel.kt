@@ -21,6 +21,8 @@ class DialogViewModel @Inject constructor(
     val members : LiveData<List<User>> get() = _members
     private var _allMembers = MutableLiveData<List<User>>()
     val allMembers : LiveData<List<User>> get() = _allMembers
+    private var _selectedMembers = MutableLiveData<List<User>>()
+    val selectedMembers  get() = _selectedMembers
 
     init {
         getAllMembers()
@@ -73,6 +75,16 @@ class DialogViewModel @Inject constructor(
         } catch (e : Exception) {
             Timber.e("Error searching members")
         }
+    }
+
+    fun addMembers(member : User) {
+        val members = mutableListOf<User>()
+        if (members.contains(member)){
+            return
+        } else {
+            members.add(member)
+        }
+        _selectedMembers.postValue(members)
     }
 
 }

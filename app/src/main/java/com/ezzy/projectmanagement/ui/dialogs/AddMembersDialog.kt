@@ -5,10 +5,12 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.view.isEmpty
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +22,8 @@ import com.ezzy.projectmanagement.model.User
 import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
 import com.ezzy.projectmanagement.ui.dialogs.viewmodel.DialogViewModel
 import com.ezzy.projectmanagement.util.Constants.USERS
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,10 +38,12 @@ class AddMembersDialog : DialogFragment() {
     private lateinit var searchEditText : TextInputEditText
     private lateinit var peopleRecyclerview: RecyclerView
     private lateinit var progressBar: ProgressBar
+    private lateinit var membersChipGroup : ChipGroup
     @Inject
     lateinit var firestore: FirebaseFirestore
     private lateinit var membersAdapter : CommonRecyclerViewAdapter<User>
-     private val dialogViewModel : DialogViewModel by viewModels()
+    private val dialogViewModel : DialogViewModel by viewModels()
+    private var members = listOf<User?>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -52,6 +58,7 @@ class AddMembersDialog : DialogFragment() {
             searchEditText = view.findViewById(R.id.searchPeopleEditText)
             peopleRecyclerview = view.findViewById(R.id.peopleRecyclerview)
             progressBar = view.findViewById(R.id.searchPpleprogressBar)
+            membersChipGroup = view.findViewById(R.id.membersChipGroup)
         }
 
         setUpRecyclerView()
@@ -61,10 +68,32 @@ class AddMembersDialog : DialogFragment() {
         membersAdapter.setOnClickListener { user ->
             Timber.d("THE SUSER: $user")
             user?.let {
-                if ((activity as NewProjectActivity).members.contains(it)){
+                if ((activity as NewProjectActivity).members.contains(it) && members.contains(it)){
                     return@setOnClickListener
                 } else {
                     (activity as NewProjectActivity).addMembers(it)
+                    dialogViewModel.addMembers(it)
+//                    members.add(it)
+//                    if (members.isNotEmpty()){
+//                        membersChipGroup.visibility = View.VISIBLE
+//                    }
+//                    if (membersChipGroup.visibility == View.INVISIBLE){
+//                        members.clear()
+//                    } else {
+//                        members.forEach { member ->
+//                            members.removeAt(0)
+//                            val chip = LayoutInflater.from(context).inflate(
+//                                R.layout.members_chip_item, null, false
+//                            ) as Chip
+//                            chip.apply {
+//                                text = member?.name
+//                                setOnCloseIconClickListener { memberChip ->
+//                                    membersChipGroup.removeView(memberChip)
+//                                }
+//                            }
+//                            membersChipGroup.addView(chip)
+//                        }
+//                    }
                 }
             }
         }
@@ -107,6 +136,25 @@ class AddMembersDialog : DialogFragment() {
             }
         })
 
+        dialogViewModel.selectedMembers.observe(this, { membersList ->
+            if (membersList.isNotEmpty()) {
+                membersChipGroup.visibility = View.VISIBLE
+                members = membersList
+            }
+            membersList.forEach {
+                val chip = LayoutInflater.from(context).inflate(
+                    R.layout.members_chip_item, null, false
+                ) as Chip
+                chip.apply {
+                    text = it.name
+                    setOnCloseIconClickListener { memberChip ->
+                        membersChipGroup.removeView(memberChip)
+                    }
+                }
+                membersChipGroup.addView(chip)
+            }
+        })
+
         builder.setView(view)
 
         return builder.create()
@@ -122,29 +170,6 @@ class AddMembersDialog : DialogFragment() {
         peopleRecyclerview.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = membersAdapter
-        }
-    }
-
-    private fun searchMembers (name: String) {
-        try {
-            firestore.collection(USERS).whereEqualTo("name", name)
-                .get()
-                .addOnCompleteListener {
-                    if (it.isSuccessful){
-                        val members = mutableListOf<User>()
-                        for (snapshot in it.result!!){
-                            val member = User(snapshot.getString("name"), snapshot.getString("email"))
-                            Timber.d("MEMBER: >> $member")
-                            members.add(member)
-                        }
-                        Timber.d("USERS ==>> $members")
-                        membersAdapter.differ.submitList(members)
-                    }
-                }.addOnFailureListener {
-                    Toast.makeText(context, "Error searching members", Toast.LENGTH_SHORT).show()
-                }
-        } catch (e : Exception) {
-            Toast.makeText(context, e.message.toString(), Toast.LENGTH_LONG).show()
         }
     }
 

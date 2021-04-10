@@ -37,23 +37,9 @@
 
         <com.google.android.material.chip.ChipGroup
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                app:closeIconEnabled="true"
-                android:layout_height="wrap_content"
-                android:text="John doe"
-                />
-
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                app:closeIconEnabled="true"
-                android:layout_height="wrap_content"
-                android:text="Jane doe"
-                />
-
-        </com.google.android.material.chip.ChipGroup>
+            android:id="@+id/membersChipGroup"
+            android:visibility="gone"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
