@@ -56,7 +56,7 @@ class AssignOrgDialog : DialogFragment() {
         orgAdapter.setOnClickListener { org ->
             org?.let { organization ->
                 if (organizationList.contains(organization)){
-                    return@setOnClickListener
+                    Timber.d("ORG IS ALREADY ADDED")
                 } else {
                     organizationViewModel.addOrgs(organization)
                 }
