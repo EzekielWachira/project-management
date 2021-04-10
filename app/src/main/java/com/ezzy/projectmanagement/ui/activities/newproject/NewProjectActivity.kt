@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityNewProjectBinding
+import com.ezzy.projectmanagement.model.Organization
 import com.ezzy.projectmanagement.model.Project
 import com.ezzy.projectmanagement.model.User
 import com.ezzy.projectmanagement.ui.activities.newproject.viewmodel.NewProjectViewModel
@@ -18,6 +19,7 @@ import com.ezzy.projectmanagement.ui.dialogs.AddMembersDialog
 import com.ezzy.projectmanagement.ui.dialogs.AssignOrgDialog
 import com.ezzy.projectmanagement.util.Constants.ASSIGN_ORG
 import com.ezzy.projectmanagement.util.Constants.ATTACH_FILE
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,23 +36,33 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
     @Inject
     lateinit var firebaseFirestore: FirebaseFirestore
     var members = mutableListOf<User>()
+    private  var organization: Organization? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNewProjectBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "New Project"
+        if (intent.hasExtra("organization")) {
+            organization = intent?.extras?.get("organization") as Organization
+            supportActionBar?.title = organization!!.name
+        } else { supportActionBar?.title = "New Project" }
 
         projectViewModel = NewProjectViewModel(application, firebaseFirestore)
 
-        binding.showBottomSheet.setOnClickListener {
-            supportFragmentManager.let {
-                OptionsBottomSheet.newInstance(Bundle()).apply {
-                    show(it, tag)
-                }
-            }
+        BottomSheetBehavior.from(binding.btmSheet).apply {
+            peekHeight = 100
+            state = BottomSheetBehavior.STATE_COLLAPSED
+
         }
+
+//        binding.showBottomSheet.setOnClickListener {
+//            supportFragmentManager.let {
+//                OptionsBottomSheet.newInstance(Bundle()).apply {
+//                    show(it, tag)
+//                }
+//            }
+//        }
 
         binding.startDateEditText.setOnClickListener {
             showDatePicker("Select project start date", binding.startDateEditText)
