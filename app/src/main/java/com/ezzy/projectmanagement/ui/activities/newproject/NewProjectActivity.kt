@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 private const val TAG = "NewProjectActivity"
 @AndroidEntryPoint
-class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickListener {
+class NewProjectActivity : AppCompatActivity(){
 
     private lateinit var binding : ActivityNewProjectBinding
     private lateinit var projectViewModel: NewProjectViewModel
@@ -63,14 +63,6 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
         binding.btnAddOrg.setOnClickListener {
             AssignOrgDialog().show(supportFragmentManager, ASSIGN_ORG)
         }
-
-//        binding.showBottomSheet.setOnClickListener {
-//            supportFragmentManager.let {
-//                OptionsBottomSheet.newInstance(Bundle()).apply {
-//                    show(it, tag)
-//                }
-//            }
-//        }
 
         binding.startDateEditText.setOnClickListener {
             showDatePicker("Select project start date", binding.startDateEditText)
@@ -146,18 +138,6 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
         val projectStages = resources.getStringArray(R.array.project_stages)
         val arrayAdapter = ArrayAdapter(this, R.layout.dropdown_item, projectStages)
         binding.projectStageTextView.setAdapter(arrayAdapter)
-    }
-
-    override fun onItemClick(item: String) {
-        when(item){
-            "attachFile" -> AddMembersDialog().show(
-                supportFragmentManager, ATTACH_FILE
-            )
-            "addOrg" -> AssignOrgDialog().show(
-                supportFragmentManager, ASSIGN_ORG
-            )
-            else -> makeToast("Nothing was clicked")
-        }
     }
 
     private fun isEmpty(string: String): Boolean {
