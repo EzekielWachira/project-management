@@ -42,4 +42,6 @@
     </string>
     <string name="management">Management</string>
     <string name="progress">Progress: </string>
+    <string name="not_member">You are not a member of this group</string>
+    <string name="request_add">Request Add</string>
 </resources>

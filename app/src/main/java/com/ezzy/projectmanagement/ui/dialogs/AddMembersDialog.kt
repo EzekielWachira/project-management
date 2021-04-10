@@ -73,27 +73,6 @@ class AddMembersDialog : DialogFragment() {
                 } else {
                     (activity as NewProjectActivity).addMembers(it)
                     dialogViewModel.addMembers(it)
-//                    members.add(it)
-//                    if (members.isNotEmpty()){
-//                        membersChipGroup.visibility = View.VISIBLE
-//                    }
-//                    if (membersChipGroup.visibility == View.INVISIBLE){
-//                        members.clear()
-//                    } else {
-//                        members.forEach { member ->
-//                            members.removeAt(0)
-//                            val chip = LayoutInflater.from(context).inflate(
-//                                R.layout.members_chip_item, null, false
-//                            ) as Chip
-//                            chip.apply {
-//                                text = member?.name
-//                                setOnCloseIconClickListener { memberChip ->
-//                                    membersChipGroup.removeView(memberChip)
-//                                }
-//                            }
-//                            membersChipGroup.addView(chip)
-//                        }
-//                    }
                 }
             }
         }

@@ -1,105 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/_10sdp"
-        tools:context=".ui.activities.organization.OrgDetailsActivity">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_150sdp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/cover"
-            android:scaleType="centerCrop"
-            android:id="@+id/orgDetailImage"/>
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10sdp"
+            tools:context=".ui.activities.organization.OrgDetailsActivity">
+
+            <ImageView
+                android:id="@+id/orgDetailImage"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_150sdp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/cover"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/orgDetailName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Organization Name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14ssp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/orgDetailImage"
+                app:layout_constraintTop_toBottomOf="@id/orgDetailImage" />
+
+            <TextView
+                android:id="@+id/orgDetailAbout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="@string/lorem"
+                app:layout_constraintStart_toStartOf="@id/orgDetailName"
+                app:layout_constraintTop_toBottomOf="@id/orgDetailName" />
+
+            <TextView
+                android:id="@+id/managementTxtView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="@string/management"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/orgDetailAbout"
+                app:layout_constraintTop_toBottomOf="@id/orgDetailAbout" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/managementRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/managementTxtView" />
+
+
+            <TextView
+                android:id="@+id/othersTxtView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Others"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/managementRecyclerView"
+                app:layout_constraintTop_toBottomOf="@id/managementRecyclerView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/othersRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/othersTxtView" />
+
+            <TextView
+                android:id="@+id/projectsTxtView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="@string/projects"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/othersRecyclerView"
+                app:layout_constraintTop_toBottomOf="@id/othersRecyclerView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/projectsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/projectsTxtView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/search_bg"
+        android:orientation="horizontal"
+        android:padding="@dimen/_5sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
+            android:id="@+id/notAMemberTxtView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/orgDetailName"
-            app:layout_constraintStart_toStartOf="@id/orgDetailImage"
-            app:layout_constraintTop_toBottomOf="@id/orgDetailImage"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:textSize="@dimen/_14ssp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="Organization Name"/>
+            android:text="@string/not_member" />
 
-        <TextView
+        <Button
+            android:id="@+id/requestAddBtn"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:id="@+id/orgDetailAbout"
-            app:layout_constraintStart_toStartOf="@id/orgDetailName"
-            app:layout_constraintTop_toBottomOf="@id/orgDetailName"
-            android:text="@string/lorem"
-            />
+            android:layout_marginStart="@dimen/_10sdp"
+            android:text="@string/request_add"
+            app:icon="@drawable/ic_add_circle_" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/orgDetailAbout"
-            app:layout_constraintTop_toBottomOf="@id/orgDetailAbout"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:text="@string/management"
-            android:textStyle="bold"
-            android:id="@+id/managementTxtView"
-            android:textSize="@dimen/_13ssp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_30sdp"
-            app:layout_constraintTop_toBottomOf="@id/managementTxtView"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:id="@+id/managementRecyclerView"/>
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/managementRecyclerView"
-            app:layout_constraintTop_toBottomOf="@id/managementRecyclerView"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:text="Others"
-            android:textStyle="bold"
-            android:id="@+id/othersTxtView"
-            android:textSize="@dimen/_13ssp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_30sdp"
-            app:layout_constraintTop_toBottomOf="@id/othersTxtView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/othersRecyclerView"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/othersRecyclerView"
-            app:layout_constraintTop_toBottomOf="@id/othersRecyclerView"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:text="@string/projects"
-            android:textStyle="bold"
-            android:id="@+id/projectsTxtView"
-            android:textSize="@dimen/_13ssp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_30sdp"
-            app:layout_constraintTop_toBottomOf="@id/projectsTxtView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/projectsRecyclerView"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
