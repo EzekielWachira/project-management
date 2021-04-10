@@ -2,11 +2,16 @@ package com.ezzy.projectmanagement.ui.activities.organization
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.ezzy.projectmanagement.R
+import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.databinding.ActivityOrgDetailsBinding
 import com.ezzy.projectmanagement.model.Organization
+import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
 
 class OrgDetailsActivity : AppCompatActivity() {
 
@@ -37,5 +42,19 @@ class OrgDetailsActivity : AppCompatActivity() {
                 this, R.drawable.placeholder
             ))
             .into(binding.orgDetailImage)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_org_details, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.actionAddProject -> {
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

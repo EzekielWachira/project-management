@@ -16,6 +16,7 @@ import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @HiltViewModel
 class OrganizationViewModel @Inject constructor(
@@ -34,6 +35,12 @@ class OrganizationViewModel @Inject constructor(
     val isOrgLoadingSuccess = _isOrgLoadingSuccess
     private var _orgsSearched = MutableLiveData<List<Organization>>()
     val orgsSearched : LiveData<List<Organization>> get() = _orgsSearched
+    private var _orgs = MutableLiveData<ArrayList<Organization>>()
+    val orgs : LiveData<ArrayList<Organization>> get() = _orgs
+
+    init {
+        retrieveOrganizations()
+    }
 
     fun addOrganization(organization: Organization, fileName : String, imageUri: Uri) {
         viewModelScope.launch {
@@ -113,6 +120,16 @@ class OrganizationViewModel @Inject constructor(
                 Timber.d(e.message.toString())
             }
         }
+    }
+
+    fun addOrgs(organization: Organization) {
+        val orgsList = arrayListOf<Organization>()
+        if (orgsList.contains(organization)){
+            Timber.d("Org is already added")
+        } else {
+            orgsList.add(organization)
+        }
+        _orgs.postValue(orgsList)
     }
     
     fun saveOrgImage(fileName : String, imageUri: Uri) : String? {

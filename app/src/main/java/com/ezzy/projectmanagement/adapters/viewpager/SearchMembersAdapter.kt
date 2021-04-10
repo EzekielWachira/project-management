@@ -3,9 +3,13 @@ package com.ezzy.projectmanagement.adapters.viewpager
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.adapters.CommonViewHolder
+import com.ezzy.projectmanagement.model.Organization
 import com.ezzy.projectmanagement.model.User
+import de.hdodenhof.circleimageview.CircleImageView
 
 class SearchMemberViewHolder(
     val context: Context,
@@ -21,6 +25,28 @@ class SearchMemberViewHolder(
         item?.let { user ->
             userNameTextView.text = user.name
             userEmailTextView.text = user.email
+        }
+    }
+}
+
+class SearchOrgViewHolder(
+    val context: Context,
+    parent: ViewGroup
+) : CommonViewHolder<Organization>(
+    parent, R.layout.organization_item
+) {
+
+    val orgImage : CircleImageView = rootView.findViewById(R.id.organizationImage)
+    val orgName : TextView = rootView.findViewById(R.id.organizationName)
+
+    override fun bindItem(item: Organization?) {
+        item?.let {
+            orgName.text = it.name
+            Glide.with(context)
+                .load(it.imageSrc)
+                .placeholder(ContextCompat.getDrawable(
+                    context, R.drawable.placeholder
+                )).into(orgImage)
         }
     }
 }

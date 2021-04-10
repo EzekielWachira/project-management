@@ -44,4 +44,5 @@
     <string name="progress">Progress: </string>
     <string name="not_member">You are not a member of this group</string>
     <string name="request_add">Request Add</string>
+    <string name="add_project">Add Project</string>
 </resources>

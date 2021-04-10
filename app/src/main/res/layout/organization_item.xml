@@ -2,75 +2,34 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardElevation="@dimen/_5sdp"
-    app:cardCornerRadius="@dimen/_5sdp"
-    android:layout_marginStart="@dimen/_5sdp"
-    android:layout_marginEnd="@dimen/_5sdp"
-    android:layout_height="wrap_content">
-
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:padding="@dimen/_5sdp"
-        android:layout_height="match_parent">
+        >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:src="@drawable/ezzy"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            >
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:gravity="center"
-                android:layout_height="match_parent">
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_40sdp"
-                    android:src="@drawable/ezzy"
-                    android:id="@+id/organizationImage"/>
-            </LinearLayout>
+            android:id="@+id/organizationImage"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/_5sdp"
-                android:orientation="vertical"
-                >
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Organization 1"
-                    android:textSize="@dimen/_13ssp"
-                    android:textStyle="bold"
-                    android:textColor="@color/deepOrange"
-                    android:id="@+id/organizationName"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Members 5"
-                    android:gravity="center_vertical"
-                    android:drawableStart="@drawable/ic_build"
-                    android:drawablePadding="@dimen/_5sdp"
-                    android:id="@+id/membersTextView"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Projects 6"
-                    android:drawablePadding="@dimen/_5sdp"
-                    android:id="@+id/projectsTextView"
-                    android:gravity="center_vertical"
-                    android:drawableStart="@drawable/ic_people"
-                />
-
-            </LinearLayout>
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/organizationName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:text="Organization One"
+            android:textSize="@dimen/_13ssp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/organizationImage"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
