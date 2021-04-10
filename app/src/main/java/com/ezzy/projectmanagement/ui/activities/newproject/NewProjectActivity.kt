@@ -17,6 +17,7 @@ import com.ezzy.projectmanagement.ui.activities.newproject.viewmodel.NewProjectV
 import com.ezzy.projectmanagement.ui.bottomsheet.OptionsBottomSheet
 import com.ezzy.projectmanagement.ui.dialogs.AddMembersDialog
 import com.ezzy.projectmanagement.ui.dialogs.AssignOrgDialog
+import com.ezzy.projectmanagement.util.Constants.ADD_MEMBERS
 import com.ezzy.projectmanagement.util.Constants.ASSIGN_ORG
 import com.ezzy.projectmanagement.util.Constants.ATTACH_FILE
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -53,7 +54,14 @@ class NewProjectActivity : AppCompatActivity(), OptionsBottomSheet.ItemClickList
         BottomSheetBehavior.from(binding.btmSheet).apply {
             peekHeight = 100
             state = BottomSheetBehavior.STATE_COLLAPSED
+        }
 
+        binding.btnAddMembers.setOnClickListener {
+            AddMembersDialog().show(supportFragmentManager, ADD_MEMBERS)
+        }
+
+        binding.btnAddOrg.setOnClickListener {
+            AssignOrgDialog().show(supportFragmentManager, ASSIGN_ORG)
         }
 
 //        binding.showBottomSheet.setOnClickListener {

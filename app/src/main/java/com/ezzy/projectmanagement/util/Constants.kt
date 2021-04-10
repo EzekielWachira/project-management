@@ -8,8 +8,9 @@ object Constants {
     const val ORGANIZATIONS = "organizations"
     const val MEMBERS = "members"
     const val ATTACHMENTS = "attachments"
-    const val ASSIGN_ORG ="ASSIGN_ORG"
+    const val ASSIGN_ORG ="Assign org"
     const val ATTACH_FILE = "ATTACH_FILE"
+    const val ADD_MEMBERS = "Add Members"
     const val PICK_PHOTO_REQUEST_CODE = 1
     const val TAKE_IMAGE_REQUEST_CODE = 0
     const val TAKE_PHOTO = "Take Photo"

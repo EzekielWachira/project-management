@@ -202,9 +202,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_20sdp"
+                android:id="@+id/btnAddMembers"
                 android:layout_marginEnd="@dimen/_20sdp"
                 app:icon="@drawable/ic_person_add"
-                android:text="Add members"/>
+                android:text="@string/add_members"/>
 
             <Button
                 android:layout_marginTop="@dimen/_10sdp"
@@ -213,7 +214,8 @@
                 android:layout_marginStart="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_20sdp"
                 app:icon="@drawable/ic_business"
-                android:text="Assign Organization"/>
+                android:id="@+id/btnAddOrg"
+                android:text="@string/assign_organization"/>
             <Button
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_width="match_parent"
@@ -225,7 +227,8 @@
                 app:iconPadding="@dimen/_10sdp"
                 app:strokeWidth="@dimen/_1sdp"
                 app:strokeColor="@color/orange"
-                android:text="Attach files"/>
+                android:id="@+id/btnAttachFiles"
+                android:text="@string/attach_files"/>
         </LinearLayout>
     </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -45,4 +45,6 @@
     <string name="not_member">You are not a member of this group</string>
     <string name="request_add">Request Add</string>
     <string name="add_project">Add Project</string>
+    <string name="attach_files">Attach files</string>
+    <string name="assign_organization">Assign Organization</string>
 </resources>
