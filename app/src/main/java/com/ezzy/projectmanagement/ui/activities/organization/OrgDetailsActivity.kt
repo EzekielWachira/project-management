@@ -1,5 +1,6 @@
 package com.ezzy.projectmanagement.ui.activities.organization
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -11,12 +12,13 @@ import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.databinding.ActivityOrgDetailsBinding
 import com.ezzy.projectmanagement.model.Organization
+import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
 
 class OrgDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityOrgDetailsBinding
-    private lateinit var organization : Organization
+    private var organization : Organization? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +29,9 @@ class OrgDetailsActivity : AppCompatActivity() {
             organization = intent.extras?.get("organization") as Organization
             supportActionBar?.apply {
                 setDisplayHomeAsUpEnabled(true)
-                title = organization.name
+                title = organization!!.name
             }
-            setUpViews(organization)
+            setUpViews(organization!!)
         }
     }
 
@@ -52,7 +54,12 @@ class OrgDetailsActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.actionAddProject -> {
-
+                Intent(this, NewProjectActivity::class.java).apply {
+                    organization?.let {
+                        putExtra("organization", it)
+                    }
+                    startActivity(this)
+                }
             }
         }
         return super.onOptionsItemSelected(item)
