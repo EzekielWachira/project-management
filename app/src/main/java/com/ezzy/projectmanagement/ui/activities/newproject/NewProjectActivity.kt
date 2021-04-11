@@ -2,11 +2,13 @@ package com.ezzy.projectmanagement.ui.activities.newproject
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityNewProjectBinding
@@ -14,29 +16,27 @@ import com.ezzy.projectmanagement.model.Organization
 import com.ezzy.projectmanagement.model.Project
 import com.ezzy.projectmanagement.model.User
 import com.ezzy.projectmanagement.ui.activities.newproject.viewmodel.NewProjectViewModel
-import com.ezzy.projectmanagement.ui.bottomsheet.OptionsBottomSheet
 import com.ezzy.projectmanagement.ui.dialogs.AddMembersDialog
 import com.ezzy.projectmanagement.ui.dialogs.AssignOrgDialog
 import com.ezzy.projectmanagement.util.Constants.ADD_MEMBERS
 import com.ezzy.projectmanagement.util.Constants.ASSIGN_ORG
-import com.ezzy.projectmanagement.util.Constants.ATTACH_FILE
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import javax.inject.Inject
 
 private const val TAG = "NewProjectActivity"
 @AndroidEntryPoint
 class NewProjectActivity : AppCompatActivity(){
 
     private lateinit var binding : ActivityNewProjectBinding
-    private lateinit var projectViewModel: NewProjectViewModel
-    @Inject
-    lateinit var firebaseFirestore: FirebaseFirestore
-    var members = mutableListOf<User>()
+    private val projectViewModel: NewProjectViewModel by viewModels()
+//    @Inject
+//    lateinit var firebaseFirestore: FirebaseFirestore
+    var members : MutableSet<User>? = null
+    var organizations : MutableList<Organization>? = null
     private  var organization: Organization? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,12 +49,14 @@ class NewProjectActivity : AppCompatActivity(){
             supportActionBar?.title = organization!!.name
         } else { supportActionBar?.title = "New Project" }
 
-        projectViewModel = NewProjectViewModel(application, firebaseFirestore)
+//        projectViewModel = NewProjectViewModel(application, firebaseFirestore)
 
         BottomSheetBehavior.from(binding.btmSheet).apply {
             peekHeight = 100
             state = BottomSheetBehavior.STATE_COLLAPSED
         }
+
+//        setUpChips()
 
         binding.btnAddMembers.setOnClickListener {
             AddMembersDialog().show(supportFragmentManager, ADD_MEMBERS)
@@ -80,12 +82,68 @@ class NewProjectActivity : AppCompatActivity(){
             }
         })
 
+        projectViewModel.organizations.observe(this, {
+
+            it.forEach { org ->
+                val orgChip = LayoutInflater.from(this).inflate(
+                    R.layout.members_chip_item, null, false
+                ) as Chip
+                orgChip.apply {
+                    text = org.name
+                    setOnCloseIconClickListener { chip ->
+                        binding.organizationChipGroup.removeView(chip)
+                    }
+                }
+                binding.organizationChipGroup.addView(orgChip)
+            }
+        })
+
 
     }
 
-    fun addMembers(user: User) {
-        members.add(user)
+    private fun setUpChips() {
+        if (members?.isNotEmpty() == true || organizations?.isNotEmpty() == true) {
+            binding.membersLayout.visibility = View.VISIBLE
+            members?.forEach { member ->
+                val chip = LayoutInflater.from(this).inflate(
+                    R.layout.members_chip_item, null, false
+                ) as Chip
+                chip.apply {
+                    text = member?.name
+                    setOnCloseIconClickListener {
+                        binding.membersChipGroup.removeView(it)
+                    }
+                }
+                binding.membersChipGroup.addView(chip)
+            }
+            organizations.let {
+                it?.forEach { org ->
+                    val chip = LayoutInflater.from(this).inflate(
+                        R.layout.members_chip_item, null, false
+                    ) as Chip
+                    chip.apply {
+                        text = org.name
+                        setOnCloseIconClickListener {
+                            binding.organizationChipGroup.removeView(it)
+                        }
+                    }
+                    binding.organizationChipGroup.addView(chip)
+                }
+            }
+        }
+    }
+
+    fun addMembers(users: MutableSet<User>) {
+        members?.addAll(users)
         Timber.d("MEMBERS : =>>> $members")
+    }
+
+    fun addOrganizations(organization: Organization){
+        if (organizations?.contains(organization) == true){
+            makeToast("Organization already exist")
+        } else {
+            organizations?.add(organization)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

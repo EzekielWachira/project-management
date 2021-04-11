@@ -19,6 +19,8 @@ import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.adapters.viewpager.SearchOrgViewHolder
 import com.ezzy.projectmanagement.model.Organization
+import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
+import com.ezzy.projectmanagement.ui.activities.newproject.viewmodel.NewProjectViewModel
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -35,7 +37,9 @@ class AssignOrgDialog : DialogFragment() {
     private lateinit var orgSearchEditText : TextInputEditText
     private lateinit var orgChipGroup : ChipGroup
     private val organizationViewModel : OrganizationViewModel by viewModels()
+    private val newProjectViewModel : NewProjectViewModel by viewModels()
     private lateinit var orgAdapter : CommonRecyclerViewAdapter<Organization>
+    private var organizations = mutableSetOf<Organization>()
 
     private var organizationList = arrayListOf<Organization>()
 
@@ -55,10 +59,13 @@ class AssignOrgDialog : DialogFragment() {
 
         orgAdapter.setOnClickListener { org ->
             org?.let { organization ->
-                if (organizationList.contains(organization)){
+                if (organizations.contains(organization)){
                     Timber.d("ORG IS ALREADY ADDED")
                 } else {
-                    organizationViewModel.addOrgs(organization)
+//                    (activity as NewProjectActivity).addOrganizations(org)
+                    organizations.add(organization)
+                    Timber.d("ORGS_SET $organizations")
+//                    organizationViewModel.addOrgs(organization)
                 }
 //                organizationViewModel.orgs.observe(this, {
 //                    if (it.contains(organization)){
@@ -96,27 +103,48 @@ class AssignOrgDialog : DialogFragment() {
             orgAdapter.differ.submitList(it)
         })
 
-        organizationViewModel.orgs.observe(this, { orgs ->
-            if (orgs.isNotEmpty()){
-                orgChipGroup.visibility = View.VISIBLE
-                organizationList = orgs
-                orgs.forEach {
-                    val orgChip = LayoutInflater.from(context).inflate(
-                        R.layout.members_chip_item, null, false
-                    ) as Chip
-                    orgChip.apply {
-                        text = it.name
-                        setOnCloseIconClickListener {
-                            orgChipGroup.removeView(it)
+//        organizationViewModel.orgs.observe(this, { orgs ->
+//            if (orgs.isNotEmpty()){
+//                orgChipGroup.visibility = View.VISIBLE
+//                organizationList = orgs
+//                orgs.forEach {
+//                    val orgChip = LayoutInflater.from(context).inflate(
+//                        R.layout.members_chip_item, null, false
+//                    ) as Chip
+//                    orgChip.apply {
+//                        text = it.name
+//                        setOnCloseIconClickListener {
+//                            orgChipGroup.removeView(it)
+//                        }
+//                    }
+//                    orgChipGroup.addView(orgChip)
+//                }
+//                Timber.d("ORGANUZATIONS: $orgs")
+//            }
+//        })
+
+        newProjectViewModel.organizations.observe(this, { organizations ->
+            organizations?.let { orgs ->
+                if (orgs.isNotEmpty()){
+                    orgChipGroup.visibility = View.VISIBLE
+                    orgs.forEach { org ->
+                        val chip = LayoutInflater.from(context).inflate(
+                            R.layout.members_chip_item, null, false
+                        ) as Chip
+                        chip.apply {
+                            text = org.name
+                            setOnCloseIconClickListener {
+                                orgChipGroup.removeView(it)
+                            }
                         }
+                        orgChipGroup.addView(chip)
                     }
-                    orgChipGroup.addView(orgChip)
                 }
-                Timber.d("ORGANUZATIONS: $orgs")
             }
         })
 
         doneButton.setOnClickListener {
+            newProjectViewModel.addOrganizations(organizations)
             dialog?.dismiss()
         }
 

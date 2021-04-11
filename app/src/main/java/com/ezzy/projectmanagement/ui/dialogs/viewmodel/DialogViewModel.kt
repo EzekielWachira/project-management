@@ -21,7 +21,7 @@ class DialogViewModel @Inject constructor(
     val members : LiveData<List<User>> get() = _members
     private var _allMembers = MutableLiveData<List<User>>()
     val allMembers : LiveData<List<User>> get() = _allMembers
-    private var _selectedMembers = MutableLiveData<List<User>>()
+    private var _selectedMembers = MutableLiveData<Set<User>>()
     val selectedMembers  get() = _selectedMembers
 
     init {
@@ -78,7 +78,7 @@ class DialogViewModel @Inject constructor(
     }
 
     fun addMembers(member : User) {
-        val members = mutableListOf<User>()
+        val members = mutableSetOf<User>()
         if (members.contains(member)){
             return
         } else {

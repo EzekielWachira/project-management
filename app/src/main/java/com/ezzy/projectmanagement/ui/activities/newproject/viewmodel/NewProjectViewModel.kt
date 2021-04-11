@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.ezzy.projectmanagement.model.Organization
 import com.ezzy.projectmanagement.model.Project
 import com.ezzy.projectmanagement.model.User
 import com.ezzy.projectmanagement.util.Constants.MEMBERS
@@ -30,8 +31,16 @@ class NewProjectViewModel @Inject constructor(
     val errorMessage : LiveData<String> get() = _errorMessage
     private var _isSuccess = MutableLiveData<Boolean>()
     val isSuccess : LiveData<Boolean> get() = _isSuccess
+    private var _organizations = MutableLiveData<Set<Organization>>()
+    val organizations : LiveData<Set<Organization>> get() = _organizations
+    private var _members = MutableLiveData<List<User>>()
+    val members : LiveData<List<User>> get() = _members
 
-    fun addProject(project: Project, members : List<User>?) = viewModelScope.launch {
+    init {
+
+    }
+
+    fun addProject(project: Project, members : Set<User>?) = viewModelScope.launch {
         try {
             val projectsRef = firebaseFirestore.collection(PROJECT_COLLECTION)
             projectsRef.add(project)
@@ -60,6 +69,15 @@ class NewProjectViewModel @Inject constructor(
             _isError.postValue(true)
             _errorMessage.postValue(e.message)
         }
+    }
+
+    fun addOrganizations(organizationList: Set<Organization>){
+        val orgs = mutableListOf<Organization>()
+        _organizations.postValue(organizationList)
+    }
+
+    fun addMembers(membersList: List<User>){
+        _members.postValue(membersList)
     }
 
 }
