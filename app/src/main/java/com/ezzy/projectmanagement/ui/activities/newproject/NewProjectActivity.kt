@@ -84,18 +84,19 @@ class NewProjectActivity : AppCompatActivity(){
         })
 
         projectViewModel.organizations.observe(this, {
-            organizations = (it as MutableSet<Organization>?)!!
             it.forEach { org ->
+                organizations.add(org)
                 val orgChip = LayoutInflater.from(this).inflate(
                     R.layout.members_chip_item, null, false
                 ) as Chip
                 orgChip.apply {
                     text = org.name
                     setOnCloseIconClickListener { chip ->
-                        binding.organizationChipGroup.removeView(chip)
+                        organizations.remove(org)
+                        binding.chipOrgGroup.removeView(chip)
                     }
                 }
-                binding.organizationChipGroup.addView(orgChip)
+                binding.chipOrgGroup.addView(orgChip)
             }
         })
 
@@ -125,10 +126,10 @@ class NewProjectActivity : AppCompatActivity(){
                     chip.apply {
                         text = org.name
                         setOnCloseIconClickListener {
-                            binding.organizationChipGroup.removeView(it)
+                            binding.chipOrgGroup.removeView(it)
                         }
                     }
-                    binding.organizationChipGroup.addView(chip)
+                    binding.chipOrgGroup.addView(chip)
                 }
             }
         }
@@ -198,6 +199,7 @@ class NewProjectActivity : AppCompatActivity(){
         val projectStages = resources.getStringArray(R.array.project_stages)
         val arrayAdapter = ArrayAdapter(this, R.layout.dropdown_item, projectStages)
         binding.projectStageTextView.setAdapter(arrayAdapter)
+        projectViewModel.reloadOrgs()
     }
 
     private fun isEmpty(string: String): Boolean {

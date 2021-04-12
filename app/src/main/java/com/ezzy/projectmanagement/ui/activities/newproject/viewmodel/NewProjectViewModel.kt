@@ -38,8 +38,10 @@ class NewProjectViewModel @Inject constructor(
     val members : LiveData<List<User>> get() = _members
 
     init {
-
+        reloadOrgs()
     }
+
+    fun reloadOrgs() = organizations
 
     fun addProject(organizationsList : Set<Organization>?, project: Project, members : Set<User>?) {
         viewModelScope.launch {
@@ -81,6 +83,7 @@ class NewProjectViewModel @Inject constructor(
                             Timber.e("An error occurred while searching")
                         }
                         .await()
+                    _isError.postValue(false)
                 }
 //            projectsRef.add(project)
 //                .addOnSuccessListener { docReference ->
