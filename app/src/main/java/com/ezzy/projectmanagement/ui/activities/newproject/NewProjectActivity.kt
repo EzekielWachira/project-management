@@ -36,7 +36,7 @@ class NewProjectActivity : AppCompatActivity(){
 //    @Inject
 //    lateinit var firebaseFirestore: FirebaseFirestore
     var members : MutableSet<User>? = null
-    var organizations : MutableList<Organization>? = null
+    var organizations = mutableSetOf<Organization>()
     private  var organization: Organization? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +47,7 @@ class NewProjectActivity : AppCompatActivity(){
         if (intent.hasExtra("organization")) {
             organization = intent?.extras?.get("organization") as Organization
             supportActionBar?.title = organization!!.name
+            organizations.add(organization!!)
         } else { supportActionBar?.title = "New Project" }
 
 //        projectViewModel = NewProjectViewModel(application, firebaseFirestore)
@@ -83,7 +84,7 @@ class NewProjectActivity : AppCompatActivity(){
         })
 
         projectViewModel.organizations.observe(this, {
-
+            organizations = (it as MutableSet<Organization>?)!!
             it.forEach { org ->
                 val orgChip = LayoutInflater.from(this).inflate(
                     R.layout.members_chip_item, null, false
@@ -142,7 +143,7 @@ class NewProjectActivity : AppCompatActivity(){
         if (organizations?.contains(organization) == true){
             makeToast("Organization already exist")
         } else {
-            organizations?.add(organization)
+//            organizations?.add(organization)
         }
     }
 
@@ -170,7 +171,8 @@ class NewProjectActivity : AppCompatActivity(){
                         binding.startDateEditText.text.toString(),
                         binding.endDateEditText.text.toString()
                     )
-                    projectViewModel.addProject(project, members)
+                    Timber.d("ORGANISATIONS: >> $organizations : PROJECT: >> $project : MEMBERS $members")
+                    projectViewModel.addProject( organizations, project, members)
                 }
             }
         }

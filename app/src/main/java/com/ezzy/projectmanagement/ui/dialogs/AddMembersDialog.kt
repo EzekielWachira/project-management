@@ -40,7 +40,7 @@ class AddMembersDialog : DialogFragment() {
     lateinit var firestore: FirebaseFirestore
     private lateinit var membersAdapter : CommonRecyclerViewAdapter<User>
     private val dialogViewModel : DialogViewModel by viewModels()
-    private var members : MutableSet<User>? = null
+    private var members = setOf<User>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -65,15 +65,14 @@ class AddMembersDialog : DialogFragment() {
         membersAdapter.setOnClickListener { user ->
             Timber.d("THE SUSER: $user")
             user?.let {
-                members?.let { memberrs ->
                 //(activity as NewProjectActivity).members?.contains(it) == true &&
-                    if (memberrs.contains(it)){
+                    if (members.contains(it)){
                         Timber.d("The user is already added")
                     } else {
-                        memberrs.add(it)
+//                        members.add(it)
                         dialogViewModel.addMembers(it)
                     }
-                }
+
             }
         }
 
@@ -119,7 +118,7 @@ class AddMembersDialog : DialogFragment() {
         dialogViewModel.selectedMembers.observe(this, { membersList ->
             if (membersList.isNotEmpty()) {
                 membersChipGroup.visibility = View.VISIBLE
-                members = membersList.toMutableSet()
+                members = membersList
                 for (member in membersList) {
                     val chip = LayoutInflater.from(context).inflate(
                         R.layout.members_chip_item, null, false
