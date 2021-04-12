@@ -31,7 +31,6 @@ class AllProjectsViewModel @Inject constructor(
     fun getAllProjects() = viewModelScope.launch {
         try {
             firestore.collection(PROJECT_COLLECTION)
-                .orderBy("name")
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
