@@ -37,6 +37,14 @@ class AllProjectsFragment : Fragment() {
             allProjectsAdapter.differ.submitList(projectsList)
         })
 
+        allProjectsViewModel.isProjectLoadSuccess.observe(viewLifecycleOwner, { isSuccess ->
+            if (isSuccess) {
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                binding.progressBar.visibility = View.INVISIBLE
+            }
+        })
+
         return binding.root
     }
 
@@ -49,7 +57,7 @@ class AllProjectsFragment : Fragment() {
         binding.allProjectRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = allProjectsAdapter
-            addItemDecoration(VerticalItemDecorator(5))
+            addItemDecoration(VerticalItemDecorator(8))
         }
     }
 

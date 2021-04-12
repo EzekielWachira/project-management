@@ -30,11 +30,12 @@ class AllProjectsViewModel @Inject constructor(
 
     fun getAllProjects() = viewModelScope.launch {
         try {
+            _isProjectLoadSuccess.postValue(true)
             firestore.collection(PROJECT_COLLECTION)
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        _isProjectLoadSuccess.postValue(true)
+                        _isProjectLoadSuccess.postValue(false)
                         val projects = mutableListOf<Project>()
                         it.result!!.forEach { querySnapshot ->
                             val project = Project(

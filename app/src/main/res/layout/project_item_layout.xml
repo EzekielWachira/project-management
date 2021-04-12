@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/_5sdp"
     android:layout_marginEnd="@dimen/_5sdp"
-    app:cardCornerRadius="@dimen/_5sdp">
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
