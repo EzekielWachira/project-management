@@ -38,7 +38,7 @@ class NewProjectActivity : AppCompatActivity(){
 
     private lateinit var binding : ActivityNewProjectBinding
     private val projectViewModel: NewProjectViewModel by viewModels()
-    private lateinit var newProjectMemberAdapter : CommonRecyclerViewAdapter<User>
+//    private lateinit var newProjectMemberAdapter : CommonRecyclerViewAdapter<User>
     var members = mutableSetOf<User>()
     var organizations = mutableSetOf<Organization>()
     private  var organization: Organization? = null
@@ -89,37 +89,43 @@ class NewProjectActivity : AppCompatActivity(){
         })
 
         projectViewModel.organizations.observe(this, {
-            it.forEach { org ->
-                organizations.add(org)
-                val orgChip = LayoutInflater.from(this).inflate(
-                    R.layout.members_chip_item, null, false
-                ) as Chip
-                orgChip.apply {
-                    text = org.name
-                    setOnCloseIconClickListener { chip ->
-                        organizations.remove(org)
-                        binding.chipOrgGroup.removeView(chip)
+            if (it.isNotEmpty()) {
+                binding.organizationLayout.visibility = View.VISIBLE
+                it.forEach { org ->
+                    organizations.add(org)
+                    val orgChip = LayoutInflater.from(this).inflate(
+                        R.layout.members_chip_item, null, false
+                    ) as Chip
+                    orgChip.apply {
+                        text = org.name
+                        setOnCloseIconClickListener { chip ->
+                            organizations.remove(org)
+                            binding.chipOrgGroup.removeView(chip)
+                        }
                     }
+                    binding.chipOrgGroup.addView(orgChip)
                 }
-                binding.chipOrgGroup.addView(orgChip)
-            }
+            } else {binding.organizationLayout.visibility = View.INVISIBLE}
         })
 
         projectViewModel.members.observe(this, {
-            newProjectMemberAdapter.differ.submitList(it.toList())
-            it.forEach { user ->
-                members.add(user)
-                val membersChip = LayoutInflater.from(this)
-                    .inflate(R.layout.members_chip_item, null, false) as Chip
-                membersChip.apply {
-                    text = user.name
-                    setOnCloseIconClickListener {
-                        binding.membersChipGroup.removeView(it)
-                        members.remove(user)
+//            newProjectMemberAdapter.differ.submitList(it.toList())
+            if (it.isNotEmpty()) {
+                binding.membersLayout.visibility = View.VISIBLE
+                it.forEach { user ->
+                    members.add(user)
+                    val membersChip = LayoutInflater.from(this)
+                        .inflate(R.layout.members_chip_item, null, false) as Chip
+                    membersChip.apply {
+                        text = user.name
+                        setOnCloseIconClickListener {
+                            binding.membersChipGroup.removeView(it)
+                            members.remove(user)
+                        }
                     }
+                    binding.membersChipGroup.addView(membersChip)
                 }
-                binding.membersChipGroup.addView(membersChip)
-            }
+            } else { binding.membersLayout.visibility = View.INVISIBLE }
         })
     }
 
