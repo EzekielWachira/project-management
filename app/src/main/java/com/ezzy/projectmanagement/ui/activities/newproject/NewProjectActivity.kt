@@ -2,41 +2,45 @@ package com.ezzy.projectmanagement.ui.activities.newproject
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ezzy.projectmanagement.R
+import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
+import com.ezzy.projectmanagement.adapters.NewProjectMembersViewHolder
 import com.ezzy.projectmanagement.databinding.ActivityNewProjectBinding
 import com.ezzy.projectmanagement.model.Organization
 import com.ezzy.projectmanagement.model.Project
 import com.ezzy.projectmanagement.model.User
 import com.ezzy.projectmanagement.ui.activities.newproject.viewmodel.NewProjectViewModel
-import com.ezzy.projectmanagement.ui.bottomsheet.OptionsBottomSheet
 import com.ezzy.projectmanagement.ui.dialogs.AddMembersDialog
 import com.ezzy.projectmanagement.ui.dialogs.AssignOrgDialog
 import com.ezzy.projectmanagement.util.Constants.ADD_MEMBERS
 import com.ezzy.projectmanagement.util.Constants.ASSIGN_ORG
-import com.ezzy.projectmanagement.util.Constants.ATTACH_FILE
+import com.ezzy.projectmanagement.util.HorizontalItemDecorator
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import javax.inject.Inject
 
 private const val TAG = "NewProjectActivity"
 @AndroidEntryPoint
 class NewProjectActivity : AppCompatActivity(){
 
     private lateinit var binding : ActivityNewProjectBinding
-    private lateinit var projectViewModel: NewProjectViewModel
-    @Inject
-    lateinit var firebaseFirestore: FirebaseFirestore
-    var members = mutableListOf<User>()
+    private val projectViewModel: NewProjectViewModel by viewModels()
+//    private lateinit var newProjectMemberAdapter : CommonRecyclerViewAdapter<User>
+    var members = mutableSetOf<User>()
+    var organizations = mutableSetOf<Organization>()
     private  var organization: Organization? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,14 +51,18 @@ class NewProjectActivity : AppCompatActivity(){
         if (intent.hasExtra("organization")) {
             organization = intent?.extras?.get("organization") as Organization
             supportActionBar?.title = organization!!.name
+            organizations.add(organization!!)
         } else { supportActionBar?.title = "New Project" }
 
-        projectViewModel = NewProjectViewModel(application, firebaseFirestore)
+//        projectViewModel = NewProjectViewModel(application, firebaseFirestore)
 
         BottomSheetBehavior.from(binding.btmSheet).apply {
             peekHeight = 100
             state = BottomSheetBehavior.STATE_COLLAPSED
         }
+
+//        setUpChips()
+//        setUpRecyclerView()
 
         binding.btnAddMembers.setOnClickListener {
             AddMembersDialog().show(supportFragmentManager, ADD_MEMBERS)
@@ -80,13 +88,60 @@ class NewProjectActivity : AppCompatActivity(){
             }
         })
 
+        projectViewModel.organizations.observe(this, {
+            if (it.isNotEmpty()) {
+                binding.organizationLayout.visibility = View.VISIBLE
+                it.forEach { org ->
+                    organizations.add(org)
+                    val orgChip = LayoutInflater.from(this).inflate(
+                        R.layout.members_chip_item, null, false
+                    ) as Chip
+                    orgChip.apply {
+                        text = org.name
+                        setOnCloseIconClickListener { chip ->
+                            organizations.remove(org)
+                            binding.chipOrgGroup.removeView(chip)
+                        }
+                    }
+                    binding.chipOrgGroup.addView(orgChip)
+                }
+            } else {binding.organizationLayout.visibility = View.INVISIBLE}
+        })
 
+        projectViewModel.members.observe(this, {
+//            newProjectMemberAdapter.differ.submitList(it.toList())
+            if (it.isNotEmpty()) {
+                binding.membersLayout.visibility = View.VISIBLE
+                it.forEach { user ->
+                    members.add(user)
+                    val membersChip = LayoutInflater.from(this)
+                        .inflate(R.layout.members_chip_item, null, false) as Chip
+                    membersChip.apply {
+                        text = user.name
+                        setOnCloseIconClickListener {
+                            binding.membersChipGroup.removeView(it)
+                            members.remove(user)
+                        }
+                    }
+                    binding.membersChipGroup.addView(membersChip)
+                }
+            } else { binding.membersLayout.visibility = View.INVISIBLE }
+        })
     }
 
-    fun addMembers(user: User) {
-        members.add(user)
-        Timber.d("MEMBERS : =>>> $members")
-    }
+//    fun setUpRecyclerView(){
+//        newProjectMemberAdapter = CommonRecyclerViewAdapter {
+//            NewProjectMembersViewHolder(this, it)
+//        }
+//        binding.newProjectMembersRV.apply {
+//            layoutManager = LinearLayoutManager(this@NewProjectActivity,
+//                LinearLayoutManager.HORIZONTAL, false
+//            )
+//            adapter = newProjectMemberAdapter
+//            addItemDecoration(HorizontalItemDecorator(5))
+//        }
+//    }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.new_project_menu, menu)
@@ -112,7 +167,8 @@ class NewProjectActivity : AppCompatActivity(){
                         binding.startDateEditText.text.toString(),
                         binding.endDateEditText.text.toString()
                     )
-                    projectViewModel.addProject(project, members)
+                    Timber.d("ORGANISATIONS: >> $organizations : PROJECT: >> $project : MEMBERS $members")
+                    projectViewModel.addProject( organizations, project, members)
                 }
             }
         }
@@ -138,6 +194,7 @@ class NewProjectActivity : AppCompatActivity(){
         val projectStages = resources.getStringArray(R.array.project_stages)
         val arrayAdapter = ArrayAdapter(this, R.layout.dropdown_item, projectStages)
         binding.projectStageTextView.setAdapter(arrayAdapter)
+        projectViewModel.reloadOrgs()
     }
 
     private fun isEmpty(string: String): Boolean {

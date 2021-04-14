@@ -1,5 +1,8 @@
 package com.ezzy.projectmanagement.ui.dialogs.viewmodel
 
+import android.app.Application
+import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,8 +15,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DialogViewModel @Inject constructor(
+    val app: Application,
     val firestore: FirebaseFirestore
-) : ViewModel() {
+) : AndroidViewModel(app) {
 
     private var _isSearching = MutableLiveData<Boolean>()
     val isSearching : LiveData<Boolean> get()  = _isSearching
@@ -21,7 +25,7 @@ class DialogViewModel @Inject constructor(
     val members : LiveData<List<User>> get() = _members
     private var _allMembers = MutableLiveData<List<User>>()
     val allMembers : LiveData<List<User>> get() = _allMembers
-    private var _selectedMembers = MutableLiveData<List<User>>()
+    private var _selectedMembers = MutableLiveData<Set<User>>()
     val selectedMembers  get() = _selectedMembers
 
     init {
@@ -78,13 +82,17 @@ class DialogViewModel @Inject constructor(
     }
 
     fun addMembers(member : User) {
-        val members = mutableListOf<User>()
+        val members = mutableSetOf<User>()
         if (members.contains(member)){
-            return
+            makeToast("Member already exist in list")
         } else {
             members.add(member)
         }
         _selectedMembers.postValue(members)
+    }
+
+    private fun makeToast(message : String) {
+        Toast.makeText(app.applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
 }

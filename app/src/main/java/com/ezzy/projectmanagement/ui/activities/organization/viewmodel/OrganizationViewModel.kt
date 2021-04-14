@@ -35,8 +35,8 @@ class OrganizationViewModel @Inject constructor(
     val isOrgLoadingSuccess = _isOrgLoadingSuccess
     private var _orgsSearched = MutableLiveData<List<Organization>>()
     val orgsSearched : LiveData<List<Organization>> get() = _orgsSearched
-    private var _orgs = MutableLiveData<ArrayList<Organization>>()
-    val orgs : LiveData<ArrayList<Organization>> get() = _orgs
+    private var _orgsSelected = MutableLiveData<Set<Organization>>()
+    val orgsSelected : LiveData<Set<Organization>> get() = _orgsSelected
 
     init {
         retrieveOrganizations()
@@ -71,11 +71,12 @@ class OrganizationViewModel @Inject constructor(
 
     fun retrieveOrganizations() = viewModelScope.launch {
         try {
+            _isOrgLoadingSuccess.postValue(true)
             firebaseFirestore.collection(ORGANIZATIONS)
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        _isOrgLoadingSuccess.postValue(true)
+                        _isOrgLoadingSuccess.postValue(false)
                         val orgs = mutableListOf<Organization>()
                         it.result!!.forEach { documentSnapshot ->
                             val organization = Organization(
@@ -123,13 +124,13 @@ class OrganizationViewModel @Inject constructor(
     }
 
     fun addOrgs(organization: Organization) {
-        val orgsList = arrayListOf<Organization>()
+        val orgsList = mutableSetOf<Organization>()
         if (orgsList.contains(organization)){
             Timber.d("Org is already added")
         } else {
             orgsList.add(organization)
         }
-        _orgs.postValue(orgsList)
+        _orgsSelected.postValue(orgsList)
     }
     
     fun saveOrgImage(fileName : String, imageUri: Uri) : String? {

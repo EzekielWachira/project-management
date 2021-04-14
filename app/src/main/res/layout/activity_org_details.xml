@@ -119,7 +119,7 @@
         android:background="@drawable/search_bg"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="@dimen/_5sdp"
+        android:padding="@dimen/_10sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -133,9 +133,13 @@
         <Button
             android:id="@+id/requestAddBtn"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:strokeWidth="@dimen/_1sdp"
+            app:strokeColor="@color/orange"
             android:text="@string/request_add"
             app:icon="@drawable/ic_add_circle_" />
 
