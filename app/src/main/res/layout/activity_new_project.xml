@@ -10,8 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_100sdp"
         >
 
 
@@ -158,6 +159,7 @@
                 android:orientation="vertical"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:padding="@dimen/_10sdp"
+                android:visibility="gone"
                 android:id="@+id/membersLayout">
 
                 <TextView
@@ -174,10 +176,10 @@
                     android:id="@+id/members_chip_group"
                     android:layout_marginTop="@dimen/_5sdp"/>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/newProjectMembersRV"/>
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:id="@+id/newProjectMembersRV"/>-->
 
             </LinearLayout>
 
@@ -190,6 +192,7 @@
                 android:orientation="vertical"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:padding="@dimen/_10sdp"
+                android:visibility="gone"
                 android:id="@+id/organizationLayout">
 
                 <TextView

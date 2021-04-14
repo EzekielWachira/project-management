@@ -24,6 +24,7 @@ import com.ezzy.projectmanagement.ui.dialogs.AddMembersDialog
 import com.ezzy.projectmanagement.ui.dialogs.AssignOrgDialog
 import com.ezzy.projectmanagement.util.Constants.ADD_MEMBERS
 import com.ezzy.projectmanagement.util.Constants.ASSIGN_ORG
+import com.ezzy.projectmanagement.util.HorizontalItemDecorator
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -61,7 +62,7 @@ class NewProjectActivity : AppCompatActivity(){
         }
 
 //        setUpChips()
-        setUpRecyclerView()
+//        setUpRecyclerView()
 
         binding.btnAddMembers.setOnClickListener {
             AddMembersDialog().show(supportFragmentManager, ADD_MEMBERS)
@@ -122,49 +123,19 @@ class NewProjectActivity : AppCompatActivity(){
         })
     }
 
-    fun setUpRecyclerView(){
-        newProjectMemberAdapter = CommonRecyclerViewAdapter {
-            NewProjectMembersViewHolder(this, it)
-        }
-        binding.newProjectMembersRV.apply {
-            layoutManager = LinearLayoutManager(this@NewProjectActivity,
-                LinearLayoutManager.HORIZONTAL, false
-            )
-            adapter = newProjectMemberAdapter
-        }
-    }
+//    fun setUpRecyclerView(){
+//        newProjectMemberAdapter = CommonRecyclerViewAdapter {
+//            NewProjectMembersViewHolder(this, it)
+//        }
+//        binding.newProjectMembersRV.apply {
+//            layoutManager = LinearLayoutManager(this@NewProjectActivity,
+//                LinearLayoutManager.HORIZONTAL, false
+//            )
+//            adapter = newProjectMemberAdapter
+//            addItemDecoration(HorizontalItemDecorator(5))
+//        }
+//    }
 
-    private fun setUpChips() {
-        if (members?.isNotEmpty() == true || organizations?.isNotEmpty() == true) {
-            binding.membersLayout.visibility = View.VISIBLE
-            members?.forEach { member ->
-                val chip = LayoutInflater.from(this).inflate(
-                    R.layout.members_chip_item, null, false
-                ) as Chip
-                chip.apply {
-                    text = member?.name
-                    setOnCloseIconClickListener {
-                        binding.membersChipGroup.removeView(it)
-                    }
-                }
-                binding.membersChipGroup.addView(chip)
-            }
-            organizations.let {
-                it?.forEach { org ->
-                    val chip = LayoutInflater.from(this).inflate(
-                        R.layout.members_chip_item, null, false
-                    ) as Chip
-                    chip.apply {
-                        text = org.name
-                        setOnCloseIconClickListener {
-                            binding.chipOrgGroup.removeView(it)
-                        }
-                    }
-                    binding.chipOrgGroup.addView(chip)
-                }
-            }
-        }
-    }
 
     fun addMembers(users: MutableSet<User>) {
         members?.addAll(users)
