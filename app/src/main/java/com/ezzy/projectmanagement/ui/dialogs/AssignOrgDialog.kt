@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,7 +38,7 @@ class AssignOrgDialog : DialogFragment() {
     private lateinit var orgSearchEditText : TextInputEditText
     private lateinit var orgChipGroup : ChipGroup
     private val organizationViewModel : OrganizationViewModel by viewModels()
-    private val newProjectViewModel : NewProjectViewModel by viewModels()
+    private val newProjectViewModel : NewProjectViewModel by activityViewModels()
     private lateinit var orgAdapter : CommonRecyclerViewAdapter<Organization>
     private var organizations = mutableSetOf<Organization>()
 

@@ -34,8 +34,8 @@ class NewProjectViewModel @Inject constructor(
     val isSuccess : LiveData<Boolean> get() = _isSuccess
     private var _organizations = MutableLiveData<Set<Organization>>()
     val organizations : LiveData<Set<Organization>> get() = _organizations
-    private var _members = MutableLiveData<List<User>>()
-    val members : LiveData<List<User>> get() = _members
+    private var _members = MutableLiveData<Set<User>>()
+    val members : LiveData<Set<User>> get() = _members
 
     init {
         reloadOrgs()
@@ -118,7 +118,7 @@ class NewProjectViewModel @Inject constructor(
         _organizations.postValue(organizationList)
     }
 
-    fun addMembers(membersList: List<User>){
+    fun addMembers(membersList: Set<User>){
         _members.postValue(membersList)
     }
 

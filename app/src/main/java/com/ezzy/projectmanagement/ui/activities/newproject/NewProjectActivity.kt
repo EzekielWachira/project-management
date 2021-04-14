@@ -7,10 +7,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ezzy.projectmanagement.R
+import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
+import com.ezzy.projectmanagement.adapters.NewProjectMembersViewHolder
 import com.ezzy.projectmanagement.databinding.ActivityNewProjectBinding
 import com.ezzy.projectmanagement.model.Organization
 import com.ezzy.projectmanagement.model.Project
@@ -33,9 +37,8 @@ class NewProjectActivity : AppCompatActivity(){
 
     private lateinit var binding : ActivityNewProjectBinding
     private val projectViewModel: NewProjectViewModel by viewModels()
-//    @Inject
-//    lateinit var firebaseFirestore: FirebaseFirestore
-    var members : MutableSet<User>? = null
+    private lateinit var newProjectMemberAdapter : CommonRecyclerViewAdapter<User>
+    var members = mutableSetOf<User>()
     var organizations = mutableSetOf<Organization>()
     private  var organization: Organization? = null
 
@@ -58,6 +61,7 @@ class NewProjectActivity : AppCompatActivity(){
         }
 
 //        setUpChips()
+        setUpRecyclerView()
 
         binding.btnAddMembers.setOnClickListener {
             AddMembersDialog().show(supportFragmentManager, ADD_MEMBERS)
@@ -100,7 +104,34 @@ class NewProjectActivity : AppCompatActivity(){
             }
         })
 
+        projectViewModel.members.observe(this, {
+            newProjectMemberAdapter.differ.submitList(it.toList())
+            it.forEach { user ->
+                members.add(user)
+                val membersChip = LayoutInflater.from(this)
+                    .inflate(R.layout.members_chip_item, null, false) as Chip
+                membersChip.apply {
+                    text = user.name
+                    setOnCloseIconClickListener {
+                        binding.membersChipGroup.removeView(it)
+                        members.remove(user)
+                    }
+                }
+                binding.membersChipGroup.addView(membersChip)
+            }
+        })
+    }
 
+    fun setUpRecyclerView(){
+        newProjectMemberAdapter = CommonRecyclerViewAdapter {
+            NewProjectMembersViewHolder(this, it)
+        }
+        binding.newProjectMembersRV.apply {
+            layoutManager = LinearLayoutManager(this@NewProjectActivity,
+                LinearLayoutManager.HORIZONTAL, false
+            )
+            adapter = newProjectMemberAdapter
+        }
     }
 
     private fun setUpChips() {

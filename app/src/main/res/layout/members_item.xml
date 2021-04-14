@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="John Doe"
-            android:id="@+id/memberName"
+            android:id="@+id/memberItemName"
             android:textSize="@dimen/_10ssp"
             android:textStyle="bold"
             android:textColor="@color/black"
