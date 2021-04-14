@@ -68,7 +68,6 @@ class AddMembersDialog : DialogFragment() {
         membersAdapter.setOnClickListener { user ->
             Timber.d("THE SUSER: $user")
             user?.let {
-                //(activity as NewProjectActivity).members?.contains(it) == true &&
                     if (members.contains(it)){
                         Timber.d("The user is already added")
                     } else {
@@ -81,7 +80,6 @@ class AddMembersDialog : DialogFragment() {
 
 
         doneButton.setOnClickListener {
-//            (activity as NewProjectActivity).addMembers(members)
             projectViewModel.addMembers(members)
             dialog?.dismiss()
         }

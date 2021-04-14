@@ -143,19 +143,6 @@ class NewProjectActivity : AppCompatActivity(){
 //    }
 
 
-    fun addMembers(users: MutableSet<User>) {
-        members?.addAll(users)
-        Timber.d("MEMBERS : =>>> $members")
-    }
-
-    fun addOrganizations(organization: Organization){
-        if (organizations?.contains(organization) == true){
-            makeToast("Organization already exist")
-        } else {
-//            organizations?.add(organization)
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.new_project_menu, menu)
         return super.onCreateOptionsMenu(menu)

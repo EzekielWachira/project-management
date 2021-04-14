@@ -63,18 +63,9 @@ class AssignOrgDialog : DialogFragment() {
                 if (organizations.contains(organization)){
                     Timber.d("ORG IS ALREADY ADDED")
                 } else {
-//                    (activity as NewProjectActivity).addOrganizations(org)
-//                    organizations.add(organization)
                     Timber.d("ORGS_SET $organizations")
                     organizationViewModel.addOrgs(organization)
                 }
-//                organizationViewModel.orgs.observe(this, {
-//                    if (it.contains(organization)){
-//                        return@observe
-//                    } else {
-//                        organizationViewModel.addOrgs(organization)
-//                    }
-//                })
             }
         }
 
@@ -122,26 +113,6 @@ class AssignOrgDialog : DialogFragment() {
                 }
             }
         })
-
-//        organizationViewModel.orgs.observe(this, { orgs ->
-//            if (orgs.isNotEmpty()){
-//                orgChipGroup.visibility = View.VISIBLE
-//                organizationList = orgs
-//                orgs.forEach {
-//                    val orgChip = LayoutInflater.from(context).inflate(
-//                        R.layout.members_chip_item, null, false
-//                    ) as Chip
-//                    orgChip.apply {
-//                        text = it.name
-//                        setOnCloseIconClickListener {
-//                            orgChipGroup.removeView(it)
-//                        }
-//                    }
-//                    orgChipGroup.addView(orgChip)
-//                }
-//                Timber.d("ORGANUZATIONS: $orgs")
-//            }
-//        })
 
         newProjectViewModel.organizations.observe(this, { organizations ->
             organizations?.let { orgs ->
