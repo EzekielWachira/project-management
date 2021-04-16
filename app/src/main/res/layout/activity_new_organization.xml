@@ -71,35 +71,48 @@
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
-        android:id="@+id/addMembersLayout"
-        android:layout_width="@dimen/_80sdp"
-        android:layout_height="@dimen/_80sdp"
-        android:background="@drawable/wheat_bg"
-        app:layout_constraintTop_toBottomOf="@id/orgAboutLayout"
-        app:layout_constraintStart_toStartOf="@id/orgAboutLayout"
-        android:gravity="center"
-        android:layout_marginTop="@dimen/_10sdp">
-
-        <ImageView
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="@dimen/_50sdp"
-            android:src="@drawable/ic_person_add"
-            android:id="@+id/addMembersImageView"
-            />
-
-
-    </LinearLayout>
-
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/membersChipGrp"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_10sdp"
-        app:layout_constraintBottom_toBottomOf="@+id/addMembersLayout"
+        app:layout_constraintTop_toBottomOf="@+id/orgAboutLayout"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/addMembersLayout"
-        app:layout_constraintTop_toBottomOf="@+id/orgAboutLayout" />
+        android:layout_marginTop="@dimen/_10sdp"
+        tools:layout_editor_absoluteX="13dp"/>
+
+    <Button
+        android:id="@+id/btnAddMembers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_members"
+        app:icon="@drawable/ic_person_add"
+        app:layout_constraintTop_toBottomOf="@+id/membersChipGrp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/_10sdp"
+        tools:layout_editor_absoluteX="13dp" />
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/addMembersLayout"-->
+<!--        android:layout_width="@dimen/_80sdp"-->
+<!--        android:layout_height="@dimen/_80sdp"-->
+<!--        android:background="@drawable/wheat_bg"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/orgAboutLayout"-->
+<!--        app:layout_constraintStart_toStartOf="@id/orgAboutLayout"-->
+<!--        android:gravity="center"-->
+<!--        android:layout_marginTop="@dimen/_10sdp">-->
+
+<!--        <ImageView-->
+<!--            android:layout_width="@dimen/_50sdp"-->
+<!--            android:layout_height="@dimen/_50sdp"-->
+<!--            android:src="@drawable/ic_person_add"-->
+<!--            android:id="@+id/addMembersImageView"-->
+<!--            />-->
+
+
+<!--    </LinearLayout>-->
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

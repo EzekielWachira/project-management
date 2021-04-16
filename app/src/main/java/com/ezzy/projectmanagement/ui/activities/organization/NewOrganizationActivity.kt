@@ -70,7 +70,7 @@ class NewOrganizationActivity : AppCompatActivity() {
             requestPermissions()
         }
 
-        binding.addMembersImageView.setOnClickListener {
+        binding.btnAddMembers.setOnClickListener {
             AddMembersToOrgDialog().show(
                 supportFragmentManager, "ADD_MEMBERS"
             )
