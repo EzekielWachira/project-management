@@ -1,20 +1,18 @@
 package com.ezzy.projectmanagement.ui.activities.newproject
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.ezzy.projectmanagement.R
-import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
-import com.ezzy.projectmanagement.adapters.NewProjectMembersViewHolder
 import com.ezzy.projectmanagement.databinding.ActivityNewProjectBinding
 import com.ezzy.projectmanagement.model.Organization
 import com.ezzy.projectmanagement.model.Project
@@ -24,11 +22,11 @@ import com.ezzy.projectmanagement.ui.dialogs.AddMembersDialog
 import com.ezzy.projectmanagement.ui.dialogs.AssignOrgDialog
 import com.ezzy.projectmanagement.util.Constants.ADD_MEMBERS
 import com.ezzy.projectmanagement.util.Constants.ASSIGN_ORG
-import com.ezzy.projectmanagement.util.HorizontalItemDecorator
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -78,7 +76,12 @@ class NewProjectActivity : AppCompatActivity(){
             if (isError) {
                 makeToast(projectViewModel.errorMessage.toString())
             } else {
-                makeToast("Project added succesfully")
+//                makeToast("Project added succesfully")
+                SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE).apply {
+                    titleText = "Project Saved"
+                    contentText = "Project added successfully"
+                    show()
+                }
             }
         })
 

@@ -96,6 +96,6 @@ dependencies {
     implementation(Dependencies.coroutinesForFirebase)
 
     //sweet alert for android
-
+    implementation(Dependencies.sweetAlert2)
 
 }

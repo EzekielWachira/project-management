@@ -78,5 +78,6 @@ object Dependencies {
     const val firebaseUiAuth = "com.firebaseui:firebase-ui-auth:${Versions.firebaseUiVersion}"
     const val firebaseUiForFirestore = "com.firebaseui:firebase-ui-firestore:${Versions.firebaseUiVersion}"
     const val coroutinesForFirebase = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.coroutinesForFirebaseVersion}"
-    const val sweetAlert = "implementation 'com.github.f0ris.sweetalert:library:${Versions.sweetAlertVersion}"
+    const val sweetAlert = "com.github.thomper:sweet-alert-dialog:${Versions.sweetAlertVersion}"
+    const val sweetAlert2 = "com.github.thomper:sweet-alert-dialog:${Versions.sweetAlertVersion}"
 }
