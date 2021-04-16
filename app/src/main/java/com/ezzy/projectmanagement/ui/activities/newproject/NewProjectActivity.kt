@@ -1,6 +1,5 @@
 package com.ezzy.projectmanagement.ui.activities.newproject
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -10,8 +9,6 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityNewProjectBinding
 import com.ezzy.projectmanagement.model.Organization
@@ -30,7 +27,6 @@ import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
-private const val TAG = "NewProjectActivity"
 @AndroidEntryPoint
 class NewProjectActivity : AppCompatActivity(){
 
@@ -72,11 +68,10 @@ class NewProjectActivity : AppCompatActivity(){
             showDatePicker("Select project end date", binding.endDateEditText)
         }
 
-        projectViewModel.isError.observe(this, Observer { isError ->
+        projectViewModel.isError.observe(this, { isError ->
             if (isError) {
                 makeToast(projectViewModel.errorMessage.toString())
             } else {
-//                makeToast("Project added succesfully")
                 SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE).apply {
                     titleText = "Project Saved"
                     contentText = "Project added successfully"
@@ -106,7 +101,6 @@ class NewProjectActivity : AppCompatActivity(){
         })
 
         projectViewModel.members.observe(this, {
-//            newProjectMemberAdapter.differ.submitList(it.toList())
             if (it.isNotEmpty()) {
                 binding.membersLayout.visibility = View.VISIBLE
                 it.forEach { user ->
