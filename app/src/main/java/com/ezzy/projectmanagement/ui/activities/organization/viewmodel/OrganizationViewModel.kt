@@ -7,6 +7,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ezzy.projectmanagement.model.Organization
+import com.ezzy.projectmanagement.model.User
+import com.ezzy.projectmanagement.util.Constants.MEMBERS
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -37,24 +39,40 @@ class OrganizationViewModel @Inject constructor(
     val orgsSearched : LiveData<List<Organization>> get() = _orgsSearched
     private var _orgsSelected = MutableLiveData<Set<Organization>>()
     val orgsSelected : LiveData<Set<Organization>> get() = _orgsSelected
+    private var _members = MutableLiveData<Set<User>>()
+    val members : LiveData<Set<User>> get()  = _members
 
     init {
         retrieveOrganizations()
     }
 
-    fun addOrganization(organization: Organization, fileName : String, imageUri: Uri) {
+    fun addOrganization(
+        organization: Organization, memberList: Set<User>? ,fileName : String, imageUri: Uri
+    ) {
         viewModelScope.launch {
             try {
                 var imagePath : String? = null
                 val storageReference = firebaseStorage.reference.child("images/${ORGANIZATIONS}/$fileName")
+                val organizationReference = firebaseFirestore.collection(ORGANIZATIONS)
                 storageReference.putFile(imageUri)
                     .addOnSuccessListener {
                         _isImageUploaded.postValue(true)
                         storageReference.downloadUrl.addOnSuccessListener { uri ->
                             imagePath = uri.toString()
                             organization.imageSrc = imagePath
-                            firebaseFirestore.collection(ORGANIZATIONS).add(organization)
-                                .addOnSuccessListener {
+                            organizationReference.add(organization)
+                                .addOnSuccessListener { docReference ->
+                                    memberList?.forEach { member ->
+                                        organizationReference.document(docReference.id)
+                                            .collection(MEMBERS)
+                                            .add(member)
+                                            .addOnSuccessListener {
+                                                _isSuccess.postValue(true)
+                                            }
+                                            .addOnFailureListener {
+                                                _isSuccess.postValue(false)
+                                            }
+                                    }
                                     _isSuccess.postValue(true)
                                 }.addOnFailureListener {
                                     _isSuccess.postValue(false)
@@ -131,6 +149,10 @@ class OrganizationViewModel @Inject constructor(
             orgsList.add(organization)
         }
         _orgsSelected.postValue(orgsList)
+    }
+
+    fun addMembers(membersSet : Set<User>) {
+        _members.postValue(membersSet)
     }
     
     fun saveOrgImage(fileName : String, imageUri: Uri) : String? {

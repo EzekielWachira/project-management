@@ -42,8 +42,6 @@ class AssignOrgDialog : DialogFragment() {
     private lateinit var orgAdapter : CommonRecyclerViewAdapter<Organization>
     private var organizations = mutableSetOf<Organization>()
 
-    private var organizationList = arrayListOf<Organization>()
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
         val inflator = activity?.layoutInflater

@@ -9,10 +9,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -21,7 +23,10 @@ import androidx.lifecycle.Observer
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityNewOrganizationBinding
 import com.ezzy.projectmanagement.model.Organization
+import com.ezzy.projectmanagement.model.User
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
+import com.ezzy.projectmanagement.ui.dialogs.AddMembersDialog
+import com.ezzy.projectmanagement.ui.dialogs.AddMembersToOrgDialog
 import com.ezzy.projectmanagement.util.Constants.CANCEL
 import com.ezzy.projectmanagement.util.Constants.CHOOSE_IMAGE
 import com.ezzy.projectmanagement.util.Constants.PICK_FROM_GALLERY
@@ -31,6 +36,7 @@ import com.ezzy.projectmanagement.util.Constants.TAKE_IMAGE_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_PHOTO
 import com.ezzy.projectmanagement.util.convertToUri
 import com.ezzy.projectmanagement.util.getNameFromUri
+import com.google.android.material.chip.Chip
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,7 +53,8 @@ class NewOrganizationActivity : AppCompatActivity() {
     lateinit var firebaseStorage : FirebaseStorage
     @Inject
     lateinit var firestore: FirebaseFirestore
-    lateinit var orgViewModel : OrganizationViewModel
+    val orgViewModel : OrganizationViewModel by viewModels()
+    private var members = mutableSetOf<User>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,10 +66,14 @@ class NewOrganizationActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        orgViewModel = OrganizationViewModel(application, firestore, firebaseStorage)
-
         binding.orgImage.setOnClickListener {
             requestPermissions()
+        }
+
+        binding.addMembersImageView.setOnClickListener {
+            AddMembersToOrgDialog().show(
+                supportFragmentManager, "ADD_MEMBERS"
+            )
         }
 
         orgViewModel.isImageUploaded.observe(this, Observer {
@@ -70,6 +81,23 @@ class NewOrganizationActivity : AppCompatActivity() {
                 makeToast("Image uploaded successfully")
             } else {
                 makeToast("Couldn't upload image")
+            }
+        })
+
+        orgViewModel.members.observe(this, {
+            it.forEach { user ->
+                members.add(user)
+                val chip = LayoutInflater.from(this).inflate(
+                    R.layout.members_chip_item, null, false
+                ) as Chip
+                chip.apply {
+                    text = user.name
+                    setOnCloseIconClickListener { memberChip ->
+                        members.remove(user)
+                        binding.membersChipGrp.removeView(memberChip)
+                    }
+                }
+                binding.membersChipGrp.addView(chip)
             }
         })
 
@@ -196,7 +224,9 @@ class NewOrganizationActivity : AppCompatActivity() {
                     )
                     orgViewModel.addOrganization(
                         organization,
-                        imageUri.getNameFromUri(this, imageUri), imageUri
+                        members,
+                        imageUri.getNameFromUri(this, imageUri),
+                        imageUri
                     )
                 }
             }

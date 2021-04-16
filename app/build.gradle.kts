@@ -95,4 +95,7 @@ dependencies {
     implementation(Dependencies.firebaseUiForFirestore)
     implementation(Dependencies.coroutinesForFirebase)
 
+    //sweet alert for android
+
+
 }

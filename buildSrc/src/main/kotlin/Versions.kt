@@ -17,4 +17,5 @@ object Versions {
     const val firebaseVersion = "26.8.0"
     const val firebaseUiVersion = "7.1.1"
     const val coroutinesForFirebaseVersion = "1.1.1"
+    const val sweetAlertVersion = "1.6.2"
 }
