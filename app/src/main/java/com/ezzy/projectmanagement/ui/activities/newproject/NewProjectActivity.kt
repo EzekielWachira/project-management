@@ -38,7 +38,6 @@ class NewProjectActivity : AppCompatActivity(){
 
     private lateinit var binding : ActivityNewProjectBinding
     private val projectViewModel: NewProjectViewModel by viewModels()
-//    private lateinit var newProjectMemberAdapter : CommonRecyclerViewAdapter<User>
     var members = mutableSetOf<User>()
     var organizations = mutableSetOf<Organization>()
     private  var organization: Organization? = null
@@ -54,15 +53,10 @@ class NewProjectActivity : AppCompatActivity(){
             organizations.add(organization!!)
         } else { supportActionBar?.title = "New Project" }
 
-//        projectViewModel = NewProjectViewModel(application, firebaseFirestore)
-
         BottomSheetBehavior.from(binding.btmSheet).apply {
             peekHeight = 100
             state = BottomSheetBehavior.STATE_COLLAPSED
         }
-
-//        setUpChips()
-//        setUpRecyclerView()
 
         binding.btnAddMembers.setOnClickListener {
             AddMembersDialog().show(supportFragmentManager, ADD_MEMBERS)
@@ -128,20 +122,6 @@ class NewProjectActivity : AppCompatActivity(){
             } else { binding.membersLayout.visibility = View.INVISIBLE }
         })
     }
-
-//    fun setUpRecyclerView(){
-//        newProjectMemberAdapter = CommonRecyclerViewAdapter {
-//            NewProjectMembersViewHolder(this, it)
-//        }
-//        binding.newProjectMembersRV.apply {
-//            layoutManager = LinearLayoutManager(this@NewProjectActivity,
-//                LinearLayoutManager.HORIZONTAL, false
-//            )
-//            adapter = newProjectMemberAdapter
-//            addItemDecoration(HorizontalItemDecorator(5))
-//        }
-//    }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.new_project_menu, menu)

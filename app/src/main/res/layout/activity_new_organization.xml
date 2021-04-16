@@ -14,13 +14,12 @@
         android:layout_marginStart="13dp"
         android:layout_marginTop="13dp"
         android:layout_marginEnd="12dp"
-        app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/wheat_bg"
-        android:orientation="horizontal"
         android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/orgImage"
@@ -37,9 +36,9 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
         android:hint="@string/organization_name"
         app:endIconMode="clear_text"
-        android:layout_marginTop="@dimen/_10sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/orgImageLayout"
@@ -56,9 +55,9 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
         android:hint="@string/organization_about"
         app:endIconMode="clear_text"
-        android:layout_marginTop="@dimen/_10sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/orgNameLayout"
@@ -66,53 +65,32 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/orgAbout"
-            android:inputType="textMultiLine"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/membersChipGrp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/orgAboutLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="@dimen/_10sdp"
-        tools:layout_editor_absoluteX="13dp"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orgAboutLayout"
+        tools:layout_editor_absoluteX="13dp" />
 
     <Button
         android:id="@+id/btnAddMembers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
         android:text="@string/add_members"
         app:icon="@drawable/ic_person_add"
-        app:layout_constraintTop_toBottomOf="@+id/membersChipGrp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/membersChipGrp"
         tools:layout_editor_absoluteX="13dp" />
-
-<!--    <LinearLayout-->
-<!--        android:id="@+id/addMembersLayout"-->
-<!--        android:layout_width="@dimen/_80sdp"-->
-<!--        android:layout_height="@dimen/_80sdp"-->
-<!--        android:background="@drawable/wheat_bg"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/orgAboutLayout"-->
-<!--        app:layout_constraintStart_toStartOf="@id/orgAboutLayout"-->
-<!--        android:gravity="center"-->
-<!--        android:layout_marginTop="@dimen/_10sdp">-->
-
-<!--        <ImageView-->
-<!--            android:layout_width="@dimen/_50sdp"-->
-<!--            android:layout_height="@dimen/_50sdp"-->
-<!--            android:src="@drawable/ic_person_add"-->
-<!--            android:id="@+id/addMembersImageView"-->
-<!--            />-->
-
-
-<!--    </LinearLayout>-->
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

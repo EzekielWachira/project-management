@@ -49,10 +49,6 @@ class NewOrganizationActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityNewOrganizationBinding
     private var picImageUri : Uri? = null
-    @Inject
-    lateinit var firebaseStorage : FirebaseStorage
-    @Inject
-    lateinit var firestore: FirebaseFirestore
     val orgViewModel : OrganizationViewModel by viewModels()
     private var members = mutableSetOf<User>()
 

@@ -27,10 +27,6 @@ class OrganizationsActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityOrganizationsBinding
     private lateinit var organizationsAdapter: CommonRecyclerViewAdapter<Organization>
-    @Inject
-    lateinit var firestore: FirebaseFirestore
-    @Inject
-    lateinit var storage: FirebaseStorage
     private val organizationViewModel: OrganizationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
