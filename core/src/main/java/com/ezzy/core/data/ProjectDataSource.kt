@@ -13,7 +13,7 @@ interface ProjectDataSource {
 
     suspend fun getAll() : List<Project>
 
-    suspend fun addMembers(membersSet : Set<User>)
+    suspend fun addMembers(membersSet : Set<User>) : Set<User>
 
-    suspend fun attachOrganizations(organizationSet: Set<Organization>)
+    suspend fun attachOrganizations(organizationSet: Set<Organization>) : Set<Organization>
 }
