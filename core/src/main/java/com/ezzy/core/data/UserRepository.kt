@@ -6,7 +6,7 @@ class UserRepository(
     private val dataSource: UserDataSource
 ) {
 
-    suspend fun getAll() = dataSource.getAll()
+    suspend fun getAllUsers() = dataSource.getAllUsers()
     suspend fun searchMembers(name : String) = dataSource.searchMembers(name)
     suspend fun addMember(member : User) = dataSource.addMember(member)
 

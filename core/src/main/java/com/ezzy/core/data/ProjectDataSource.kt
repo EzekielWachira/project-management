@@ -15,5 +15,5 @@ interface ProjectDataSource {
 
     suspend fun addMembers(membersSet : Set<User>)
 
-    suspend fun addOrganizations(organizationSet: Set<Organization>)
+    suspend fun attachOrganizations(organizationSet: Set<Organization>)
 }
