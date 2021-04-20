@@ -9,7 +9,11 @@
         android:id="@+id/projectFragment2"
         android:name="com.ezzy.projectmanagement.ui.fragments.project.ProjectFragment"
         android:label="fragment_project"
-        tools:layout="@layout/fragment_project" />
+        tools:layout="@layout/fragment_project" >
+        <action
+            android:id="@+id/action_projectFragment2_to_projectDetailsFragment"
+            app:destination="@id/projectDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/activityFragment2"
         android:name="com.ezzy.projectmanagement.ui.fragments.activity.ActivityFragment"
@@ -25,4 +29,13 @@
         android:name="com.ezzy.projectmanagement.ui.fragments.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/projectDetailsFragment"
+        android:name="com.ezzy.projectmanagement.ui.fragments.project_details.ProjectDetailsFragment"
+        android:label="fragment_project_details"
+        tools:layout="@layout/fragment_project_details" >
+        <argument
+            android:name="project"
+            app:argType="com.ezzy.projectmanagement.model.Project" />
+    </fragment>
 </navigation>

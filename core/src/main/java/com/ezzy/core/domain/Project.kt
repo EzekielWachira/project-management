@@ -1,4 +1,4 @@
-package com.ezzy.projectmanagement.model
+package com.ezzy.core.domain
 
 import java.io.Serializable
 import java.util.*

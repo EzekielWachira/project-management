@@ -80,4 +80,6 @@ object Dependencies {
     const val coroutinesForFirebase = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.coroutinesForFirebaseVersion}"
     const val sweetAlert = "com.github.thomper:sweet-alert-dialog:${Versions.sweetAlertVersion}"
     const val sweetAlert2 = "com.github.thomper:sweet-alert-dialog:${Versions.sweetAlertVersion}"
+    const val dataStore = "androidx.datastore:datastore-preferences:${Versions.dataStoreVersion}"
+    const val typedDataStore = "androidx.datastore:datastore:${Versions.dataStoreVersion}"
 }

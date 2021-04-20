@@ -42,7 +42,7 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":core"))
     implementation(Dependencies.legacySupport)
     implementation(Dependencies.kotlinStdLib)
     implementation(Dependencies.coreKtx)
@@ -97,5 +97,9 @@ dependencies {
 
     //sweet alert for android
     implementation(Dependencies.sweetAlert2)
+
+    //data store
+    implementation(Dependencies.dataStore)
+    implementation(Dependencies.typedDataStore)
 
 }

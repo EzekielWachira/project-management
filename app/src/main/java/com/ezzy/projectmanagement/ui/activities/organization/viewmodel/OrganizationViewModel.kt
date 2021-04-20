@@ -87,7 +87,7 @@ class OrganizationViewModel @Inject constructor(
         }
     }
 
-    fun retrieveOrganizations() = viewModelScope.launch {
+    fun retrieveOrganizations() =  viewModelScope.launch {
         try {
             _isOrgLoadingSuccess.postValue(true)
             firebaseFirestore.collection(ORGANIZATIONS)
