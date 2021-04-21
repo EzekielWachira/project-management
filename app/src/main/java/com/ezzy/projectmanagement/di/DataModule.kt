@@ -4,7 +4,6 @@ import com.ezzy.core.data.OrganizationRepository
 import com.ezzy.core.data.ProjectRepository
 import com.ezzy.core.data.UserRepository
 import com.ezzy.core.interactors.*
-import com.ezzy.projectmanagement.data.remote.ProjectProvider
 import com.ezzy.projectmanagement.data.remote.RemoteOrganizationDataSource
 import com.ezzy.projectmanagement.data.remote.RemoteProjectDataSource
 import com.ezzy.projectmanagement.data.remote.RemoteUserDataSource
