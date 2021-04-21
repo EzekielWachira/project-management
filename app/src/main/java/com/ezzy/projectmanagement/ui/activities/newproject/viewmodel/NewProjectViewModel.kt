@@ -1,7 +1,6 @@
 package com.ezzy.projectmanagement.ui.activities.newproject.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,13 +9,8 @@ import com.ezzy.core.domain.Organization
 import com.ezzy.core.domain.Project
 import com.ezzy.core.domain.User
 import com.ezzy.core.interactors.*
-import com.ezzy.projectmanagement.util.Constants.MEMBERS
-import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
-import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.lang.Exception
 import javax.inject.Inject
@@ -24,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class NewProjectViewModel @Inject constructor(
     app: Application,
-    val firebaseFirestore: FirebaseFirestore,
     val addProject: AddProject,
     val attachOrganization: AttachOrganization,
     val attachMembers: AttachMembers
