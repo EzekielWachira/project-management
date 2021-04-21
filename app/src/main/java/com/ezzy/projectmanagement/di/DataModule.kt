@@ -1,14 +1,13 @@
 package com.ezzy.projectmanagement.di
 
-import com.ezzy.core.data.OrganizationDataSource
 import com.ezzy.core.data.OrganizationRepository
 import com.ezzy.core.data.ProjectRepository
 import com.ezzy.core.data.UserRepository
 import com.ezzy.core.interactors.*
+import com.ezzy.projectmanagement.data.remote.ProjectProvider
 import com.ezzy.projectmanagement.data.remote.RemoteOrganizationDataSource
 import com.ezzy.projectmanagement.data.remote.RemoteProjectDataSource
 import com.ezzy.projectmanagement.data.remote.RemoteUserDataSource
-import com.ezzy.projectmanagement.model.Project
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
@@ -70,6 +69,11 @@ object DataModule {
     @Provides
     fun attachedOrganizations(repository: ProjectRepository) =
         AttachOrganization(repository)
+
+    @Provides
+    fun provideAttachMembers(repository: ProjectRepository) =
+        AttachMembers(repository)
+
 
     //User use case
     @Provides

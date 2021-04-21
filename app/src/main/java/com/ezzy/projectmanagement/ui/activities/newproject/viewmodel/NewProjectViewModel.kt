@@ -6,9 +6,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.ezzy.projectmanagement.model.Organization
-import com.ezzy.projectmanagement.model.Project
-import com.ezzy.projectmanagement.model.User
+import com.ezzy.core.domain.Organization
+import com.ezzy.core.domain.Project
+import com.ezzy.core.domain.User
+import com.ezzy.core.interactors.*
 import com.ezzy.projectmanagement.util.Constants.MEMBERS
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
@@ -23,7 +24,10 @@ import javax.inject.Inject
 @HiltViewModel
 class NewProjectViewModel @Inject constructor(
     app: Application,
-    val firebaseFirestore: FirebaseFirestore
+    val firebaseFirestore: FirebaseFirestore,
+    val addProject: AddProject,
+    val attachOrganization: AttachOrganization,
+    val attachMembers: AttachMembers
 ) : AndroidViewModel (app){
 
     private val _isError = MutableLiveData<Boolean>()
@@ -43,83 +47,72 @@ class NewProjectViewModel @Inject constructor(
 
     fun reloadOrgs() = organizations
 
-    fun addProject(organizationsList : Set<Organization>?, project: Project, members : Set<User>?) {
+    fun saveProject(organizationsList : Set<Organization>?, project: Project, members : Set<User>?) {
         viewModelScope.launch {
             try {
-                val projectsRef = firebaseFirestore.collection(PROJECT_COLLECTION)
-                val organizationRef = firebaseFirestore.collection(ORGANIZATIONS)
-                organizationsList?.forEach { org ->
-                    organizationRef.whereEqualTo("name", org.name)
-                        .get()
-                        .addOnCompleteListener {
-                            if (it.isSuccessful){
-                                it.result!!.forEach { docSnapshot ->
-                                    organizationRef.document(docSnapshot.id)
-                                        .collection(PROJECT_COLLECTION)
-                                        .add(project)
-                                        .addOnSuccessListener { docReference ->
-                                            members?.let { users ->
-                                                users.forEach { member ->
-                                                    organizationRef.document(docSnapshot.id)
-                                                        .collection(PROJECT_COLLECTION)
-                                                        .document(docReference.id)
-                                                        .collection(MEMBERS)
-                                                        .add(member)
-                                                        .addOnSuccessListener {
-                                                            _isSuccess.postValue(true)
-                                                        }
-                                                        .addOnFailureListener {
-                                                            _isSuccess.postValue(false)
-                                                        }
-                                                }
-                                            }
-                                        }
-                                        .addOnFailureListener {
-                                            Timber.e("Error add project to organization")
-                                        }
-                                }
-                            }
-                        }.addOnFailureListener {
-                            Timber.e("An error occurred while searching")
-                        }
-                        .await()
-                    _isError.postValue(false)
-                }
-//            projectsRef.add(project)
-//                .addOnSuccessListener { docReference ->
-//                    members?.let {  users ->
-//                        users.forEach{ member ->
-//                            projectsRef.document(docReference.id)
-//                                .collection(MEMBERS).add(member)
-//                                .addOnCompleteListener {
-//                                    if (it.isSuccessful){
-//                                        _isSuccess.postValue(true)
-//                                    }
-//                                }.addOnFailureListener { e ->
-//                                    _isSuccess.postValue(false)
-//                                    _errorMessage.postValue(e.message.toString())
-//                                }
-//                        }
-//                    }
-//
-//                    Timber.d("addProject: Success")
-//                }.addOnFailureListener{
-//                    Timber.d("addProject: ${it.message}")
-//                }.await()
-//            _isError.postValue(false)
-            } catch (e : Exception) {
-                _isError.postValue(true)
-                _errorMessage.postValue(e.message)
+                addProject(organizationsList!!, project, members!!)
+                _isSuccess.postValue(true)
+            } catch (e : Exception){
+                Timber.e(e.message.toString())
+                _isSuccess.postValue(false)
             }
+//            try {
+//                val projectsRef = firebaseFirestore.collection(PROJECT_COLLECTION)
+//                val organizationRef = firebaseFirestore.collection(ORGANIZATIONS)
+//                organizationsList?.forEach { org ->
+//                    organizationRef.whereEqualTo("name", org.name)
+//                        .get()
+//                        .addOnCompleteListener {
+//                            if (it.isSuccessful){
+//                                it.result!!.forEach { docSnapshot ->
+//                                    organizationRef.document(docSnapshot.id)
+//                                        .collection(PROJECT_COLLECTION)
+//                                        .add(project)
+//                                        .addOnSuccessListener { docReference ->
+//                                            members?.let { users ->
+//                                                users.forEach { member ->
+//                                                    organizationRef.document(docSnapshot.id)
+//                                                        .collection(PROJECT_COLLECTION)
+//                                                        .document(docReference.id)
+//                                                        .collection(MEMBERS)
+//                                                        .add(member)
+//                                                        .addOnSuccessListener {
+//                                                            _isSuccess.postValue(true)
+//                                                        }
+//                                                        .addOnFailureListener {
+//                                                            _isSuccess.postValue(false)
+//                                                        }
+//                                                }
+//                                            }
+//                                        }
+//                                        .addOnFailureListener {
+//                                            Timber.e("Error add project to organization")
+//                                        }
+//                                }
+//                            }
+//                        }.addOnFailureListener {
+//                            Timber.e("An error occurred while searching")
+//                        }
+//                        .await()
+//                    _isError.postValue(false)
+//                }
+//            } catch (e : Exception) {
+//                _isError.postValue(true)
+//                _errorMessage.postValue(e.message)
+//            }
         }
     }
 
     fun addOrganizations(organizationList: Set<Organization>){
-        _organizations.postValue(organizationList)
+        viewModelScope.launch {
+            _organizations.postValue(attachOrganization(organizationList)!!)
+        }
     }
 
-    fun addMembers(membersList: Set<User>){
-        _members.postValue(membersList)
+    fun addMembers(membersSet: Set<User>){
+        viewModelScope.launch {
+            _members.postValue(attachMembers(membersSet)!!)
+        }
     }
 
 }

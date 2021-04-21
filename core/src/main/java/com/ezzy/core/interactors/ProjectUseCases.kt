@@ -22,3 +22,9 @@ class AttachOrganization(private val repository: ProjectRepository) {
         organizationSet: Set<Organization>
     ) = repository.attachOrganization(organizationSet)
 }
+
+class AttachMembers(private val repository: ProjectRepository) {
+    suspend operator fun invoke(
+        membersSet: Set<User>
+    ) = repository.addMembers(membersSet)
+}
