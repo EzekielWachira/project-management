@@ -6,8 +6,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.ezzy.projectmanagement.model.Organization
-import com.ezzy.projectmanagement.model.User
+import com.ezzy.core.domain.Organization
+import com.ezzy.core.domain.User
 import com.ezzy.projectmanagement.util.Constants.MEMBERS
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.google.firebase.firestore.FirebaseFirestore

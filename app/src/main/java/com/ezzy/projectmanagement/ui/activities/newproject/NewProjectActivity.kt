@@ -11,9 +11,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityNewProjectBinding
-import com.ezzy.projectmanagement.model.Organization
-import com.ezzy.projectmanagement.model.Project
-import com.ezzy.projectmanagement.model.User
+import com.ezzy.core.domain.Organization
+import com.ezzy.core.domain.Project
+import com.ezzy.core.domain.User
 import com.ezzy.projectmanagement.ui.activities.newproject.viewmodel.NewProjectViewModel
 import com.ezzy.projectmanagement.ui.dialogs.AddMembersDialog
 import com.ezzy.projectmanagement.ui.dialogs.AssignOrgDialog
@@ -145,7 +145,7 @@ class NewProjectActivity : AppCompatActivity(){
                         binding.endDateEditText.text.toString()
                     )
                     Timber.d("ORGANISATIONS: >> $organizations : PROJECT: >> $project : MEMBERS $members")
-                    projectViewModel.addProject( organizations, project, members)
+                    projectViewModel.saveProject( organizations, project, members)
                 }
             }
         }

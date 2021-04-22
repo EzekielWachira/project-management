@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.adapters.viewpager.OrganizationViewHolder
 import com.ezzy.projectmanagement.databinding.ActivityOrganizationsBinding
-import com.ezzy.projectmanagement.model.Organization
+import com.ezzy.core.domain.Organization
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.ezzy.projectmanagement.util.VerticalItemDecorator

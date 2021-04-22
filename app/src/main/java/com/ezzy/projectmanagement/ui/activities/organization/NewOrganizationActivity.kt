@@ -22,8 +22,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityNewOrganizationBinding
-import com.ezzy.projectmanagement.model.Organization
-import com.ezzy.projectmanagement.model.User
+import com.ezzy.core.domain.Organization
+import com.ezzy.core.domain.User
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
 import com.ezzy.projectmanagement.ui.dialogs.AddMembersDialog
 import com.ezzy.projectmanagement.ui.dialogs.AddMembersToOrgDialog

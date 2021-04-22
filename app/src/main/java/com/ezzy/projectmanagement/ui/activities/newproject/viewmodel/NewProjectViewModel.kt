@@ -45,9 +45,11 @@ class NewProjectViewModel @Inject constructor(
             try {
                 addProject(organizationsList!!, project, members!!)
                 _isSuccess.postValue(true)
+                _isError.postValue(false)
             } catch (e : Exception){
                 Timber.e(e.message.toString())
                 _isSuccess.postValue(false)
+                _isError.postValue(true)
             }
 //            try {
 //                val projectsRef = firebaseFirestore.collection(PROJECT_COLLECTION)

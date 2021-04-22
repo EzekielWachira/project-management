@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.adapters.viewpager.SearchMemberViewHolder
-import com.ezzy.projectmanagement.model.User
+import com.ezzy.core.domain.User
 import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
 import com.ezzy.projectmanagement.ui.activities.newproject.viewmodel.NewProjectViewModel
 import com.ezzy.projectmanagement.ui.dialogs.viewmodel.DialogViewModel

@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.adapters.CommonViewHolder
-import com.ezzy.projectmanagement.model.Organization
+import com.ezzy.core.domain.Organization
 
 class OrganizationViewHolder(
     val context: Context,
