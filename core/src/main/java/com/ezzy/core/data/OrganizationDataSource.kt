@@ -16,7 +16,7 @@ interface OrganizationDataSource {
 
     suspend fun searchOrganization(name : String) : List<Organization>
 
-    suspend fun addOrgs(organization: Organization) : Set<Organization>
+    suspend fun addOrgs(organizationSet: Set<Organization>) : Set<Organization>
 
     suspend fun addMembers(membersSet: Set<User>) : Set<User>
 }

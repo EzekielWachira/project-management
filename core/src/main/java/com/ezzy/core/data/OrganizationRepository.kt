@@ -18,7 +18,7 @@ class OrganizationRepository(
     )
     suspend fun retrieveOrganizations() = dataSource.retrieveOrganizations()
     suspend fun searchOrganizations(name : String) = dataSource.searchOrganization(name)
-    suspend fun addOrgs(organization: Organization) = dataSource.addOrgs(organization)
+    suspend fun addOrgs(organizationSet: Set<Organization>) = dataSource.addOrgs(organizationSet)
     suspend fun addMembers(membersSet: Set<User>) = dataSource.addMembers(membersSet)
 
 }

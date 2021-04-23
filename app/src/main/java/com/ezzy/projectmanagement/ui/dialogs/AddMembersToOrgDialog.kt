@@ -81,7 +81,7 @@ class AddMembersToOrgDialog : DialogFragment() {
 
 
         doneButton.setOnClickListener {
-            organizationViewModel.addMembers(members)
+            organizationViewModel.attachMembers(members)
             dialog?.dismiss()
         }
 
