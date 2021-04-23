@@ -14,12 +14,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ezzy.core.domain.User
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.adapters.viewpager.SearchMemberViewHolder
-import com.ezzy.core.domain.User
-import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
-import com.ezzy.projectmanagement.ui.activities.newproject.viewmodel.NewProjectViewModel
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
 import com.ezzy.projectmanagement.ui.dialogs.viewmodel.DialogViewModel
 import com.google.android.material.chip.Chip

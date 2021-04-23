@@ -129,12 +129,6 @@ class RemoteOrganizationDataSource @Inject constructor(
     }
 
     override suspend fun addOrgs(organizationSet: Set<Organization>): Set<Organization> {
-//        val orgsSet = mutableSetOf<Organization>()
-//        if (orgsSet.contains(organization)){
-//            Timber.d("Org is already added")
-//        } else {
-//            orgsSet.add(organization)
-//        }
         return organizationSet
     }
 
