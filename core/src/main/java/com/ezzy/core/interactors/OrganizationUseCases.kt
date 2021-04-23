@@ -26,8 +26,8 @@ class SearchOrganizations(private val organizationRepository: OrganizationReposi
 
 class AddOrgs(private val repository: OrganizationRepository) {
     suspend operator fun invoke(
-        organization: Organization
-    ) = repository.addOrgs(organization)
+        organizationSet: Set<Organization>
+    ) = repository.addOrgs(organizationSet)
 }
 
 class AddMembers(private val repository: OrganizationRepository) {

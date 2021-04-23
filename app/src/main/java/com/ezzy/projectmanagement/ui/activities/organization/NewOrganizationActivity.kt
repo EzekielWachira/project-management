@@ -97,13 +97,13 @@ class NewOrganizationActivity : AppCompatActivity() {
             }
         })
 
-        orgViewModel.isSuccess.observe(this, Observer { isSuccess ->
+        orgViewModel.isSuccess.observe(this) { isSuccess ->
             if (isSuccess) {
                 makeToast("organization added successfully")
             } else {
                 makeToast("Error saving organization")
             }
-        })
+        }
 
     }
 
@@ -218,7 +218,7 @@ class NewOrganizationActivity : AppCompatActivity() {
                         null,
                         binding.orgAbout.text.toString()
                     )
-                    orgViewModel.addOrganization(
+                    orgViewModel.addOrg(
                         organization,
                         members,
                         imageUri.getNameFromUri(this, imageUri),

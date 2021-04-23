@@ -62,7 +62,8 @@ class AssignOrgDialog : DialogFragment() {
                     Timber.d("ORG IS ALREADY ADDED")
                 } else {
                     Timber.d("ORGS_SET $organizations")
-                    organizationViewModel.addOrgs(organization)
+                    organizations.add(organization)
+                    organizationViewModel.attachOrgs(organizations)
                 }
             }
         }
@@ -71,7 +72,7 @@ class AssignOrgDialog : DialogFragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                organizationViewModel.searchOrganizations(
+                organizationViewModel.searchOrgs(
                     orgSearchEditText.text.toString().toLowerCase(
                         Locale.getDefault()
                     )
@@ -79,7 +80,7 @@ class AssignOrgDialog : DialogFragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                organizationViewModel.searchOrganizations(
+                organizationViewModel.searchOrgs(
                     s.toString().toLowerCase(Locale.getDefault())
                 )
             }

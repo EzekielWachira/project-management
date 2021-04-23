@@ -1,19 +1,16 @@
 package com.ezzy.projectmanagement.ui.activities.organization
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.ezzy.core.domain.Organization
 import com.ezzy.projectmanagement.R
-import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.databinding.ActivityOrgDetailsBinding
-import com.ezzy.projectmanagement.model.Organization
 import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
-import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
 
 class OrgDetailsActivity : AppCompatActivity() {
 

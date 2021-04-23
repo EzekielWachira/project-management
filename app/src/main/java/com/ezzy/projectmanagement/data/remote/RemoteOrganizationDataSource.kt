@@ -1,6 +1,7 @@
 package com.ezzy.projectmanagement.data.remote
 
 import android.net.Uri
+import androidx.lifecycle.MutableLiveData
 import com.ezzy.core.data.OrganizationDataSource
 import com.ezzy.core.domain.Organization
 import com.ezzy.core.domain.User
@@ -14,9 +15,11 @@ import java.util.*
 import javax.inject.Inject
 
 class RemoteOrganizationDataSource @Inject constructor(
-    val firebaseFirestore: FirebaseFirestore,
+    val firestore: FirebaseFirestore,
     val firebaseStorage: FirebaseStorage
 ) : OrganizationDataSource{
+
+    val organizations = MutableLiveData<List<Organization>>()
 
     override suspend fun addOrganization(
         organization: Organization,
@@ -26,14 +29,16 @@ class RemoteOrganizationDataSource @Inject constructor(
     ) {
         try {
             var imagePath : String? = null
-            val imgUri = Uri.Builder().scheme(imageUri.scheme)
-                .encodedAuthority(imageUri.rawAuthority)
-                .encodedPath(imageUri.rawQuery)
-                .fragment(imageUri.rawFragment)
-                .build()
+            val imgUri = Uri.parse(imageUri.toString())
+
+//            Uri.Builder().scheme(imageUri.scheme)
+//                .encodedAuthority(imageUri.rawAuthority)
+//                .encodedPath(imageUri.rawQuery)
+//                .fragment(imageUri.rawFragment)
+//                .build()
 
             val storageReference = firebaseStorage.reference.child("images/${Constants.ORGANIZATIONS}/$fileName")
-            val organizationReference = firebaseFirestore.collection(Constants.ORGANIZATIONS)
+            val organizationReference = firestore.collection(Constants.ORGANIZATIONS)
 
             storageReference.putFile(imgUri)
                 .addOnSuccessListener {
@@ -67,65 +72,64 @@ class RemoteOrganizationDataSource @Inject constructor(
     }
 
     override suspend fun retrieveOrganizations(): List<Organization> {
-        val orgs = mutableListOf<Organization>()
+        var orgs = mutableListOf<Organization>()
         try {
-            firebaseFirestore.collection(Constants.ORGANIZATIONS)
+            firestore.collection(Constants.ORGANIZATIONS)
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
+                        val results = mutableListOf<Organization>()
                         it.result!!.forEach { documentSnapshot ->
                             val organization = Organization(
                                 documentSnapshot.getString("name"),
                                 documentSnapshot.getString("imageSrc"),
                                 documentSnapshot.getString("about")
                             )
-                            orgs.add(organization)
+                            results.add(organization)
                         }
+                        orgs = results
+                        Timber.d("ONE ORG>> $orgs")
                     } else {
                         Timber.e("An error occurred!!!!")
                     }
                 }.addOnFailureListener {
                     Timber.e("An error occurred!!!!")
-                }
+                }.await()
 
         } catch (e : Exception) {
             Timber.e("An error occurred!!!!")
         }
+        Timber.d("BLUUM: >> $orgs")
         return orgs
     }
 
     override suspend fun searchOrganization(name: String): List<Organization> {
         val orgs = mutableListOf<Organization>()
         try {
-            firebaseFirestore.collection(Constants.ORGANIZATIONS)
+            firestore.collection(Constants.ORGANIZATIONS)
                 .whereEqualTo("name", name.toLowerCase(Locale.getDefault()))
                 .get()
                 .addOnCompleteListener {
                     it.result!!.forEach { documentSnapshot ->
-                        var organization = Organization(
+                        val organization = Organization(
                             documentSnapshot.getString("name"),
                             documentSnapshot.getString("imageUrl"),
                             documentSnapshot.getString("about")
                         )
+
                         orgs.add(organization)
                     }
                 }.addOnFailureListener {
                     Timber.d(it.message.toString())
-                }
+                }.await()
         } catch ( e : Exception ){
             Timber.d(e.message.toString())
         }
         return orgs
     }
 
-    override suspend fun addOrgs(organization: Organization): Set<Organization> {
-        val orgsSet = mutableSetOf<Organization>()
-        if (orgsSet.contains(organization)){
-            Timber.d("Org is already added")
-        } else {
-            orgsSet.add(organization)
-        }
-        return orgsSet
+    override suspend fun addOrgs(organizationSet: Set<Organization>): Set<Organization> {
+        return organizationSet
     }
 
     override suspend fun addMembers(membersSet: Set<User>): Set<User> {

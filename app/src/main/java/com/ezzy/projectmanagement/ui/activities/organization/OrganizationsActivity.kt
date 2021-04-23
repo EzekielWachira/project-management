@@ -41,50 +41,50 @@ class OrganizationsActivity : AppCompatActivity() {
 
         setUpRecyclerView()
 
-        organizationViewModel.retrieveOrganizations()
+        organizationViewModel.getAllOrganizations()
 
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (binding.searchEditText.text.isNotEmpty()){
-                    organizationViewModel.searchOrganizations(
+                    organizationViewModel.searchOrgs(
                         binding.searchEditText.text.toString().toLowerCase(
                             Locale.getDefault()
                         )
                     )
                 } else {
-                    organizationViewModel.retrieveOrganizations()
+                    organizationViewModel.getAllOrganizations()
                 }
             }
 
             override fun afterTextChanged(s: Editable?) {
                 if (binding.searchEditText.text.isNotEmpty()){
-                    organizationViewModel.searchOrganizations(
+                    organizationViewModel.searchOrgs(
                         s.toString().toLowerCase(Locale.getDefault())
                     )
                 } else {
-                    organizationViewModel.retrieveOrganizations()
+                    organizationViewModel.getAllOrganizations()
                 }
             }
 
         })
 
-        organizationViewModel.organizations.observe(this, { organizationList ->
+        organizationViewModel.organizations.observe(this) { organizationList ->
             organizationsAdapter.differ.submitList(organizationList)
-        })
+        }
 
-        organizationViewModel.isOrgLoadingSuccess.observe(this, { isSuccess ->
+        organizationViewModel.isOrgLoadingSuccess.observe(this) { isSuccess ->
             if (isSuccess) {
                 binding.orgProgressBar.visibility = View.INVISIBLE
             } else {
                 binding.orgProgressBar.visibility = View.VISIBLE
             }
-        })
+        }
 
-        organizationViewModel.orgsSearched.observe(this, { orgsList ->
+        organizationViewModel.orgsSearched.observe(this) { orgsList ->
             organizationsAdapter.differ.submitList(orgsList)
-        })
+        }
 
         organizationsAdapter.setOnClickListener {
             Intent(this, OrgDetailsActivity::class.java).apply {
