@@ -1,6 +1,7 @@
 package com.ezzy.projectmanagement.data.remote
 
 import android.net.Uri
+import androidx.lifecycle.MutableLiveData
 import com.ezzy.core.data.OrganizationDataSource
 import com.ezzy.core.domain.Organization
 import com.ezzy.core.domain.User
@@ -17,6 +18,8 @@ class RemoteOrganizationDataSource @Inject constructor(
     val firestore: FirebaseFirestore,
     val firebaseStorage: FirebaseStorage
 ) : OrganizationDataSource{
+
+    val organizations = MutableLiveData<List<Organization>>()
 
     override suspend fun addOrganization(
         organization: Organization,
@@ -69,30 +72,34 @@ class RemoteOrganizationDataSource @Inject constructor(
     }
 
     override suspend fun retrieveOrganizations(): List<Organization> {
-        val orgs = mutableListOf<Organization>()
+        var orgs = mutableListOf<Organization>()
         try {
             firestore.collection(Constants.ORGANIZATIONS)
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
+                        val results = mutableListOf<Organization>()
                         it.result!!.forEach { documentSnapshot ->
                             val organization = Organization(
                                 documentSnapshot.getString("name"),
                                 documentSnapshot.getString("imageSrc"),
                                 documentSnapshot.getString("about")
                             )
-                            orgs.add(organization)
+                            results.add(organization)
                         }
+                        orgs = results
+                        Timber.d("ONE ORG>> $orgs")
                     } else {
                         Timber.e("An error occurred!!!!")
                     }
                 }.addOnFailureListener {
                     Timber.e("An error occurred!!!!")
-                }
+                }.await()
 
         } catch (e : Exception) {
             Timber.e("An error occurred!!!!")
         }
+        Timber.d("BLUUM: >> $orgs")
         return orgs
     }
 
@@ -104,16 +111,17 @@ class RemoteOrganizationDataSource @Inject constructor(
                 .get()
                 .addOnCompleteListener {
                     it.result!!.forEach { documentSnapshot ->
-                        var organization = Organization(
+                        val organization = Organization(
                             documentSnapshot.getString("name"),
                             documentSnapshot.getString("imageUrl"),
                             documentSnapshot.getString("about")
                         )
+
                         orgs.add(organization)
                     }
                 }.addOnFailureListener {
                     Timber.d(it.message.toString())
-                }
+                }.await()
         } catch ( e : Exception ){
             Timber.d(e.message.toString())
         }

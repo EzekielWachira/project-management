@@ -102,6 +102,9 @@ class OrganizationViewModel @Inject constructor(
         try {
             _isSuccess.postValue(true)
             val results = retrieveOrganizations()
+
+            Timber.d("RESULST: >>>> ${retrieveOrganizations()}")
+
             _organizations.postValue(results)
             if(results.isNotEmpty()){
                 _isSuccess.postValue(false)
