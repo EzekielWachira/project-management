@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.databinding.ActivityOrgDetailsBinding
-import com.ezzy.projectmanagement.model.Organization
+import com.ezzy.core.domain.Organization
 import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
 

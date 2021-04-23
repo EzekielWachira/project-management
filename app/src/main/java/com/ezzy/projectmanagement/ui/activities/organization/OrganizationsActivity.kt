@@ -70,21 +70,21 @@ class OrganizationsActivity : AppCompatActivity() {
 
         })
 
-        organizationViewModel.organizations.observe(this, { organizationList ->
+        organizationViewModel.organizations.observe(this) { organizationList ->
             organizationsAdapter.differ.submitList(organizationList)
-        })
+        }
 
-        organizationViewModel.isOrgLoadingSuccess.observe(this, { isSuccess ->
+        organizationViewModel.isOrgLoadingSuccess.observe(this) { isSuccess ->
             if (isSuccess) {
                 binding.orgProgressBar.visibility = View.INVISIBLE
             } else {
                 binding.orgProgressBar.visibility = View.VISIBLE
             }
-        })
+        }
 
-        organizationViewModel.orgsSearched.observe(this, { orgsList ->
+        organizationViewModel.orgsSearched.observe(this) { orgsList ->
             organizationsAdapter.differ.submitList(orgsList)
-        })
+        }
 
         organizationsAdapter.setOnClickListener {
             Intent(this, OrgDetailsActivity::class.java).apply {

@@ -9,24 +9,16 @@ import androidx.lifecycle.viewModelScope
 import com.ezzy.core.domain.Organization
 import com.ezzy.core.domain.User
 import com.ezzy.core.interactors.*
-import com.ezzy.projectmanagement.util.Constants.MEMBERS
-import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.net.URI
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 @HiltViewModel
 class OrganizationViewModel @Inject constructor(
     app: Application,
-    val firebaseFirestore: FirebaseFirestore,
-    val firebaseStorage: FirebaseStorage,
     val addOrganization: AddOrganization,
     val retrieveOrganizations: RetrieveOrganizations,
     val searchOrganizations: SearchOrganizations,
@@ -59,12 +51,10 @@ class OrganizationViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val imageSrcUri = URI.create(imageUri.toString())
-                
                 addOrganization(
                     organization, membersSet!!, fileName, imageSrcUri
                 )
                 _isSuccess.postValue(true)
-
             }catch (e : Exception){
                 Timber.e("Error adding organization: ${e.message.toString()}")
                 _isSuccess.postValue(false)
@@ -112,8 +102,8 @@ class OrganizationViewModel @Inject constructor(
         try {
             _isSuccess.postValue(true)
             val results = retrieveOrganizations()
+            _organizations.postValue(results)
             if(results.isNotEmpty()){
-                _organizations.postValue(results)
                 _isSuccess.postValue(false)
             } else {
                 _isSuccess.postValue(false)
@@ -207,26 +197,6 @@ class OrganizationViewModel @Inject constructor(
             _members.postValue(addMembers(membersSet)!!)
         }
     }
-    
-    fun saveOrgImage(fileName : String, imageUri: Uri) : String? {
-        var imagePath : String? = null
-        viewModelScope.launch {
-            try {
-                val storageReference = firebaseStorage.reference.child("images/${ORGANIZATIONS}/$fileName")
-                    storageReference.putFile(imageUri)
-                    .addOnSuccessListener {
-                        _isImageUploaded.postValue(true)
-                        storageReference.downloadUrl.addOnSuccessListener { uri ->
-                            imagePath = uri.toString()
-                        }
-                    }.addOnFailureListener {
-                        _isImageUploaded.postValue(false)
-                    }.await()
-            } catch (e: Exception) {
-                _isImageUploaded.postValue(false)
-            }
-        }
-        return imagePath
-    }
+
 
 }
