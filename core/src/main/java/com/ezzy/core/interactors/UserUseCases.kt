@@ -15,6 +15,6 @@ class SearchMembers(private val repository: UserRepository) {
 
 class AddMember(private val repository: UserRepository){
     suspend operator fun invoke(
-        member : User
-    ) = repository.addMember(member)
+        memberSet : Set<User>
+    ) = repository.addMember(memberSet)
 }

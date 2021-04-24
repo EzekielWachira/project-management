@@ -8,6 +8,6 @@ class UserRepository(
 
     suspend fun getAllUsers() = dataSource.getAllUsers()
     suspend fun searchMembers(name : String) = dataSource.searchMembers(name)
-    suspend fun addMember(member : User) = dataSource.addMember(member)
+    suspend fun addMember(memberSet : Set<User>) = dataSource.addMember(memberSet)
 
 }
