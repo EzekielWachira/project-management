@@ -37,63 +37,24 @@ class DialogViewModel @Inject constructor(
 
     fun getAllMembers() {
         viewModelScope.launch {
+            _isSearching.postValue(true)
             val results = getAllUsers()
             if (results.isNotEmpty()){
+                _isSearching.postValue(false)
                 _allMembers.postValue(results)
             }
         }
-//        try {
-//            _isSearching.postValue(true)
-//            firestore.collection(USERS)
-//                .get()
-//                .addOnCompleteListener {
-//                    if (it.isSuccessful){
-//                        _isSearching.postValue(false)
-//                        val results = mutableListOf<User>()
-//                        for (querySnapshot in it.result!!){
-//                            val member = User(querySnapshot.getString("name"), querySnapshot.getString("email"))
-//                            results.add(member)
-//                        }
-//                        _allMembers.postValue(results)
-//                    }
-//                }.addOnFailureListener {
-//                    _isSearching.postValue(false)
-//                    Timber.d("Error getting users")
-//                }
-//        } catch (e: Exception){
-//            Timber.e(e.message.toString())
-//        }
     }
 
     fun searchMember (name: String) {
         viewModelScope.launch {
+            _isSearching.postValue(true)
             val results = searchMembers(name)
             if (results.isNotEmpty()){
+                _isSearching.postValue(false)
                 _members.postValue(results)
             }
         }
-//        try {
-//            _isSearching.postValue(true)
-//            firestore.collection(USERS).whereEqualTo("name", name)
-//                .get()
-//                .addOnCompleteListener {
-//                    if (it.isSuccessful){
-//                        _isSearching.postValue(false)
-//                        val results = mutableListOf<User>()
-//                        for (snapshot in it.result!!){
-//                            val member = User(snapshot.getString("name"), snapshot.getString("email"))
-//                            results.add(member)
-//                        }
-//                        _members.postValue(results)
-//                        Timber.d("USERS ==>> $members")
-//                    }
-//                }.addOnFailureListener {
-//                    _isSearching.postValue(true)
-//                    Timber.e("Error searching members")
-//                }
-//        } catch (e : Exception) {
-//            Timber.e("Error searching members")
-//        }
     }
 
     fun addMembers(memberSet : Set<User>) {
@@ -101,13 +62,6 @@ class DialogViewModel @Inject constructor(
             val results =  addMember(memberSet)
             _selectedMembers.postValue(results)
         }
-//        val members = mutableSetOf<User>()
-//        if (members.contains(member)){
-//            makeToast("Member already exist in list")
-//        } else {
-//            members.add(member)
-//        }
-//        _selectedMembers.postValue(members)
     }
 
     private fun makeToast(message : String) {

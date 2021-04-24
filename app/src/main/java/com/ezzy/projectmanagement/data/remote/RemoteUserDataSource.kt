@@ -63,13 +63,6 @@ class RemoteUserDataSource @Inject constructor(
 
     override suspend fun addMember(memberSet: Set<User>): Set<User> {
         return memberSet
-//        val members = mutableSetOf<User>()
-//        if (members.contains(member)){
-//            Timber.i("Member already exist in list")
-//        } else {
-//            members.add(member)
-//        }
-//        return members
     }
 
 }
