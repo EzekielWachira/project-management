@@ -37,8 +37,6 @@ class AddMembersToOrgDialog : DialogFragment() {
     private lateinit var peopleRecyclerview: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var membersChipGroup : ChipGroup
-    @Inject
-    lateinit var firestore: FirebaseFirestore
     private lateinit var membersAdapter : CommonRecyclerViewAdapter<User>
     val dialogViewModel : DialogViewModel by viewModels()
     val organizationViewModel : OrganizationViewModel by activityViewModels()
@@ -66,15 +64,12 @@ class AddMembersToOrgDialog : DialogFragment() {
 
         membersAdapter.setOnClickListener { user ->
             Timber.d("THE SUSER: $user")
-            user?.let {
-                    if (members.contains(it)){
-                        Timber.d("The user is already added")
-                    } else {
-                        members.add(it)
-                        dialogViewModel.addMembers(it)
-                    }
-
+            if (members.contains(user)){
+                Timber.d("The user is already added")
+            } else {
+                members.add(user!!)
             }
+            dialogViewModel.addMembers(members)
         }
 
 
@@ -89,12 +84,12 @@ class AddMembersToOrgDialog : DialogFragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val searchText: String = searchEditText.text.toString()
                 Timber.d("SEARCH QUERY: =>> $searchText")
-                dialogViewModel.searchMembers(searchText.toLowerCase(Locale.getDefault()))
+                dialogViewModel.searchMember(searchText.toLowerCase(Locale.getDefault()))
             }
 
             override fun afterTextChanged(s: Editable?) {
                 Timber.d("SEARCH QUERY ss: =>> ${s.toString().toLowerCase(Locale.getDefault())}")
-                dialogViewModel.searchMembers(s.toString().toLowerCase(Locale.getDefault()))
+                dialogViewModel.searchMember(s.toString().toLowerCase(Locale.getDefault()))
             }
 
         })

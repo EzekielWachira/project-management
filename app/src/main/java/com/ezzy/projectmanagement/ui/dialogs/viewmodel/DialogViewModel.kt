@@ -2,21 +2,24 @@ package com.ezzy.projectmanagement.ui.dialogs.viewmodel
 
 import android.app.Application
 import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.ezzy.core.domain.User
+import com.ezzy.core.interactors.AddMember
+import com.ezzy.core.interactors.GetAllUser
+import com.ezzy.core.interactors.SearchMembers
 import com.ezzy.projectmanagement.util.Constants.USERS
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class DialogViewModel @Inject constructor(
     val app: Application,
-    val firestore: FirebaseFirestore
+    val getAllUsers: GetAllUser,
+    val searchMembers: SearchMembers,
+    val addMember: AddMember
 ) : AndroidViewModel(app) {
 
     private var _isSearching = MutableLiveData<Boolean>()
@@ -33,62 +36,32 @@ class DialogViewModel @Inject constructor(
     }
 
     fun getAllMembers() {
-        try {
+        viewModelScope.launch {
             _isSearching.postValue(true)
-            firestore.collection(USERS)
-                .get()
-                .addOnCompleteListener {
-                    if (it.isSuccessful){
-                        _isSearching.postValue(false)
-                        val results = mutableListOf<User>()
-                        for (querySnapshot in it.result!!){
-                            val member = User(querySnapshot.getString("name"), querySnapshot.getString("email"))
-                            results.add(member)
-                        }
-                        _allMembers.postValue(results)
-                    }
-                }.addOnFailureListener {
-                    _isSearching.postValue(false)
-                    Timber.d("Error getting users")
-                }
-        } catch (e: Exception){
-            Timber.e(e.message.toString())
+            val results = getAllUsers()
+            if (results.isNotEmpty()){
+                _isSearching.postValue(false)
+                _allMembers.postValue(results)
+            }
         }
     }
 
-    fun searchMembers (name: String) {
-        try {
+    fun searchMember (name: String) {
+        viewModelScope.launch {
             _isSearching.postValue(true)
-            firestore.collection(USERS).whereEqualTo("name", name)
-                .get()
-                .addOnCompleteListener {
-                    if (it.isSuccessful){
-                        _isSearching.postValue(false)
-                        val results = mutableListOf<User>()
-                        for (snapshot in it.result!!){
-                            val member = User(snapshot.getString("name"), snapshot.getString("email"))
-                            results.add(member)
-                        }
-                        _members.postValue(results)
-                        Timber.d("USERS ==>> $members")
-                    }
-                }.addOnFailureListener {
-                    _isSearching.postValue(true)
-                    Timber.e("Error searching members")
-                }
-        } catch (e : Exception) {
-            Timber.e("Error searching members")
+            val results = searchMembers(name)
+            if (results.isNotEmpty()){
+                _isSearching.postValue(false)
+                _members.postValue(results)
+            }
         }
     }
 
-    fun addMembers(member : User) {
-        val members = mutableSetOf<User>()
-        if (members.contains(member)){
-            makeToast("Member already exist in list")
-        } else {
-            members.add(member)
+    fun addMembers(memberSet : Set<User>) {
+        viewModelScope.launch {
+            val results =  addMember(memberSet)
+            _selectedMembers.postValue(results)
         }
-        _selectedMembers.postValue(members)
     }
 
     private fun makeToast(message : String) {

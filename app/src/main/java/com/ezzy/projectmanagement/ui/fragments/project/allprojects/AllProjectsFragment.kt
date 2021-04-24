@@ -11,7 +11,7 @@ import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.adapters.AllProjectsViewHolder
 import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.databinding.FragmentAllProjectsBinding
-import com.ezzy.projectmanagement.model.Project
+import com.ezzy.core.domain.Project
 import com.ezzy.projectmanagement.util.VerticalItemDecorator
 import dagger.hilt.android.AndroidEntryPoint
 

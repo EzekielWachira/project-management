@@ -30,13 +30,6 @@ class RemoteOrganizationDataSource @Inject constructor(
         try {
             var imagePath : String? = null
             val imgUri = Uri.parse(imageUri.toString())
-
-//            Uri.Builder().scheme(imageUri.scheme)
-//                .encodedAuthority(imageUri.rawAuthority)
-//                .encodedPath(imageUri.rawQuery)
-//                .fragment(imageUri.rawFragment)
-//                .build()
-
             val storageReference = firebaseStorage.reference.child("images/${Constants.ORGANIZATIONS}/$fileName")
             val organizationReference = firestore.collection(Constants.ORGANIZATIONS)
 
