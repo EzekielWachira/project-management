@@ -36,6 +36,6 @@
         tools:layout="@layout/fragment_project_details" >
         <argument
             android:name="project"
-            app:argType="com.ezzy.projectmanagement.model.Project" />
+            app:argType="com.ezzy.core.domain.Project" />
     </fragment>
 </navigation>

@@ -12,7 +12,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityProjectBinding
-import com.ezzy.projectmanagement.model.User
+import com.ezzy.core.domain.User
 import com.ezzy.projectmanagement.ui.activities.auth.LoginActivity
 import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
 import com.ezzy.projectmanagement.ui.activities.organization.NewOrganizationActivity

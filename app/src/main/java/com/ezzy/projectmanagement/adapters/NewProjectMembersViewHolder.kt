@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.ViewGroup
 import android.widget.TextView
 import com.ezzy.projectmanagement.R
-import com.ezzy.projectmanagement.model.User
+import com.ezzy.core.domain.User
 
 class NewProjectMembersViewHolder(
     context: Context,
