@@ -17,7 +17,6 @@ import javax.inject.Inject
 @HiltViewModel
 class AllProjectsViewModel @Inject constructor(
     app: Application,
-    val firestore: FirebaseFirestore,
     val getAll: GetAll
 ) : AndroidViewModel(app) {
 
@@ -37,31 +36,5 @@ class AllProjectsViewModel @Inject constructor(
             _isProjectLoadSuccess.postValue(false)
             _allProjects.postValue(results)
         }
-//        try {
-//            _isProjectLoadSuccess.postValue(true)
-//            firestore.collection(PROJECT_COLLECTION)
-//                .get()
-//                .addOnCompleteListener {
-//                    if (it.isSuccessful) {
-//                        _isProjectLoadSuccess.postValue(false)
-//                        val projects = mutableListOf<Project>()
-//                        it.result!!.forEach { querySnapshot ->
-//                            val project = Project(
-//                                querySnapshot.getString("projectTitle"),
-//                                querySnapshot.getString("projectDescription"),
-//                                querySnapshot.getString("projectStage"),
-//                                querySnapshot.getString("startDate"),
-//                                querySnapshot.getString("endDate"),
-//                            )
-//                            projects.add(project)
-//                        }
-//                        _allProjects.postValue(projects)
-//                    }
-//                }.addOnFailureListener {
-//                    _isProjectLoadSuccess.postValue(false)
-//                }
-//        } catch (e : Exception) {
-//            _isProjectLoadSuccess.postValue(false)
-//        }
     }
 }
