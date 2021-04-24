@@ -37,8 +37,6 @@ class AddMembersToOrgDialog : DialogFragment() {
     private lateinit var peopleRecyclerview: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var membersChipGroup : ChipGroup
-    @Inject
-    lateinit var firestore: FirebaseFirestore
     private lateinit var membersAdapter : CommonRecyclerViewAdapter<User>
     val dialogViewModel : DialogViewModel by viewModels()
     val organizationViewModel : OrganizationViewModel by activityViewModels()

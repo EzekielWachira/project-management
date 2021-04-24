@@ -85,7 +85,7 @@ class RemoteProjectDataSource @Inject constructor(
                     }
                 }.addOnFailureListener {
                     Timber.e(it.message.toString())
-                }
+                }.await()
         } catch (e : Exception) {
             Timber.e(e.message.toString())
         }
