@@ -44,4 +44,8 @@ class RetrieveOrganizationProjects(private val repository: OrganizationRepositor
     suspend operator fun invoke(orgId: String) = repository.getOrganizationProjects(orgId)
 }
 
+class GetOrgId(private val repository: OrganizationRepository) {
+    suspend operator fun invoke(orgName : String) = repository.getOrganizationId(orgName)
+}
+
 

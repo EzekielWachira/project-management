@@ -188,4 +188,26 @@ class RemoteOrganizationDataSource @Inject constructor(
         return projects
     }
 
+    override suspend fun getOrganizationId(orgName: String): String {
+        var organizationId : String? = null
+        try {
+            firestore.collection(ORGANIZATIONS)
+                .whereEqualTo("name", orgName.toLowerCase(Locale.getDefault()))
+                .get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful){
+                        it.result!!.forEach { docSnapshot ->
+                            organizationId = docSnapshot.id
+                        }
+                    }
+                }.addOnFailureListener {
+                    Timber.e(it.message.toString())
+                }
+                .await()
+        }catch (e : Exception){
+            Timber.e(e.message.toString())
+        }
+        return organizationId!!
+    }
+
 }
