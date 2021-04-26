@@ -36,4 +36,12 @@ class AddMembers(private val repository: OrganizationRepository) {
     ) = repository.addMembers(membersSet)
 }
 
+class RetrieveOrganizationMembers(private val repository: OrganizationRepository) {
+    suspend operator fun invoke(orgId : String) = repository.getOrganizationMembers(orgId)
+}
+
+class RetrieveOrganizationProjects(private val repository: OrganizationRepository) {
+    suspend operator fun invoke(orgId: String) = repository.getOrganizationProjects(orgId)
+}
+
 

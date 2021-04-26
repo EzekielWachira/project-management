@@ -4,8 +4,12 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.ezzy.core.data.OrganizationDataSource
 import com.ezzy.core.domain.Organization
+import com.ezzy.core.domain.Project
 import com.ezzy.core.domain.User
 import com.ezzy.projectmanagement.util.Constants
+import com.ezzy.projectmanagement.util.Constants.MEMBERS
+import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
+import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
@@ -30,8 +34,8 @@ class RemoteOrganizationDataSource @Inject constructor(
         try {
             var imagePath : String? = null
             val imgUri = Uri.parse(imageUri.toString())
-            val storageReference = firebaseStorage.reference.child("images/${Constants.ORGANIZATIONS}/$fileName")
-            val organizationReference = firestore.collection(Constants.ORGANIZATIONS)
+            val storageReference = firebaseStorage.reference.child("images/$ORGANIZATIONS/$fileName")
+            val organizationReference = firestore.collection(ORGANIZATIONS)
 
             storageReference.putFile(imgUri)
                 .addOnSuccessListener {
@@ -67,7 +71,7 @@ class RemoteOrganizationDataSource @Inject constructor(
     override suspend fun retrieveOrganizations(): List<Organization> {
         var orgs = mutableListOf<Organization>()
         try {
-            firestore.collection(Constants.ORGANIZATIONS)
+            firestore.collection(ORGANIZATIONS)
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
@@ -99,7 +103,7 @@ class RemoteOrganizationDataSource @Inject constructor(
     override suspend fun searchOrganization(name: String): List<Organization> {
         val orgs = mutableListOf<Organization>()
         try {
-            firestore.collection(Constants.ORGANIZATIONS)
+            firestore.collection(ORGANIZATIONS)
                 .whereEqualTo("name", name.toLowerCase(Locale.getDefault()))
                 .get()
                 .addOnCompleteListener {
@@ -127,6 +131,61 @@ class RemoteOrganizationDataSource @Inject constructor(
 
     override suspend fun addMembers(membersSet: Set<User>): Set<User> {
         return membersSet
+    }
+
+    override suspend fun getOrganizationMembers(orgId: String): List<User> {
+        val members = mutableSetOf<User>()
+        try {
+            firestore.collection(ORGANIZATIONS)
+                .document(orgId)
+                .collection(MEMBERS)
+                .get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful){
+                        it.result!!.forEach { docSnapshot ->
+                            val member = User(
+                                docSnapshot.getString("name"),
+                                docSnapshot.getString("email")
+                            )
+                            members.add(member)
+                        }
+                    }
+                }.addOnFailureListener {
+                    Timber.e(it.message.toString())
+                }.await()
+        } catch (e : Exception){
+            Timber.e(e.message.toString())
+        }
+        return members.toList()
+    }
+
+    override suspend fun getOrganizationProjects(orgId: String): List<Project> {
+        val projects = mutableListOf<Project>()
+        try {
+            firestore.collection(ORGANIZATIONS)
+                .document(orgId)
+                .collection(PROJECT_COLLECTION)
+                .get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful){
+                        it.result!!.forEach { docSnapShot ->
+                            val project = Project(
+                                docSnapShot.getString("projectTitle"),
+                                docSnapShot.getString("projectDescription"),
+                                docSnapShot.getString("projectStage"),
+                                docSnapShot.getString("startDate"),
+                                docSnapShot.getString("endDate"),
+                            )
+                            projects.add(project)
+                        }
+                    }
+                }.addOnFailureListener {
+                    Timber.e("ERROr querying organization projects")
+                }.await()
+        } catch (e : Exception){
+            Timber.e("Error querying organization projects")
+        }
+        return projects
     }
 
 }

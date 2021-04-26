@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ezzy.core.domain.Organization
+import com.ezzy.core.domain.Project
 import com.ezzy.core.domain.User
 import com.ezzy.core.interactors.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +23,9 @@ class OrganizationViewModel @Inject constructor(
     val retrieveOrganizations: RetrieveOrganizations,
     val searchOrganizations: SearchOrganizations,
     val addOrgs: AddOrgs,
-    val addMembers: AddMembers
+    val addMembers: AddMembers,
+    val getOrganizationProjects: RetrieveOrganizationProjects,
+    val getOrganizationMembers: RetrieveOrganizationMembers
 ) : AndroidViewModel(app) {
 
     private val _isSuccess = MutableLiveData<Boolean>()
@@ -39,6 +42,10 @@ class OrganizationViewModel @Inject constructor(
     val orgsSelected : LiveData<Set<Organization>> get() = _orgsSelected
     private var _members = MutableLiveData<Set<User>>()
     val members : LiveData<Set<User>> get()  = _members
+    private var _organizationMembers  = MutableLiveData<List<User>>()
+    val organizationMembers : LiveData<List<User>> get() = _organizationMembers
+    private var _organizationProjects = MutableLiveData<List<Project>>()
+    val organizationProjects : LiveData<List<Project>> get() = _organizationProjects
 
     init { getAllOrganizations() }
 
@@ -99,6 +106,24 @@ class OrganizationViewModel @Inject constructor(
         viewModelScope.launch {
             val results = addMembers(membersSet)
             _members.postValue(results)
+        }
+    }
+
+    fun getOrgProjects(organizationId : String) {
+        viewModelScope.launch {
+            val results = getOrganizationProjects(organizationId)
+            if (results.isNotEmpty()){
+                _organizationProjects.postValue(results)
+            }
+        }
+    }
+
+    fun getOrgMembers(organizationId: String) {
+        viewModelScope.launch {
+            val results = getOrganizationMembers(organizationId)
+            if (results.isNotEmpty()){
+                _organizationMembers.postValue(results)
+            }
         }
     }
 }
