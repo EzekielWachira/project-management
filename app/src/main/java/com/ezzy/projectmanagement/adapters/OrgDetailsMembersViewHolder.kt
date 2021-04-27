@@ -15,7 +15,7 @@ class OrgDetailsMembersViewHolder(
 ){
 
     private val memberNameTextView : TextView = rootView.findViewById(R.id.memberItemName)
-    private val membersEmailTextView : Chip = rootView.findViewById(R.id.memberLabel)
+    private val membersEmailTextView : TextView = rootView.findViewById(R.id.memberLabel)
 
     override fun bindItem(item: User?) {
         item?.let {

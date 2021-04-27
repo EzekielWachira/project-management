@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:text="@string/management"
+                android:text="@string/members"
                 android:textSize="@dimen/_13ssp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/orgDetailAbout"
@@ -71,24 +71,6 @@
                 app:layout_constraintTop_toBottomOf="@id/managementTxtView" />
 
 
-            <TextView
-                android:id="@+id/othersTxtView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="Others"
-                android:textSize="@dimen/_13ssp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/managementRecyclerView"
-                app:layout_constraintTop_toBottomOf="@id/managementRecyclerView" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/othersRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/othersTxtView" />
 
             <TextView
                 android:id="@+id/projectsTxtView"
@@ -98,8 +80,8 @@
                 android:text="@string/projects"
                 android:textSize="@dimen/_13ssp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/othersRecyclerView"
-                app:layout_constraintTop_toBottomOf="@id/othersRecyclerView" />
+                app:layout_constraintStart_toStartOf="@id/managementRecyclerView"
+                app:layout_constraintTop_toBottomOf="@id/managementRecyclerView" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/projectsRecyclerView"
