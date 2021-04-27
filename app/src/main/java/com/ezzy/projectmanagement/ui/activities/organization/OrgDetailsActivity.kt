@@ -19,7 +19,8 @@ import com.ezzy.projectmanagement.adapters.OrgDetailsProjectViewHolder
 import com.ezzy.projectmanagement.databinding.ActivityOrgDetailsBinding
 import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
-import com.ezzy.projectmanagement.util.HorizontalItemDecorator
+import com.ezzy.projectmanagement.util.Directions
+import com.ezzy.projectmanagement.util.ItemDecorator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -88,7 +89,7 @@ class OrgDetailsActivity : AppCompatActivity() {
                 false
             )
             adapter = membersAdapter
-            addItemDecoration(HorizontalItemDecorator(10))
+            addItemDecoration(ItemDecorator(Directions.HORIZONTAL, 8))
         }
 
         binding.projectsRecyclerView.apply {
@@ -98,7 +99,7 @@ class OrgDetailsActivity : AppCompatActivity() {
                 false
             )
             adapter = projectAdapter
-            addItemDecoration(HorizontalItemDecorator(10))
+            addItemDecoration(ItemDecorator(Directions.HORIZONTAL, 8))
         }
     }
 

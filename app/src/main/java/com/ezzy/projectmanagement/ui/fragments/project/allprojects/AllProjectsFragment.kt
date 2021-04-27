@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.adapters.AllProjectsViewHolder
 import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.databinding.FragmentAllProjectsBinding
 import com.ezzy.core.domain.Project
-import com.ezzy.projectmanagement.util.VerticalItemDecorator
+import com.ezzy.projectmanagement.util.Directions
+import com.ezzy.projectmanagement.util.ItemDecorator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -57,7 +57,8 @@ class AllProjectsFragment : Fragment() {
         binding.allProjectRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = allProjectsAdapter
-            addItemDecoration(VerticalItemDecorator(8))
+//            addItemDecoration(VerticalItemDecorator(8))
+            addItemDecoration(ItemDecorator(Directions.VERTICAL, 8))
         }
     }
 

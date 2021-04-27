@@ -15,12 +15,10 @@ import com.ezzy.projectmanagement.databinding.ActivityOrganizationsBinding
 import com.ezzy.core.domain.Organization
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
-import com.ezzy.projectmanagement.util.VerticalItemDecorator
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
+import com.ezzy.projectmanagement.util.Directions
+import com.ezzy.projectmanagement.util.ItemDecorator
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class OrganizationsActivity : AppCompatActivity() {
@@ -101,7 +99,7 @@ class OrganizationsActivity : AppCompatActivity() {
         binding.organizationsRecyclerView.apply {
             adapter = organizationsAdapter
             layoutManager = LinearLayoutManager(this@OrganizationsActivity)
-            addItemDecoration(VerticalItemDecorator(10))
+            addItemDecoration(ItemDecorator(Directions.VERTICAL, 10))
         }
     }
 
