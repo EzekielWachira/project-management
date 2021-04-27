@@ -20,12 +20,14 @@ import com.ezzy.projectmanagement.databinding.ActivityOrgDetailsBinding
 import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
 import com.ezzy.projectmanagement.util.HorizontalItemDecorator
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OrgDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityOrgDetailsBinding
     private var organization : Organization? = null
-    val orgViewModel : OrganizationViewModel by viewModels()
+    private val orgViewModel : OrganizationViewModel by viewModels()
     private lateinit var membersAdapter : CommonRecyclerViewAdapter<User>
     private lateinit var projectAdapter : CommonRecyclerViewAdapter<Project>
 
@@ -40,11 +42,11 @@ class OrgDetailsActivity : AppCompatActivity() {
                 setDisplayHomeAsUpEnabled(true)
                 title = organization!!.name
             }
+            organization!!.name?.let { orgViewModel.getOrganizationId(it) }
             setUpViews(organization!!)
         }
-        organization!!.name?.let { orgViewModel.getOrganizationId(it) }
 
-        orgViewModel.orgName.observe(this){
+        orgViewModel.orgId.observe(this){
             orgViewModel.getOrgMembers(it)
             orgViewModel.getOrgProjects(it)
         }

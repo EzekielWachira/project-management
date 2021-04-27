@@ -47,8 +47,8 @@ class OrganizationViewModel @Inject constructor(
     val organizationMembers : LiveData<List<User>> get() = _organizationMembers
     private var _organizationProjects = MutableLiveData<List<Project>>()
     val organizationProjects : LiveData<List<Project>> get() = _organizationProjects
-    private var _orgName = MutableLiveData<String>()
-    val orgName : LiveData<String> get() = _orgName
+    private var _orgId = MutableLiveData<String>()
+    val orgId : LiveData<String> get() = _orgId
 
     init {
         getAllOrganizations()
@@ -136,7 +136,7 @@ class OrganizationViewModel @Inject constructor(
         viewModelScope.launch {
             val results = getOrgId(orgName)
             if (results.isNotEmpty()){
-                _orgName.postValue(results)
+                _orgId.postValue(results)
             }
         }
     }
