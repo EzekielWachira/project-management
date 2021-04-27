@@ -57,7 +57,6 @@ class AllProjectsFragment : Fragment() {
         binding.allProjectRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = allProjectsAdapter
-//            addItemDecoration(VerticalItemDecorator(8))
             addItemDecoration(ItemDecorator(Directions.VERTICAL, 8))
         }
     }
