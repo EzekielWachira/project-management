@@ -21,7 +21,7 @@ class RemoteProjectDataSource @Inject constructor(
         membersSet: Set<User>
     ) {
         try {
-            val projectsRef = firestore.collection(Constants.PROJECT_COLLECTION)
+            firestore.collection(Constants.PROJECT_COLLECTION)
             val organizationRef = firestore.collection(Constants.ORGANIZATIONS)
             organizationSet.forEach { org ->
                 organizationRef.whereEqualTo("name", org.name)
