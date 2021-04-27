@@ -76,10 +76,10 @@ class OrgDetailsActivity : AppCompatActivity() {
     private fun setUpRecyclerViews() {
         membersAdapter = CommonRecyclerViewAdapter {
             OrgDetailsMembersViewHolder(it)
-        }
+        }.apply { notifyDataSetChanged() }
         projectAdapter = CommonRecyclerViewAdapter {
             OrgDetailsProjectViewHolder(it)
-        }
+        }.apply { notifyDataSetChanged() }
 
         binding.managementRecyclerView.apply {
             layoutManager = LinearLayoutManager(
@@ -119,5 +119,11 @@ class OrgDetailsActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        membersAdapter.notifyDataSetChanged()
+        projectAdapter.notifyDataSetChanged()
     }
 }
