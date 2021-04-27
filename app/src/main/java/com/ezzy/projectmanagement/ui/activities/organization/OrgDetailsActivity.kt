@@ -7,18 +7,27 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.ezzy.core.domain.Organization
+import com.ezzy.core.domain.Project
+import com.ezzy.core.domain.User
 import com.ezzy.projectmanagement.R
+import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
+import com.ezzy.projectmanagement.adapters.OrgDetailsMembersViewHolder
+import com.ezzy.projectmanagement.adapters.OrgDetailsProjectViewHolder
 import com.ezzy.projectmanagement.databinding.ActivityOrgDetailsBinding
 import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
+import com.ezzy.projectmanagement.util.HorizontalItemDecorator
 
 class OrgDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityOrgDetailsBinding
     private var organization : Organization? = null
     val orgViewModel : OrganizationViewModel by viewModels()
+    private lateinit var membersAdapter : CommonRecyclerViewAdapter<User>
+    private lateinit var projectAdapter : CommonRecyclerViewAdapter<Project>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +40,21 @@ class OrgDetailsActivity : AppCompatActivity() {
                 setDisplayHomeAsUpEnabled(true)
                 title = organization!!.name
             }
-            organization!!.name?.let { orgViewModel.getOrganizationId(it) }
             setUpViews(organization!!)
+        }
+        organization!!.name?.let { orgViewModel.getOrganizationId(it) }
+
+        orgViewModel.orgName.observe(this){
+            orgViewModel.getOrgMembers(it)
+            orgViewModel.getOrgProjects(it)
+        }
+
+        orgViewModel.organizationMembers.observe(this) {
+            membersAdapter.differ.submitList(it)
+        }
+
+        orgViewModel.organizationProjects.observe(this) {
+            projectAdapter.differ.submitList(it)
         }
     }
 
@@ -45,6 +67,37 @@ class OrgDetailsActivity : AppCompatActivity() {
                 this, R.drawable.placeholder
             ))
             .into(binding.orgDetailImage)
+
+        setUpRecyclerViews()
+    }
+
+    private fun setUpRecyclerViews() {
+        membersAdapter = CommonRecyclerViewAdapter {
+            OrgDetailsMembersViewHolder(it)
+        }
+        projectAdapter = CommonRecyclerViewAdapter {
+            OrgDetailsProjectViewHolder(it)
+        }
+
+        binding.managementRecyclerView.apply {
+            layoutManager = LinearLayoutManager(
+                this@OrgDetailsActivity,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            adapter = membersAdapter
+            addItemDecoration(HorizontalItemDecorator(10))
+        }
+
+        binding.projectsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(
+                this@OrgDetailsActivity,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            adapter = projectAdapter
+            addItemDecoration(HorizontalItemDecorator(10))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

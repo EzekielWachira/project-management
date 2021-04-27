@@ -3,23 +3,24 @@ package com.ezzy.projectmanagement.adapters
 import android.view.ViewGroup
 import android.widget.TextView
 import com.ezzy.core.domain.Project
+import com.ezzy.core.domain.User
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.util.smartTruncate
 import com.google.android.material.chip.Chip
 
-class OrgDetailsProjectViewHolder(
+class OrgDetailsMembersViewHolder(
     parent: ViewGroup
-) : CommonViewHolder<Project>(
-    parent, R.layout.project_item
+) : CommonViewHolder<User>(
+    parent, R.layout.members_item
 ){
 
-    private val projectNameTextView : TextView = rootView.findViewById(R.id.projectItemName)
-    private val projectStatusChip : Chip = rootView.findViewById(R.id.projectStatusChip)
+    private val memberNameTextView : TextView = rootView.findViewById(R.id.memberItemName)
+    private val membersEmailTextView : Chip = rootView.findViewById(R.id.memberLabel)
 
-    override fun bindItem(item: Project?) {
+    override fun bindItem(item: User?) {
         item?.let {
-            projectNameTextView.text = it.projectTitle?.smartTruncate(10)
-            projectStatusChip.text = it.projectStage?.smartTruncate(10)
+            memberNameTextView.text = it.name?.smartTruncate(10)
+            membersEmailTextView.text = it.email?.smartTruncate(10)
         }
     }
 
