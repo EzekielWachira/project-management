@@ -6,12 +6,15 @@ import com.ezzy.core.data.OrganizationDataSource
 import com.ezzy.core.domain.Organization
 import com.ezzy.core.domain.Project
 import com.ezzy.core.domain.User
+import com.ezzy.core.interactors.SaveUserOrganizations
 import com.ezzy.projectmanagement.util.Constants
 import com.ezzy.projectmanagement.util.Constants.MEMBERS
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.net.URI
@@ -20,7 +23,9 @@ import javax.inject.Inject
 
 class RemoteOrganizationDataSource @Inject constructor(
     val firestore: FirebaseFirestore,
-    val firebaseStorage: FirebaseStorage
+    val firebaseStorage: FirebaseStorage,
+    val saveUserOrganizations: SaveUserOrganizations,
+    val firebaseAuth: FirebaseAuth
 ) : OrganizationDataSource{
 
     val organizations = MutableLiveData<List<Organization>>()
@@ -36,6 +41,10 @@ class RemoteOrganizationDataSource @Inject constructor(
             val imgUri = Uri.parse(imageUri.toString())
             val storageReference = firebaseStorage.reference.child("images/$ORGANIZATIONS/$fileName")
             val organizationReference = firestore.collection(ORGANIZATIONS)
+            val authUser = User(
+                firebaseAuth.currentUser!!.displayName,
+                firebaseAuth.currentUser!!.email
+            )
 
             storageReference.putFile(imgUri)
                 .addOnSuccessListener {
@@ -46,13 +55,18 @@ class RemoteOrganizationDataSource @Inject constructor(
                             .addOnSuccessListener { docReference ->
                                 membersSet.forEach { member ->
                                     organizationReference.document(docReference.id)
-                                        .collection(Constants.MEMBERS)
+                                        .collection(MEMBERS)
                                         .add(member)
                                         .addOnSuccessListener {
                                             Timber.d("SUCCESS")
+                                            if (member == authUser){
+                                                CoroutineScope(Dispatchers.IO).launch {
+                                                    saveUserOrganizations(it.id, member.email!!)
+                                                }
+                                            }
                                         }
                                         .addOnFailureListener {
-                                            Timber.d("SUCCESS")
+                                            Timber.d("FAILURE")
                                         }
                                 }
                                 Timber.d("SUCCESS")

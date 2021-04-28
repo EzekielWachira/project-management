@@ -101,4 +101,8 @@ object DataModule {
     @Provides
     fun provideAddMember(repository: UserRepository) =
         AddMember(repository)
+
+    @Provides
+    fun provideSaveUserOrganizations(repository: UserRepository) =
+        SaveUserOrganizations(repository)
 }
