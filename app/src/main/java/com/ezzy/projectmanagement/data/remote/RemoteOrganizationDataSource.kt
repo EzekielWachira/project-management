@@ -11,6 +11,7 @@ import com.ezzy.projectmanagement.util.Constants
 import com.ezzy.projectmanagement.util.Constants.MEMBERS
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
+import com.ezzy.projectmanagement.util.Constants.USERS
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -29,6 +30,7 @@ class RemoteOrganizationDataSource @Inject constructor(
 ) : OrganizationDataSource{
 
     val organizations = MutableLiveData<List<Organization>>()
+    private val userCollection = firestore.collection(USERS)
 
     override suspend fun addOrganization(
         organization: Organization,
@@ -59,11 +61,23 @@ class RemoteOrganizationDataSource @Inject constructor(
                                         .add(member)
                                         .addOnSuccessListener {
                                             Timber.d("SUCCESS")
-                                            if (member == authUser){
-                                                CoroutineScope(Dispatchers.IO).launch {
-                                                    saveUserOrganizations(it.id, member.email!!)
+                                            val orgHashMap = hashMapOf<String, String>()
+                                            orgHashMap["organization_id"] = it.id
+                                            userCollection.whereEqualTo("email", member.email)
+                                                .get()
+                                                .addOnSuccessListener {  querySnapshot ->
+                                                    querySnapshot.documents.forEach { documentSnapshot ->
+                                                        userCollection.document(documentSnapshot.id)
+                                                            .collection(ORGANIZATIONS)
+                                                            .add(orgHashMap)
+                                                            .addOnSuccessListener {
+                                                                Timber.i("ORG id saved to users")
+                                                            }
+                                                            .addOnFailureListener {
+                                                                Timber.e("Error adding org id to users")
+                                                            }
+                                                    }
                                                 }
-                                            }
                                         }
                                         .addOnFailureListener {
                                             Timber.d("FAILURE")

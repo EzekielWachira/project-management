@@ -4,6 +4,7 @@ import com.ezzy.core.data.UserDataSource
 import com.ezzy.core.domain.User
 import com.ezzy.projectmanagement.util.Constants
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
+import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
 import com.ezzy.projectmanagement.util.Constants.USERS
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
@@ -14,6 +15,8 @@ import javax.inject.Inject
 class RemoteUserDataSource @Inject constructor(
     val firestore: FirebaseFirestore
 ) : UserDataSource {
+
+    private val userCollection = firestore.collection(USERS)
 
     override suspend fun getAllUsers(): List<User> {
         val users = mutableListOf<User>()
@@ -74,7 +77,6 @@ class RemoteUserDataSource @Inject constructor(
         organizationHashMap["organization_id"] = organizationId
 
         try {
-            val userCollection = firestore.collection(USERS)
             userCollection.whereEqualTo("email", email.toLowerCase(Locale.getDefault()))
                 .get()
                 .addOnSuccessListener {
@@ -88,6 +90,27 @@ class RemoteUserDataSource @Inject constructor(
                 }.await()
         } catch (e : Exception){
             Timber.e("Error saving user organizations")
+        }
+    }
+
+    override suspend fun saveUserProjects(projectId: String, email: String) {
+        val projectHashMap = hashMapOf<String, String>()
+        projectHashMap["project_id"] = projectId
+
+        try {
+            userCollection.whereEqualTo("email", email.toLowerCase(Locale.getDefault()))
+                .get()
+                .addOnSuccessListener {
+                    it.documents.forEach { documentSnapshot ->
+                        userCollection.document(documentSnapshot.id)
+                            .collection(PROJECT_COLLECTION)
+                            .add(projectHashMap)
+                            .addOnSuccessListener { Timber.d("SUCCESS") }
+                            .addOnSuccessListener { Timber.e("ERROR saving user organizations") }
+                    }
+                }.await()
+        } catch (e : Exception) {
+            Timber.e("Error saving user projects")
         }
     }
 
