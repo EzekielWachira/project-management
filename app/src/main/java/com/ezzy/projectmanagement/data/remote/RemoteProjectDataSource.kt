@@ -10,6 +10,9 @@ import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
 import com.ezzy.projectmanagement.util.Constants.USERS
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.lang.Exception
@@ -36,7 +39,7 @@ class RemoteProjectDataSource @Inject constructor(
         )
 
         try {
-            firestore.collection(Constants.PROJECT_COLLECTION)
+            firestore.collection(PROJECT_COLLECTION)
             organizationSet.forEach { org ->
                 organizationRef.whereEqualTo("name", org.name)
                     .get()
@@ -44,13 +47,13 @@ class RemoteProjectDataSource @Inject constructor(
                         if (querySnapshot.isSuccessful){
                             querySnapshot.result!!.forEach { docSnapshot ->
                                 organizationRef.document(docSnapshot.id)
-                                    .collection(Constants.PROJECT_COLLECTION)
+                                    .collection(PROJECT_COLLECTION)
                                     .add(project)
                                     .addOnSuccessListener { docReference ->
                                         membersSet.let { users ->
                                             users.forEach { member ->
                                                 organizationRef.document(docSnapshot.id)
-                                                    .collection(Constants.PROJECT_COLLECTION)
+                                                    .collection(PROJECT_COLLECTION)
                                                     .document(docReference.id)
                                                     .collection(Constants.MEMBERS)
                                                     .add(member)
@@ -63,11 +66,11 @@ class RemoteProjectDataSource @Inject constructor(
                                                             .get()
                                                             .addOnSuccessListener { querySnapshot ->
                                                                 querySnapshot.documents.forEach { snapShot ->
-                                                                    userCollection.document(snapShot.id)
-                                                                        .collection(PROJECT_COLLECTION)
-                                                                        .add(projectHashMap)
-                                                                        .addOnCompleteListener {
-                                                                            Timber.d("Project id saved to users")
+                                                                    CoroutineScope(Dispatchers.IO)
+                                                                        .launch {
+                                                                            saveUserProjects(
+                                                                                snapShot.id, member.email!!
+                                                                            )
                                                                         }
                                                                 }
                                                             }
@@ -97,7 +100,7 @@ class RemoteProjectDataSource @Inject constructor(
     override suspend fun getAll(): List<Project> {
         val projects = mutableListOf<Project>()
         try {
-            firestore.collection(Constants.PROJECT_COLLECTION)
+            firestore.collection(PROJECT_COLLECTION)
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
