@@ -23,5 +23,5 @@ class OrganizationRepository(
     suspend fun getOrganizationMembers(orgId : String) = dataSource.getOrganizationMembers(orgId)
     suspend fun getOrganizationProjects(orgId: String) = dataSource.getOrganizationProjects(orgId)
     suspend fun getOrganizationId(orgName : String) = dataSource.getOrganizationId(orgName)
-
+    suspend fun getUserOrganizations(userEmail : String) = dataSource.getUserOrganizations(userEmail)
 }

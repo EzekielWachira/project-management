@@ -206,7 +206,40 @@ class RemoteOrganizationDataSource @Inject constructor(
         }catch (e : Exception){
             Timber.e(e.message.toString())
         }
-        return organizationId!!
+        return organizationId
+    }
+
+    override suspend fun getUserOrganizations(userEmail : String): List<Organization> {
+        val userOrganizations = mutableListOf<Organization>()
+        try {
+            val organizationCollection = firestore.collection(ORGANIZATIONS)
+            organizationCollection.get()
+                .addOnSuccessListener {
+                    it.documents.forEach { docSnapShot ->
+                        organizationCollection.document(docSnapShot.id)
+                            .collection(MEMBERS)
+                            .whereEqualTo("email", userEmail.toLowerCase(Locale.getDefault()))
+                            .get()
+                            .addOnSuccessListener { querySnapShot ->
+                                querySnapShot.documents.forEach { _ ->
+                                    val organization = Organization(
+                                        docSnapShot.getString("name"),
+                                        docSnapShot.getString("imageUrl"),
+                                        docSnapShot.getString("about")
+                                    )
+                                    userOrganizations.add(organization)
+                                }
+                            }.addOnFailureListener {
+                                Timber.e("Error  getting organization members with the logged in user")
+                            }
+                    }
+                }.addOnFailureListener {
+                    Timber.e("Errpr getting organizations")
+                }.await()
+        } catch (e : Exception) {
+            Timber.e("Error getting logged in user organizations")
+        }
+        return userOrganizations
     }
 
 }

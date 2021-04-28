@@ -20,4 +20,5 @@ interface OrganizationDataSource {
     suspend fun getOrganizationMembers(orgId : String) : List<User>
     suspend fun getOrganizationProjects(orgId: String) : List<Project>
     suspend fun getOrganizationId(orgName : String) : String
+    suspend fun getUserOrganizations(userEmail : String) : List<Organization>
 }

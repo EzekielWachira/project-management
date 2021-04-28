@@ -26,7 +26,8 @@ class OrganizationViewModel @Inject constructor(
     val addMembers: AddMembers,
     val getOrganizationProjects: RetrieveOrganizationProjects,
     val getOrganizationMembers: RetrieveOrganizationMembers,
-    val getOrgId: GetOrgId
+    val getOrgId: GetOrgId,
+    val getUserOrganizations: GetUserOrganizations
 ) : AndroidViewModel(app) {
 
     private val _isSuccess = MutableLiveData<Boolean>()
@@ -49,6 +50,8 @@ class OrganizationViewModel @Inject constructor(
     val organizationProjects : LiveData<List<Project>> get() = _organizationProjects
     private var _orgId = MutableLiveData<String>()
     val orgId : LiveData<String> get() = _orgId
+    private val _userOrganizations = MutableLiveData<List<Organization>>()
+    val userOrganizations : LiveData<List<Organization>> get() = _userOrganizations
 
     init {
         getAllOrganizations()
@@ -82,6 +85,13 @@ class OrganizationViewModel @Inject constructor(
             }
         } catch (e : Exception) {
             _isOrgLoadingSuccess.postValue(false)
+        }
+    }
+
+    fun getUserOrgs(email : String) = viewModelScope.launch {
+        val results = getUserOrganizations(email)
+        if (results.isNotEmpty()){
+            _userOrganizations.postValue(results)
         }
     }
 
