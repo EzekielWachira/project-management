@@ -60,23 +60,18 @@ class RemoteOrganizationDataSource @Inject constructor(
                                         .collection(MEMBERS)
                                         .add(member)
                                         .addOnSuccessListener {
-                                            Timber.d("SUCCESS")
-                                            val orgHashMap = hashMapOf<String, String>()
-                                            orgHashMap["organization_id"] = it.id
                                             userCollection.whereEqualTo("email", member.email)
                                                 .get()
                                                 .addOnSuccessListener {  querySnapshot ->
                                                     querySnapshot.documents.forEach { documentSnapshot ->
-                                                        userCollection.document(documentSnapshot.id)
-                                                            .collection(ORGANIZATIONS)
-                                                            .add(orgHashMap)
-                                                            .addOnSuccessListener {
-                                                                Timber.i("ORG id saved to users")
-                                                            }
-                                                            .addOnFailureListener {
-                                                                Timber.e("Error adding org id to users")
-                                                            }
+                                                        CoroutineScope(Dispatchers.IO).launch {
+                                                            saveUserOrganizations(
+                                                                documentSnapshot.id,
+                                                                member.email!!
+                                                            )
+                                                        }
                                                     }
+                                                    Timber.d("SUCCESS")
                                                 }
                                         }
                                         .addOnFailureListener {
