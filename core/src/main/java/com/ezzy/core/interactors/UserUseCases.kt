@@ -18,3 +18,15 @@ class AddMember(private val repository: UserRepository){
         memberSet : Set<User>
     ) = repository.addMember(memberSet)
 }
+
+class SaveUserOrganizations(private val repository: UserRepository){
+    suspend operator fun invoke(organizationId : String, email : String) =
+        repository.saveUserOrganizations(organizationId, email)
+}
+
+class SaveUserProjects(private val repository: UserRepository) {
+    suspend operator fun invoke (
+        projectId : String,
+        email: String
+    ) = repository.saveUserProjects(projectId, email)
+}

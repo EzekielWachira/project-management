@@ -6,12 +6,16 @@ import com.ezzy.core.data.OrganizationDataSource
 import com.ezzy.core.domain.Organization
 import com.ezzy.core.domain.Project
 import com.ezzy.core.domain.User
+import com.ezzy.core.interactors.SaveUserOrganizations
 import com.ezzy.projectmanagement.util.Constants
 import com.ezzy.projectmanagement.util.Constants.MEMBERS
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
+import com.ezzy.projectmanagement.util.Constants.USERS
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.net.URI
@@ -20,10 +24,12 @@ import javax.inject.Inject
 
 class RemoteOrganizationDataSource @Inject constructor(
     val firestore: FirebaseFirestore,
-    val firebaseStorage: FirebaseStorage
+    val firebaseStorage: FirebaseStorage,
+    val saveUserOrganizations: SaveUserOrganizations,
 ) : OrganizationDataSource{
 
     val organizations = MutableLiveData<List<Organization>>()
+    private val userCollection = firestore.collection(USERS)
 
     override suspend fun addOrganization(
         organization: Organization,
@@ -46,18 +52,30 @@ class RemoteOrganizationDataSource @Inject constructor(
                             .addOnSuccessListener { docReference ->
                                 membersSet.forEach { member ->
                                     organizationReference.document(docReference.id)
-                                        .collection(Constants.MEMBERS)
+                                        .collection(MEMBERS)
                                         .add(member)
                                         .addOnSuccessListener {
-                                            Timber.d("SUCCESS")
+                                            userCollection.whereEqualTo("email", member.email)
+                                                .get()
+                                                .addOnSuccessListener {  querySnapshot ->
+                                                    querySnapshot.documents.forEach { documentSnapshot ->
+                                                        CoroutineScope(Dispatchers.IO).launch {
+                                                            saveUserOrganizations(
+                                                                documentSnapshot.id,
+                                                                member.email!!
+                                                            )
+                                                        }
+                                                    }
+                                                    Timber.d("SUCCESS")
+                                                }
                                         }
                                         .addOnFailureListener {
-                                            Timber.d("SUCCESS")
+                                            Timber.d("FAILURE")
                                         }
                                 }
                                 Timber.d("SUCCESS")
                             }.addOnFailureListener {
-                                Timber.d("SUCCESS")
+                                Timber.d("FAILURE")
                             }
                     }
                 }.addOnFailureListener {
@@ -206,15 +224,40 @@ class RemoteOrganizationDataSource @Inject constructor(
         }catch (e : Exception){
             Timber.e(e.message.toString())
         }
-        return organizationId!!
+        return organizationId
+    }
+
+    override suspend fun getUserOrganizations(userEmail : String): List<Organization> {
+        val userOrganizations = mutableListOf<Organization>()
+        try {
+            val organizationCollection = firestore.collection(ORGANIZATIONS)
+            organizationCollection.get()
+                .addOnSuccessListener {
+                    it.documents.forEach { docSnapShot ->
+                        organizationCollection.document(docSnapShot.id)
+                            .collection(MEMBERS)
+                            .whereEqualTo("email", userEmail.toLowerCase(Locale.getDefault()))
+                            .get()
+                            .addOnSuccessListener { querySnapShot ->
+                                querySnapShot.documents.forEach { _ ->
+                                    val organization = Organization(
+                                        docSnapShot.getString("name"),
+                                        docSnapShot.getString("imageUrl"),
+                                        docSnapShot.getString("about")
+                                    )
+                                    userOrganizations.add(organization)
+                                }
+                            }.addOnFailureListener {
+                                Timber.e("Error  getting organization members with the logged in user")
+                            }
+                    }
+                }.addOnFailureListener {
+                    Timber.e("Errpr getting organizations")
+                }.await()
+        } catch (e : Exception) {
+            Timber.e("Error getting logged in user organizations")
+        }
+        return userOrganizations
     }
 
 }
-
-//.addOnCompleteListener {
-//    if (it.isSuccessful){
-//        it.result!!.forEach { docSnapshot ->
-//            organizationId = docSnapshot.id
-//        }
-//    }
-//}

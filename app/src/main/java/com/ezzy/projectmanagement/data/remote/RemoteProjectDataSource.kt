@@ -4,44 +4,67 @@ import com.ezzy.core.data.ProjectDataSource
 import com.ezzy.core.domain.Organization
 import com.ezzy.core.domain.Project
 import com.ezzy.core.domain.User
+import com.ezzy.core.interactors.SaveUserProjects
 import com.ezzy.projectmanagement.util.Constants
+import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
+import com.ezzy.projectmanagement.util.Constants.USERS
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.lang.Exception
 import javax.inject.Inject
 
 class RemoteProjectDataSource @Inject constructor(
-    val firestore: FirebaseFirestore
+    val firestore: FirebaseFirestore,
+    val saveUserProjects: SaveUserProjects,
 ) : ProjectDataSource {
+
+    private val userCollection = firestore.collection(USERS)
+    private val organizationRef = firestore.collection(Constants.ORGANIZATIONS)
 
     override suspend fun add(
         organizationSet: Set<Organization>,
         project: Project,
         membersSet: Set<User>
     ) {
+
         try {
-            firestore.collection(Constants.PROJECT_COLLECTION)
-            val organizationRef = firestore.collection(Constants.ORGANIZATIONS)
+            firestore.collection(PROJECT_COLLECTION)
             organizationSet.forEach { org ->
                 organizationRef.whereEqualTo("name", org.name)
                     .get()
-                    .addOnCompleteListener {
-                        if (it.isSuccessful){
-                            it.result!!.forEach { docSnapshot ->
+                    .addOnCompleteListener { querySnapshot ->
+                        if (querySnapshot.isSuccessful){
+                            querySnapshot.result!!.forEach { docSnapshot ->
                                 organizationRef.document(docSnapshot.id)
-                                    .collection(Constants.PROJECT_COLLECTION)
+                                    .collection(PROJECT_COLLECTION)
                                     .add(project)
                                     .addOnSuccessListener { docReference ->
                                         membersSet.let { users ->
                                             users.forEach { member ->
                                                 organizationRef.document(docSnapshot.id)
-                                                    .collection(Constants.PROJECT_COLLECTION)
+                                                    .collection(PROJECT_COLLECTION)
                                                     .document(docReference.id)
                                                     .collection(Constants.MEMBERS)
                                                     .add(member)
                                                     .addOnSuccessListener {
-                                                        Timber.i("PROJECT ADDED SUCCESSFULLY")
+                                                        userCollection
+                                                            .whereEqualTo("email", member.email)
+                                                            .get()
+                                                            .addOnSuccessListener { querySnapshot ->
+                                                                querySnapshot.documents.forEach { snapShot ->
+                                                                    CoroutineScope(Dispatchers.IO)
+                                                                        .launch {
+                                                                            saveUserProjects(
+                                                                                snapShot.id, member.email!!
+                                                                            )
+                                                                        }
+                                                                }
+                                                            }
                                                     }
                                                     .addOnFailureListener { e ->
                                                         Timber.e(e.message.toString())
@@ -68,7 +91,7 @@ class RemoteProjectDataSource @Inject constructor(
     override suspend fun getAll(): List<Project> {
         val projects = mutableListOf<Project>()
         try {
-            firestore.collection(Constants.PROJECT_COLLECTION)
+            firestore.collection(PROJECT_COLLECTION)
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {

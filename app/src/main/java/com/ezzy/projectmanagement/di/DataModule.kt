@@ -7,6 +7,7 @@ import com.ezzy.core.interactors.*
 import com.ezzy.projectmanagement.data.remote.RemoteOrganizationDataSource
 import com.ezzy.projectmanagement.data.remote.RemoteProjectDataSource
 import com.ezzy.projectmanagement.data.remote.RemoteUserDataSource
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
@@ -23,13 +24,20 @@ object DataModule {
     @Singleton
     fun provideOrganizationRepository(
         fireStore: FirebaseFirestore,
-        storage: FirebaseStorage
-    ) = OrganizationRepository(RemoteOrganizationDataSource(fireStore, storage))
+        storage: FirebaseStorage,
+        saveUserOrganizations: SaveUserOrganizations,
+    ) = OrganizationRepository(RemoteOrganizationDataSource(
+        fireStore, storage, saveUserOrganizations
+    ))
 
     @Provides
     @Singleton
-    fun provideProjectRepository(fireStore: FirebaseFirestore)
-        = ProjectRepository(RemoteProjectDataSource(fireStore))
+    fun provideProjectRepository(
+        fireStore: FirebaseFirestore,
+        saveUserProjects: SaveUserProjects,
+    ) = ProjectRepository(
+        RemoteProjectDataSource(fireStore, saveUserProjects)
+    )
 
     @Provides
     @Singleton
@@ -67,6 +75,10 @@ object DataModule {
     @Provides
     fun provideOrgId(repository: OrganizationRepository) = GetOrgId(repository)
 
+    @Provides
+    fun provideUserOrganizations(repository: OrganizationRepository)
+        = GetUserOrganizations(repository)
+
     //Project Use case dependencies
     @Provides
     fun provideAddProject(repository: ProjectRepository) =
@@ -97,4 +109,12 @@ object DataModule {
     @Provides
     fun provideAddMember(repository: UserRepository) =
         AddMember(repository)
+
+    @Provides
+    fun provideSaveUserOrganizations(repository: UserRepository) =
+        SaveUserOrganizations(repository)
+
+    @Provides
+    fun provideSaveUserProjects(repository: UserRepository) =
+        SaveUserProjects(repository)
 }
