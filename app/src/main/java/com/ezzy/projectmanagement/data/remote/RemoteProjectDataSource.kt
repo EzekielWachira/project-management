@@ -21,7 +21,6 @@ import javax.inject.Inject
 class RemoteProjectDataSource @Inject constructor(
     val firestore: FirebaseFirestore,
     val saveUserProjects: SaveUserProjects,
-    val firebaseAuth: FirebaseAuth
 ) : ProjectDataSource {
 
     private val userCollection = firestore.collection(USERS)
@@ -32,11 +31,6 @@ class RemoteProjectDataSource @Inject constructor(
         project: Project,
         membersSet: Set<User>
     ) {
-
-        val authUser = User(
-            firebaseAuth.currentUser!!.displayName,
-            firebaseAuth.currentUser!!.email
-        )
 
         try {
             firestore.collection(PROJECT_COLLECTION)
@@ -58,9 +52,6 @@ class RemoteProjectDataSource @Inject constructor(
                                                     .collection(Constants.MEMBERS)
                                                     .add(member)
                                                     .addOnSuccessListener {
-                                                        Timber.i("PROJECT ADDED SUCCESSFULLY")
-                                                        val projectHashMap = hashMapOf<String, String>()
-                                                        projectHashMap["project_id"] = it.id
                                                         userCollection
                                                             .whereEqualTo("email", member.email)
                                                             .get()

@@ -26,9 +26,8 @@ object DataModule {
         fireStore: FirebaseFirestore,
         storage: FirebaseStorage,
         saveUserOrganizations: SaveUserOrganizations,
-        firebaseAuth: FirebaseAuth
     ) = OrganizationRepository(RemoteOrganizationDataSource(
-        fireStore, storage, saveUserOrganizations, firebaseAuth
+        fireStore, storage, saveUserOrganizations
     ))
 
     @Provides
@@ -36,9 +35,8 @@ object DataModule {
     fun provideProjectRepository(
         fireStore: FirebaseFirestore,
         saveUserProjects: SaveUserProjects,
-        firebaseAuth: FirebaseAuth
     ) = ProjectRepository(
-        RemoteProjectDataSource(fireStore, saveUserProjects, firebaseAuth)
+        RemoteProjectDataSource(fireStore, saveUserProjects)
     )
 
     @Provides

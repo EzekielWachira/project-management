@@ -26,7 +26,6 @@ class RemoteOrganizationDataSource @Inject constructor(
     val firestore: FirebaseFirestore,
     val firebaseStorage: FirebaseStorage,
     val saveUserOrganizations: SaveUserOrganizations,
-    val firebaseAuth: FirebaseAuth
 ) : OrganizationDataSource{
 
     val organizations = MutableLiveData<List<Organization>>()
@@ -43,10 +42,6 @@ class RemoteOrganizationDataSource @Inject constructor(
             val imgUri = Uri.parse(imageUri.toString())
             val storageReference = firebaseStorage.reference.child("images/$ORGANIZATIONS/$fileName")
             val organizationReference = firestore.collection(ORGANIZATIONS)
-            val authUser = User(
-                firebaseAuth.currentUser!!.displayName,
-                firebaseAuth.currentUser!!.email
-            )
 
             storageReference.putFile(imgUri)
                 .addOnSuccessListener {
@@ -80,7 +75,7 @@ class RemoteOrganizationDataSource @Inject constructor(
                                 }
                                 Timber.d("SUCCESS")
                             }.addOnFailureListener {
-                                Timber.d("SUCCESS")
+                                Timber.d("FAILURE")
                             }
                     }
                 }.addOnFailureListener {
@@ -266,11 +261,3 @@ class RemoteOrganizationDataSource @Inject constructor(
     }
 
 }
-
-//.addOnCompleteListener {
-//    if (it.isSuccessful){
-//        it.result!!.forEach { docSnapshot ->
-//            organizationId = docSnapshot.id
-//        }
-//    }
-//}
