@@ -7,7 +7,6 @@ import com.ezzy.core.domain.Organization
 import com.ezzy.core.domain.Project
 import com.ezzy.core.domain.User
 import com.ezzy.core.interactors.SaveUserOrganizations
-import com.ezzy.projectmanagement.util.Constants
 import com.ezzy.projectmanagement.util.Constants.MEMBERS
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
@@ -26,10 +25,20 @@ class RemoteOrganizationDataSource @Inject constructor(
     val firestore: FirebaseFirestore,
     val firebaseStorage: FirebaseStorage,
     val saveUserOrganizations: SaveUserOrganizations,
+    val firebaseAuth: FirebaseAuth
 ) : OrganizationDataSource{
 
     val organizations = MutableLiveData<List<Organization>>()
     private val userCollection = firestore.collection(USERS)
+    private val organizationCollection = firestore.collection(ORGANIZATIONS)
+    private var authenticatedUser : User? = null
+
+    init {
+        authenticatedUser = User(
+            firebaseAuth.currentUser!!.displayName,
+            firebaseAuth.currentUser!!.email
+        )
+    }
 
     override suspend fun addOrganization(
         organization: Organization,
@@ -227,36 +236,81 @@ class RemoteOrganizationDataSource @Inject constructor(
         return organizationId
     }
 
-    override suspend fun getUserOrganizations(userEmail : String): List<Organization> {
+    override suspend fun getUserOrganizations(): List<Organization> {
         val userOrganizations = mutableListOf<Organization>()
+        val organizationsId = mutableListOf<String>()
         try {
-            val organizationCollection = firestore.collection(ORGANIZATIONS)
-            organizationCollection.get()
+            userCollection.whereEqualTo("email", authenticatedUser?.email)
+                .get()
                 .addOnSuccessListener {
-                    it.documents.forEach { docSnapShot ->
-                        organizationCollection.document(docSnapShot.id)
-                            .collection(MEMBERS)
-                            .whereEqualTo("email", userEmail.toLowerCase(Locale.getDefault()))
+                    it.documents.forEach { documentSnapshot ->
+                        userCollection.document(documentSnapshot.id)
+                            .collection(ORGANIZATIONS)
                             .get()
-                            .addOnSuccessListener { querySnapShot ->
-                                querySnapShot.documents.forEach { _ ->
+                            .addOnCompleteListener { querySnapShot ->
+                                if (querySnapShot.isSuccessful){
+                                    querySnapShot.result!!.forEach { queryDocumentSnapshot ->
+                                        organizationsId.add(
+                                            queryDocumentSnapshot.getString("project_id")!!
+                                        )
+                                    }
+                                }
+                            }.addOnFailureListener { Timber.e("Error obtaining org ids") }
+                    }
+                }.addOnFailureListener { Timber.e("Error obtaining user") }.await()
+
+            if (organizationsId.isNotEmpty()) {
+                organizationsId.forEach { orgId ->
+                    organizationCollection.get()
+                        .addOnSuccessListener { querySnapShot ->
+                            querySnapShot.documents.forEach { documentSnapshot ->
+                                if (documentSnapshot.id == orgId){
                                     val organization = Organization(
-                                        docSnapShot.getString("name"),
-                                        docSnapShot.getString("imageUrl"),
-                                        docSnapShot.getString("about")
+                                        documentSnapshot.getString("name"),
+                                        documentSnapshot.getString("imageUrl"),
+                                        documentSnapshot.getString("about")
                                     )
                                     userOrganizations.add(organization)
                                 }
-                            }.addOnFailureListener {
-                                Timber.e("Error  getting organization members with the logged in user")
                             }
-                    }
-                }.addOnFailureListener {
-                    Timber.e("Errpr getting organizations")
-                }.await()
+                        }.addOnFailureListener {
+                            Timber.e("error retrieving user organizations")
+                        }.await()
+                }
+            }
+
         } catch (e : Exception) {
             Timber.e("Error getting logged in user organizations")
         }
+
+//        try {
+//
+//            organizationCollection.get()
+//                .addOnSuccessListener {
+//                    it.documents.forEach { docSnapShot ->
+//                        organizationCollection.document(docSnapShot.id)
+//                            .collection(MEMBERS)
+//                            .whereEqualTo("email", organizationId.toLowerCase(Locale.getDefault()))
+//                            .get()
+//                            .addOnSuccessListener { querySnapShot ->
+//                                querySnapShot.documents.forEach { _ ->
+//                                    val organization = Organization(
+//                                        docSnapShot.getString("name"),
+//                                        docSnapShot.getString("imageUrl"),
+//                                        docSnapShot.getString("about")
+//                                    )
+//                                    userOrganizations.add(organization)
+//                                }
+//                            }.addOnFailureListener {
+//                                Timber.e("Error  getting organization members with the logged in user")
+//                            }
+//                    }
+//                }.addOnFailureListener {
+//                    Timber.e("Errpr getting organizations")
+//                }.await()
+//        } catch (e : Exception) {
+//            Timber.e("Error getting logged in user organizations")
+//        }
         return userOrganizations
     }
 

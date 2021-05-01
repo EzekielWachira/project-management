@@ -46,7 +46,7 @@ class OrganizationsActivity : AppCompatActivity() {
         setUpRecyclerView()
 
         organizationViewModel.getAllOrganizations()
-        organizationViewModel.getUserOrgs(firebaseAuth.currentUser!!.email!!)
+        organizationViewModel.getUserOrgs()
 
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -75,7 +75,7 @@ class OrganizationsActivity : AppCompatActivity() {
 
         })
 
-        organizationViewModel.organizations.observe(this) { organizationList ->
+        organizationViewModel.userOrganizations.observe(this) { organizationList ->
             organizationsAdapter.differ.submitList(organizationList)
         }
 

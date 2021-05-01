@@ -88,8 +88,8 @@ class OrganizationViewModel @Inject constructor(
         }
     }
 
-    fun getUserOrgs(email : String) = viewModelScope.launch {
-        val results = getUserOrganizations(email)
+    fun getUserOrgs() = viewModelScope.launch {
+        val results = getUserOrganizations()
         if (results.isNotEmpty()){
             _userOrganizations.postValue(results)
         }
