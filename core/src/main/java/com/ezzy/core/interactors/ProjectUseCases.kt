@@ -30,5 +30,7 @@ class AttachMembers(private val repository: ProjectRepository) {
 }
 
 class GetUserProjects(private val repository: ProjectRepository) {
-    suspend operator fun invoke(projectId : String) = repository.getUserProjects(projectId)
+    suspend operator fun invoke(
+        organizations : List<Organization>
+    ) = repository.getUserProjects(organizations)
 }

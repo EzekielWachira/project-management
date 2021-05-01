@@ -13,6 +13,7 @@ import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.databinding.FragmentAllProjectsBinding
 import com.ezzy.core.domain.Project
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
+import com.ezzy.projectmanagement.ui.fragments.project.viewmodel.BaseProjectViewModel
 import com.ezzy.projectmanagement.util.Directions
 import com.ezzy.projectmanagement.util.ItemDecorator
 import com.google.firebase.auth.FirebaseAuth
@@ -24,7 +25,7 @@ class AllProjectsFragment : Fragment() {
 
     private var _binding : FragmentAllProjectsBinding? = null
     private val binding get() = _binding!!
-    private val allProjectsViewModel : AllProjectsViewModel by viewModels()
+    private val baseViewModel : BaseProjectViewModel by viewModels()
     private lateinit var allProjectsAdapter : CommonRecyclerViewAdapter<Project>
     private val organizationViewModel : OrganizationViewModel by viewModels()
 
@@ -41,14 +42,14 @@ class AllProjectsFragment : Fragment() {
 
         setUpRecyclerView()
 
-        allProjectsViewModel.getAllProjects()
-        organizationViewModel.getUserOrgs(firebaseAuth.currentUser!!.email!!)
+        baseViewModel.getAllProjects()
+        organizationViewModel.getUserOrgs()
 
-        allProjectsViewModel.allProjects.observe(viewLifecycleOwner, { projectsList ->
+        baseViewModel.allProjects.observe(viewLifecycleOwner, { projectsList ->
             allProjectsAdapter.differ.submitList(projectsList)
         })
 
-        allProjectsViewModel.isProjectLoadSuccess.observe(viewLifecycleOwner, { isSuccess ->
+        baseViewModel.isProjectLoadSuccess.observe(viewLifecycleOwner, { isSuccess ->
             if (isSuccess) {
                 binding.progressBar.visibility = View.VISIBLE
             } else {
