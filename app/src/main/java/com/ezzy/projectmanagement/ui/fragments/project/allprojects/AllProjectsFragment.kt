@@ -5,6 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.setPadding
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ezzy.core.domain.Organization
@@ -12,6 +16,7 @@ import com.ezzy.projectmanagement.adapters.AllProjectsViewHolder
 import com.ezzy.projectmanagement.adapters.CommonRecyclerViewAdapter
 import com.ezzy.projectmanagement.databinding.FragmentAllProjectsBinding
 import com.ezzy.core.domain.Project
+import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
 import com.ezzy.projectmanagement.ui.fragments.project.viewmodel.BaseProjectViewModel
 import com.ezzy.projectmanagement.util.Directions
@@ -46,7 +51,7 @@ class AllProjectsFragment : Fragment() {
         organizationViewModel.getUserOrgs()
 
         baseViewModel.allProjects.observe(viewLifecycleOwner, { projectsList ->
-            allProjectsAdapter.differ.submitList(projectsList)
+//            allProjectsAdapter.differ.submitList(projectsList)
         })
 
         baseViewModel.isProjectLoadSuccess.observe(viewLifecycleOwner, { isSuccess ->
@@ -60,7 +65,12 @@ class AllProjectsFragment : Fragment() {
         organizationViewModel.userOrganizations.observe(viewLifecycleOwner) { orgList ->
             if (orgList.isNotEmpty()) {
                 userOrganizations = orgList
+                baseViewModel.getAuthUserProjects(orgList)
             }
+        }
+
+        baseViewModel.authUserProjects.observe(viewLifecycleOwner) {
+            allProjectsAdapter.differ.submitList(it)
         }
 
         return binding.root
