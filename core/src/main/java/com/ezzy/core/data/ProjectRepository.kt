@@ -18,5 +18,5 @@ class ProjectRepository(
     suspend fun addMembers(membersSet: Set<User>) = dataSource.addMembers(membersSet)
     suspend fun attachOrganization(organizationSet: Set<Organization>) =
         dataSource.attachOrganizations(organizationSet)
-
+    suspend fun getUserProjects(projectId : String)= dataSource.getUserProjects(projectId)
 }

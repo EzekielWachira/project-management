@@ -8,7 +8,9 @@ import com.ezzy.core.interactors.SaveUserProjects
 import com.ezzy.projectmanagement.util.Constants
 import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
 import com.ezzy.projectmanagement.util.Constants.USERS
+import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,10 +23,20 @@ import javax.inject.Inject
 class RemoteProjectDataSource @Inject constructor(
     val firestore: FirebaseFirestore,
     val saveUserProjects: SaveUserProjects,
+    firebaseAuth: FirebaseAuth
 ) : ProjectDataSource {
 
     private val userCollection = firestore.collection(USERS)
-    private val organizationRef = firestore.collection(Constants.ORGANIZATIONS)
+    private val organizationRef = firestore.collection(ORGANIZATIONS)
+    private val projectCollection = firestore.collection(PROJECT_COLLECTION)
+    private var authenticatedUser: User? = null
+
+    init {
+        authenticatedUser = User(
+            firebaseAuth.currentUser!!.displayName,
+            firebaseAuth.currentUser!!.email
+        )
+    }
 
     override suspend fun add(
         organizationSet: Set<Organization>,
@@ -60,7 +72,7 @@ class RemoteProjectDataSource @Inject constructor(
                                                                     CoroutineScope(Dispatchers.IO)
                                                                         .launch {
                                                                             saveUserProjects(
-                                                                                snapShot.id, member.email!!
+                                                                                docReference.id, member.email!!
                                                                             )
                                                                         }
                                                                 }
@@ -121,5 +133,37 @@ class RemoteProjectDataSource @Inject constructor(
 
     override suspend fun attachOrganizations(organizationSet: Set<Organization>): Set<Organization> {
         return organizationSet
+    }
+
+    override suspend fun getUserProjects(projectId: String): List<Project> {
+        val projects = mutableListOf<Project>()
+        val projectsId = mutableListOf<String>()
+        try {
+            userCollection.whereEqualTo("email", authenticatedUser?.email)
+                .get()
+                .addOnSuccessListener {
+                    it.documents.forEach { documentSnapshot ->
+                        userCollection.document(documentSnapshot.id)
+                            .collection(PROJECT_COLLECTION)
+                            .get()
+                            .addOnSuccessListener { querySnapshot ->
+                                querySnapshot.documents.forEach { docSnapshot ->
+                                    projectsId.add(docSnapshot.getString("project_id")!!)
+                                }
+                            }.addOnFailureListener { e ->
+                                Timber.e("error getting projects id")
+                            }
+                    }
+                }
+
+            if (projectsId.isNotEmpty()){
+                projectsId.forEach { pId ->
+
+                }
+            }
+        } catch (e : Exception){
+            Timber.e(e.message.toString())
+        }
+        return projects
     }
 }

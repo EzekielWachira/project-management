@@ -61,8 +61,8 @@ class RemoteOrganizationDataSource @Inject constructor(
                                                     querySnapshot.documents.forEach { documentSnapshot ->
                                                         CoroutineScope(Dispatchers.IO).launch {
                                                             saveUserOrganizations(
-                                                                documentSnapshot.id,
-                                                                member.email!!
+                                                                docReference.id,
+                                                                member.email!!,
                                                             )
                                                         }
                                                     }

@@ -96,6 +96,10 @@ object DataModule {
     fun provideAttachMembers(repository: ProjectRepository) =
         AttachMembers(repository)
 
+    @Provides
+    fun provideGetUserProjects(repository: ProjectRepository) =
+        GetUserProjects(repository)
+
 
     //User use case
     @Provides
