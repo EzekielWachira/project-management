@@ -47,7 +47,7 @@ class RemoteOrganizationDataSource @Inject constructor(
         imageUri: URI
     ) {
         try {
-            var imagePath : String? = null
+            var imagePath: String?
             val imgUri = Uri.parse(imageUri.toString())
             val storageReference = firebaseStorage.reference.child("images/$ORGANIZATIONS/$fileName")
             val organizationReference = firestore.collection(ORGANIZATIONS)
@@ -67,7 +67,7 @@ class RemoteOrganizationDataSource @Inject constructor(
                                             userCollection.whereEqualTo("email", member.email)
                                                 .get()
                                                 .addOnSuccessListener {  querySnapshot ->
-                                                    querySnapshot.documents.forEach { documentSnapshot ->
+                                                    querySnapshot.documents.forEach { _ ->
                                                         CoroutineScope(Dispatchers.IO).launch {
                                                             saveUserOrganizations(
                                                                 docReference.id,

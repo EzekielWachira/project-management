@@ -68,7 +68,7 @@ class RemoteProjectDataSource @Inject constructor(
                                                             .whereEqualTo("email", member.email)
                                                             .get()
                                                             .addOnSuccessListener { querySnapshot ->
-                                                                querySnapshot.documents.forEach { snapShot ->
+                                                                querySnapshot.documents.forEach { _ ->
                                                                     CoroutineScope(Dispatchers.IO)
                                                                         .launch {
                                                                             saveUserProjects(
@@ -150,7 +150,7 @@ class RemoteProjectDataSource @Inject constructor(
                                 querySnapshot.documents.forEach { docSnapshot ->
                                     projectsId.add(docSnapshot.getString("project_id")!!)
                                 }
-                            }.addOnFailureListener { e ->
+                            }.addOnFailureListener { _ ->
                                 Timber.e("error getting projects id")
 
                             }
@@ -174,7 +174,7 @@ class RemoteProjectDataSource @Inject constructor(
                                                             .document(projectDocSnapshot.id)
                                                             .collection(MEMBERS)
                                                             .get().addOnSuccessListener { membersQSnapshot ->
-                                                                membersQSnapshot.documents.forEach { membersDSnapshot ->
+                                                                membersQSnapshot.documents.forEach { _ ->
                                                                     val project = Project(
                                                                         projectDocSnapshot.getString("projectTitle"),
                                                                         projectDocSnapshot.getString("projectDescription"),
