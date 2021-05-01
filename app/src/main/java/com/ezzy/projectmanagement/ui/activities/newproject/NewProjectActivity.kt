@@ -45,6 +45,7 @@ class NewProjectActivity : AppCompatActivity(){
             organization = intent?.extras?.get("organization") as Organization
             supportActionBar?.title = organization!!.name
             organizations.add(organization!!)
+            showOrgOfProject(organization!!)
         } else { supportActionBar?.title = "New Project" }
 
         BottomSheetBehavior.from(binding.btmSheet).apply {
@@ -118,6 +119,18 @@ class NewProjectActivity : AppCompatActivity(){
                 }
             } else { binding.membersLayout.visibility = View.INVISIBLE }
         })
+    }
+
+    private fun showOrgOfProject(organization: Organization){
+        binding.membersLayout.visibility = View.VISIBLE
+        val membersChip = LayoutInflater.from(this).inflate(
+            R.layout.members_chip_item, null, false
+        ) as Chip
+        membersChip.apply {
+            text = organization.name
+            setOnCloseIconClickListener { binding.membersChipGroup.removeView(it) }
+        }
+        binding.membersChipGroup.addView(membersChip)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
