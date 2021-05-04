@@ -38,6 +38,8 @@ class RemoteOrganizationDataSource @Inject constructor(
             firebaseAuth.currentUser!!.displayName,
             firebaseAuth.currentUser!!.email
         )
+
+        Timber.d("AUTHENTICATED USER: $authenticatedUser")
     }
 
     override suspend fun addOrganization(
@@ -236,9 +238,9 @@ class RemoteOrganizationDataSource @Inject constructor(
         return organizationId
     }
 
-    override suspend fun getUserOrganizations(): List<Organization> {
-        val userOrganizations = mutableListOf<Organization>()
+        val userOrganizations = mutableSetOf<Organization>()
         val organizationsId = mutableListOf<String>()
+    override suspend fun getUserOrganizations(): Set<Organization> {
         try {
             userCollection.whereEqualTo("email", authenticatedUser?.email)
                 .get()
@@ -247,37 +249,61 @@ class RemoteOrganizationDataSource @Inject constructor(
                         userCollection.document(documentSnapshot.id)
                             .collection(ORGANIZATIONS)
                             .get()
-                            .addOnCompleteListener { querySnapShot ->
-                                if (querySnapShot.isSuccessful){
-                                    querySnapShot.result!!.forEach { queryDocumentSnapshot ->
-                                        organizationsId.add(
-                                            queryDocumentSnapshot.getString("project_id")!!
-                                        )
+                            .addOnSuccessListener { querySnapShot ->
+                                querySnapShot.documents.forEach { queryDocumentSnapshot ->
+                                    organizationsId.add(
+                                        queryDocumentSnapshot.getString("organization_id")!!
+                                    )
+                                }
+                                //At this point, nikilog hii data inalog poa
+                                Timber.i("Org IDs : $organizationsId")
+                                if (organizationsId.isNotEmpty()) {
+                                    organizationsId.forEach { orgId ->
+                                        organizationCollection.get()
+                                            .addOnSuccessListener { querySnapShot ->
+                                                querySnapShot.documents.forEach { documentSnapshot ->
+                                                    if (documentSnapshot.id == orgId){
+                                                        val organization = Organization(
+                                                            documentSnapshot.getString("name"),
+                                                            documentSnapshot.getString("imageSrc"),
+                                                            documentSnapshot.getString("about")
+                                                        )
+                                                        userOrganizations.add(organization)
+                                                    }
+                                                }
+//                                                Timber.d("USER ORGANIZATIONS: $userOrganizations")
+                                            }.addOnFailureListener {
+                                                Timber.e("error retrieving user organizations")
+                                            }
                                     }
                                 }
+                                //
                             }.addOnFailureListener { Timber.e("Error obtaining org ids") }
+                            .apply { CoroutineScope(Dispatchers.IO).launch { await() } }
                     }
                 }.addOnFailureListener { Timber.e("Error obtaining user") }.await()
+            //then nikilog hapa hakuna data kwa hii list
+            Timber.i("Org IDs : $organizationsId")
 
-            if (organizationsId.isNotEmpty()) {
-                organizationsId.forEach { orgId ->
-                    organizationCollection.get()
-                        .addOnSuccessListener { querySnapShot ->
-                            querySnapShot.documents.forEach { documentSnapshot ->
-                                if (documentSnapshot.id == orgId){
-                                    val organization = Organization(
-                                        documentSnapshot.getString("name"),
-                                        documentSnapshot.getString("imageUrl"),
-                                        documentSnapshot.getString("about")
-                                    )
-                                    userOrganizations.add(organization)
-                                }
-                            }
-                        }.addOnFailureListener {
-                            Timber.e("error retrieving user organizations")
-                        }.await()
-                }
-            }
+//            if (organizationsId.isNotEmpty()) {
+//                organizationsId.forEach { orgId ->
+//                    organizationCollection.get()
+//                        .addOnSuccessListener { querySnapShot ->
+//                            querySnapShot.documents.forEach { documentSnapshot ->
+//                                if (documentSnapshot.id == orgId){
+//                                    val organization = Organization(
+//                                        documentSnapshot.getString("name"),
+//                                        documentSnapshot.getString("imageSrc"),
+//                                        documentSnapshot.getString("about")
+//                                    )
+//                                    userOrganizations.add(organization)
+//                                }
+//                            }
+//                        }.addOnFailureListener {
+//                            Timber.e("error retrieving user organizations")
+//                        }.await()
+//                }
+//            }
 
         } catch (e : Exception) {
             Timber.e("Error getting logged in user organizations")
@@ -311,6 +337,7 @@ class RemoteOrganizationDataSource @Inject constructor(
 //        } catch (e : Exception) {
 //            Timber.e("Error getting logged in user organizations")
 //        }
+        Timber.d("USER ORGANIZATIONS: $userOrganizations")
         return userOrganizations
     }
 

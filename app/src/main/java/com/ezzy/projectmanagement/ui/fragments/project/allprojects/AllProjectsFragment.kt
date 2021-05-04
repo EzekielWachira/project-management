@@ -37,7 +37,7 @@ class AllProjectsFragment : Fragment() {
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
 
-    private var userOrganizations = listOf<Organization>()
+    private var userOrganizations = setOf<Organization>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -65,7 +65,7 @@ class AllProjectsFragment : Fragment() {
         organizationViewModel.userOrganizations.observe(viewLifecycleOwner) { orgList ->
             if (orgList.isNotEmpty()) {
                 userOrganizations = orgList
-                baseViewModel.getAuthUserProjects(orgList)
+                baseViewModel.getAuthUserProjects(orgList.toList())
             }
         }
 

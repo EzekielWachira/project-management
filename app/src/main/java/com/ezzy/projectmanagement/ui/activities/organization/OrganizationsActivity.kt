@@ -21,6 +21,7 @@ import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -76,7 +77,8 @@ class OrganizationsActivity : AppCompatActivity() {
         })
 
         organizationViewModel.userOrganizations.observe(this) { organizationList ->
-            organizationsAdapter.differ.submitList(organizationList)
+            Timber.d("ORGANIZATION LIST = $organizationList")
+            organizationsAdapter.differ.submitList(organizationList.toList())
         }
 
         organizationViewModel.isOrgLoadingSuccess.observe(this) { isSuccess ->

@@ -174,7 +174,7 @@ class RemoteProjectDataSource @Inject constructor(
                                                             .document(projectDocSnapshot.id)
                                                             .collection(MEMBERS)
                                                             .get().addOnSuccessListener { membersQSnapshot ->
-                                                                membersQSnapshot.documents.forEach { _ ->
+                                                                membersQSnapshot.documents.forEach { membersDSnapshot ->
                                                                     val project = Project(
                                                                         projectDocSnapshot.getString("projectTitle"),
                                                                         projectDocSnapshot.getString("projectDescription"),
