@@ -135,9 +135,9 @@ class RemoteProjectDataSource @Inject constructor(
         return organizationSet
     }
 
+    val projects = mutableListOf<Project>()
+    val projectsId = mutableListOf<String>()
     override suspend fun getUserProjects(organizations: List<Organization>): List<Project> {
-        val projects = mutableListOf<Project>()
-        val projectsId = mutableListOf<String>()
         try {
             userCollection.whereEqualTo("email", authenticatedUser?.email)
                 .get()
@@ -156,6 +156,8 @@ class RemoteProjectDataSource @Inject constructor(
                             }
                     }
                 }.await()
+
+            Timber.d("Projects Ids: $projectsId")
 
             if (projectsId.isNotEmpty()){
                 organizations.let {

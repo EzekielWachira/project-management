@@ -23,6 +23,7 @@ import com.ezzy.projectmanagement.util.Directions
 import com.ezzy.projectmanagement.util.ItemDecorator
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -51,7 +52,7 @@ class AllProjectsFragment : Fragment() {
         organizationViewModel.getUserOrgs()
 
         baseViewModel.allProjects.observe(viewLifecycleOwner, { projectsList ->
-//            allProjectsAdapter.differ.submitList(projectsList)
+            allProjectsAdapter.differ.submitList(projectsList)
         })
 
         baseViewModel.isProjectLoadSuccess.observe(viewLifecycleOwner, { isSuccess ->
@@ -63,6 +64,7 @@ class AllProjectsFragment : Fragment() {
         })
 
         organizationViewModel.userOrganizations.observe(viewLifecycleOwner) { orgList ->
+            Timber.d("User Organizations:=== $orgList")
             if (orgList.isNotEmpty()) {
                 userOrganizations = orgList
                 baseViewModel.getAuthUserProjects(orgList.toList())
@@ -72,6 +74,8 @@ class AllProjectsFragment : Fragment() {
         baseViewModel.authUserProjects.observe(viewLifecycleOwner) {
             allProjectsAdapter.differ.submitList(it)
         }
+
+        baseViewModel.getAuthUserProjects(userOrganizations.toList())
 
         return binding.root
     }

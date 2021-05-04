@@ -255,8 +255,6 @@ class RemoteOrganizationDataSource @Inject constructor(
                                         queryDocumentSnapshot.getString("organization_id")!!
                                     )
                                 }
-                                //At this point, nikilog hii data inalog poa
-                                Timber.i("Org IDs : $organizationsId")
                                 if (organizationsId.isNotEmpty()) {
                                     organizationsId.forEach { orgId ->
                                         organizationCollection.get()
@@ -271,7 +269,6 @@ class RemoteOrganizationDataSource @Inject constructor(
                                                         userOrganizations.add(organization)
                                                     }
                                                 }
-//                                                Timber.d("USER ORGANIZATIONS: $userOrganizations")
                                             }.addOnFailureListener {
                                                 Timber.e("error retrieving user organizations")
                                             }
@@ -282,8 +279,6 @@ class RemoteOrganizationDataSource @Inject constructor(
                             .apply { CoroutineScope(Dispatchers.IO).launch { await() } }
                     }
                 }.addOnFailureListener { Timber.e("Error obtaining user") }.await()
-            //then nikilog hapa hakuna data kwa hii list
-            Timber.i("Org IDs : $organizationsId")
 
 //            if (organizationsId.isNotEmpty()) {
 //                organizationsId.forEach { orgId ->
