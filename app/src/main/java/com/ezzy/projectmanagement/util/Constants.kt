@@ -19,4 +19,6 @@ object Constants {
     const val CHOOSE_IMAGE = "Choose an image"
     const val REQUEST_PERMISSION_CODE = 10
     const val USERS = "users"
+    const val CONNECTED = 1
+    const val DISCONNECTED = 0
 }

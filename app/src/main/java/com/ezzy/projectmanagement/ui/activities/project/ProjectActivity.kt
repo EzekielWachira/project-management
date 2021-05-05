@@ -1,11 +1,13 @@
 package com.ezzy.projectmanagement.ui.activities.project
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -13,12 +15,16 @@ import androidx.navigation.ui.setupWithNavController
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.ActivityProjectBinding
 import com.ezzy.core.domain.User
+import com.ezzy.projectmanagement.network.netmanager.NetworkManager
 import com.ezzy.projectmanagement.ui.activities.auth.LoginActivity
 import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
 import com.ezzy.projectmanagement.ui.activities.organization.NewOrganizationActivity
 import com.ezzy.projectmanagement.ui.activities.organization.OrganizationsActivity
+import com.ezzy.projectmanagement.util.Constants.CONNECTED
+import com.ezzy.projectmanagement.util.Constants.DISCONNECTED
 import com.ezzy.projectmanagement.util.Constants.USERS
 import com.firebase.ui.auth.AuthUI
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -47,6 +53,13 @@ class ProjectActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProjectBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        NetworkManager.networkStatus.observe(this) {
+            when (it) {
+                CONNECTED -> showSnackBar("Back online")
+                DISCONNECTED -> showSnackBar("You are offline")
+            }
+        }
 
         if (firebaseAuth.currentUser == null){
             startActivity(
@@ -163,4 +176,23 @@ class ProjectActivity : AppCompatActivity() {
     private fun makeToast(message : String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
+    private fun showSnackBar(message : String) {
+        Snackbar.make(
+            binding.projectLayout,
+            message,
+            Snackbar.LENGTH_INDEFINITE
+        ).apply {
+            setAction("Retry"){
+                makeToast("Connecting")
+            }
+            setActionTextColor(resources.getColor(R.color.green))
+            show()
+        }
+    }
+
+    private fun makeLongToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
 }

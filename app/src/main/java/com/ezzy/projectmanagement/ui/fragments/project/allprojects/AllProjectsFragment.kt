@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ezzy.core.domain.Organization
@@ -21,6 +22,8 @@ import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.Organizat
 import com.ezzy.projectmanagement.ui.fragments.project.viewmodel.BaseProjectViewModel
 import com.ezzy.projectmanagement.util.Directions
 import com.ezzy.projectmanagement.util.ItemDecorator
+import com.ezzy.projectmanagement.util.invisible
+import com.ezzy.projectmanagement.util.visible
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -46,25 +49,25 @@ class AllProjectsFragment : Fragment() {
             inflater, container, false
         )
 
+        organizationViewModel.getUserOrgs()
         setUpRecyclerView()
 
         baseViewModel.getAllProjects()
-        organizationViewModel.getUserOrgs()
 
-        baseViewModel.allProjects.observe(viewLifecycleOwner, { projectsList ->
-            allProjectsAdapter.differ.submitList(projectsList)
-        })
+//        baseViewModel.allProjects.observe(viewLifecycleOwner, { projectsList ->
+//            allProjectsAdapter.differ.submitList(projectsList)
+//        })
 
         baseViewModel.isProjectLoadSuccess.observe(viewLifecycleOwner, { isSuccess ->
             if (isSuccess) {
-                binding.progressBar.visibility = View.VISIBLE
+                binding.progressBar.visible()
             } else {
-                binding.progressBar.visibility = View.INVISIBLE
+                binding.progressBar.invisible()
             }
         })
 
         organizationViewModel.userOrganizations.observe(viewLifecycleOwner) { orgList ->
-            Timber.d("User Organizations:=== $orgList")
+            Timber.d("Uzer Organizations:=== $orgList")
             if (orgList.isNotEmpty()) {
                 userOrganizations = orgList
                 baseViewModel.getAuthUserProjects(orgList.toList())
@@ -78,6 +81,11 @@ class AllProjectsFragment : Fragment() {
         baseViewModel.getAuthUserProjects(userOrganizations.toList())
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
     }
 
     private fun setUpRecyclerView() {

@@ -90,7 +90,7 @@ class OrganizationViewModel @Inject constructor(
 
     fun getUserOrgs() = viewModelScope.launch {
         val results = getUserOrganizations()
-        Timber.d("RESULTS ($results)")
+        Timber.d("BREE ($results)")
         if (results.isNotEmpty()){
             _userOrganizations.postValue(results)
         }

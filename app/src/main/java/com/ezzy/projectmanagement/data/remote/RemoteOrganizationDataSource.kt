@@ -32,6 +32,8 @@ class RemoteOrganizationDataSource @Inject constructor(
     private val userCollection = firestore.collection(USERS)
     private val organizationCollection = firestore.collection(ORGANIZATIONS)
     private var authenticatedUser : User? = null
+    private val userOrganizations = mutableSetOf<Organization>()
+    private val organizationsId = mutableListOf<String>()
 
     init {
         authenticatedUser = User(
@@ -238,23 +240,23 @@ class RemoteOrganizationDataSource @Inject constructor(
         return organizationId
     }
 
-        val userOrganizations = mutableSetOf<Organization>()
-        val organizationsId = mutableListOf<String>()
+
     override suspend fun getUserOrganizations(): Set<Organization> {
         try {
-            userCollection.whereEqualTo("email", authenticatedUser?.email)
-                .get()
-                .addOnSuccessListener {
-                    it.documents.forEach { documentSnapshot ->
-                        userCollection.document(documentSnapshot.id)
-                            .collection(ORGANIZATIONS)
-                            .get()
-                            .addOnSuccessListener { querySnapShot ->
-                                querySnapShot.documents.forEach { queryDocumentSnapshot ->
-                                    organizationsId.add(
-                                        queryDocumentSnapshot.getString("organization_id")!!
-                                    )
-                                }
+//            userCollection.whereEqualTo("email", authenticatedUser?.email)
+//                .get()
+//                .addOnSuccessListener {
+//                    it.documents.forEach { documentSnapshot ->
+//                        userCollection.document(documentSnapshot.id)
+//                            .collection(ORGANIZATIONS)
+//                            .get()
+//                            .addOnSuccessListener { querySnapShot ->
+//                                querySnapShot.documents.forEach { queryDocumentSnapshot ->
+//                                    organizationsId.add(
+//                                        queryDocumentSnapshot.getString("organization_id")!!
+//                                    )
+//                                }
+                                getOrganizationIds()
                                 if (organizationsId.isNotEmpty()) {
                                     organizationsId.forEach { orgId ->
                                         organizationCollection.get()
@@ -275,10 +277,10 @@ class RemoteOrganizationDataSource @Inject constructor(
                                     }
                                 }
                                 //
-                            }.addOnFailureListener { Timber.e("Error obtaining org ids") }
-                            .apply { CoroutineScope(Dispatchers.IO).launch { await() } }
-                    }
-                }.addOnFailureListener { Timber.e("Error obtaining user") }.await()
+//                            }.addOnFailureListener { Timber.e("Error obtaining org ids") }
+//                            .apply { CoroutineScope(Dispatchers.IO).launch { await() } }
+//                    }
+//                }.addOnFailureListener { Timber.e("Error obtaining user") }.await()
 
 //            if (organizationsId.isNotEmpty()) {
 //                organizationsId.forEach { orgId ->
@@ -334,6 +336,33 @@ class RemoteOrganizationDataSource @Inject constructor(
 //        }
         Timber.d("USER ORGANIZATIONS: $userOrganizations")
         return userOrganizations
+
+    }
+
+
+    private suspend fun getOrganizationIds() : List<String> {
+        try {
+            userCollection.whereEqualTo("email", authenticatedUser?.email)
+                .get()
+                .addOnSuccessListener {
+                    it.documents.forEach { documentSnapshot ->
+                        userCollection.document(documentSnapshot.id)
+                            .collection(ORGANIZATIONS)
+                            .get()
+                            .addOnSuccessListener { querySnapShot ->
+                                querySnapShot.documents.forEach { queryDocumentSnapshot ->
+                                    organizationsId.add(
+                                        queryDocumentSnapshot.getString("organization_id")!!
+                                    )
+                                }
+                            }
+                    }
+                }.addOnFailureListener { Timber.e("Error retrieving organizations ids") }
+                .apply { await() }
+        } catch (e : Exception) {
+            Timber.e(e.message.toString())
+        }
+        return organizationsId
     }
 
 }
