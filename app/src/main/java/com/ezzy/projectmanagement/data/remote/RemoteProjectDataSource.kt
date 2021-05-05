@@ -150,6 +150,51 @@ class RemoteProjectDataSource @Inject constructor(
                                 querySnapshot.documents.forEach { docSnapshot ->
                                     projectsId.add(docSnapshot.getString("project_id")!!)
                                 }
+                                Timber.d("PROJECT IDS $projectsId")
+                                if (projectsId.isNotEmpty()){
+                                    organizations.let {
+                                        it.forEach { organization ->
+                                            organizationCollection.whereEqualTo("name", organization.name)
+                                                .get().addOnSuccessListener { querySnapshot ->
+                                                    querySnapshot.documents.forEach { documentSnapshot ->
+                                                        organizationCollection.document(documentSnapshot.id)
+                                                            .collection(PROJECT_COLLECTION)
+                                                            .get().addOnSuccessListener { projectQuerySnapshot ->
+                                                                projectQuerySnapshot.documents.forEach { projectDocSnapshot ->
+                                                                    projectsId.forEach { pId ->
+                                                                        if (projectDocSnapshot.id == pId) {
+                                                                            organizationCollection.document(documentSnapshot.id)
+                                                                                .collection(PROJECT_COLLECTION)
+                                                                                .document(projectDocSnapshot.id)
+                                                                                .collection(MEMBERS)
+                                                                                .get().addOnSuccessListener { membersQSnapshot ->
+                                                                                    membersQSnapshot.documents.forEach { membersDSnapshot ->
+                                                                                        val project = Project(
+                                                                                            projectDocSnapshot.getString("projectTitle"),
+                                                                                            projectDocSnapshot.getString("projectDescription"),
+                                                                                            projectDocSnapshot.getString("projectStage"),
+                                                                                            projectDocSnapshot.getString("startDate"),
+                                                                                            projectDocSnapshot.getString("endDate"),
+                                                                                        )
+                                                                                        projects.add(project)
+                                                                                    }
+                                                                                    Timber.d("THE PRJS $projects")
+                                                                                }.addOnFailureListener {
+                                                                                    Timber.e("error getting project members")
+                                                                                }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }.addOnFailureListener {
+                                                                Timber.e("Error getting org projects")
+                                                            }
+                                                    }
+                                                }.addOnFailureListener {
+                                                    Timber.e("Error getting organizations")
+                                                }
+                                        }
+                                    }
+                                }
                             }.addOnFailureListener { _ ->
                                 Timber.e("error getting projects id")
 
@@ -159,49 +204,49 @@ class RemoteProjectDataSource @Inject constructor(
 
             Timber.d("Projects Ids: $projectsId")
 
-            if (projectsId.isNotEmpty()){
-                organizations.let {
-                    it.forEach { organization ->
-                        organizationCollection.whereEqualTo("name", organization.name)
-                            .get().addOnSuccessListener { querySnapshot ->
-                                querySnapshot.documents.forEach { documentSnapshot ->
-                                    organizationCollection.document(documentSnapshot.id)
-                                        .collection(PROJECT_COLLECTION)
-                                        .get().addOnSuccessListener { projectQuerySnapshot ->
-                                            projectQuerySnapshot.documents.forEach { projectDocSnapshot ->
-                                                projectsId.forEach { pId ->
-                                                    if (projectDocSnapshot.id == pId) {
-                                                        organizationCollection.document(documentSnapshot.id)
-                                                            .collection(PROJECT_COLLECTION)
-                                                            .document(projectDocSnapshot.id)
-                                                            .collection(MEMBERS)
-                                                            .get().addOnSuccessListener { membersQSnapshot ->
-                                                                membersQSnapshot.documents.forEach { membersDSnapshot ->
-                                                                    val project = Project(
-                                                                        projectDocSnapshot.getString("projectTitle"),
-                                                                        projectDocSnapshot.getString("projectDescription"),
-                                                                        projectDocSnapshot.getString("projectStage"),
-                                                                        projectDocSnapshot.getString("startDate"),
-                                                                        projectDocSnapshot.getString("endDate"),
-                                                                    )
-                                                                    projects.add(project)
-                                                                }
-                                                            }.addOnFailureListener {
-                                                                Timber.e("error getting project members")
-                                                            }
-                                                    }
-                                                }
-                                            }
-                                        }.addOnFailureListener {
-                                            Timber.e("Error getting org projects")
-                                        }
-                                }
-                            }.addOnFailureListener {
-                                Timber.e("Error getting organizations")
-                            }.apply { await() }
-                    }
-                }
-            }
+//            if (projectsId.isNotEmpty()){
+//                organizations.let {
+//                    it.forEach { organization ->
+//                        organizationCollection.whereEqualTo("name", organization.name)
+//                            .get().addOnSuccessListener { querySnapshot ->
+//                                querySnapshot.documents.forEach { documentSnapshot ->
+//                                    organizationCollection.document(documentSnapshot.id)
+//                                        .collection(PROJECT_COLLECTION)
+//                                        .get().addOnSuccessListener { projectQuerySnapshot ->
+//                                            projectQuerySnapshot.documents.forEach { projectDocSnapshot ->
+//                                                projectsId.forEach { pId ->
+//                                                    if (projectDocSnapshot.id == pId) {
+//                                                        organizationCollection.document(documentSnapshot.id)
+//                                                            .collection(PROJECT_COLLECTION)
+//                                                            .document(projectDocSnapshot.id)
+//                                                            .collection(MEMBERS)
+//                                                            .get().addOnSuccessListener { membersQSnapshot ->
+//                                                                membersQSnapshot.documents.forEach { membersDSnapshot ->
+//                                                                    val project = Project(
+//                                                                        projectDocSnapshot.getString("projectTitle"),
+//                                                                        projectDocSnapshot.getString("projectDescription"),
+//                                                                        projectDocSnapshot.getString("projectStage"),
+//                                                                        projectDocSnapshot.getString("startDate"),
+//                                                                        projectDocSnapshot.getString("endDate"),
+//                                                                    )
+//                                                                    projects.add(project)
+//                                                                }
+//                                                            }.addOnFailureListener {
+//                                                                Timber.e("error getting project members")
+//                                                            }
+//                                                    }
+//                                                }
+//                                            }
+//                                        }.addOnFailureListener {
+//                                            Timber.e("Error getting org projects")
+//                                        }
+//                                }
+//                            }.addOnFailureListener {
+//                                Timber.e("Error getting organizations")
+//                            }.apply { await() }
+//                    }
+//                }
+//            }
         } catch (e : Exception){
             Timber.e(e.message.toString())
         }

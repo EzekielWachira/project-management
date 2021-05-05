@@ -33,7 +33,7 @@ class RemoteOrganizationDataSource @Inject constructor(
     private val organizationCollection = firestore.collection(ORGANIZATIONS)
     private var authenticatedUser : User? = null
     private val userOrganizations = mutableSetOf<Organization>()
-    private val organizationsId = mutableListOf<String>()
+    val organizationsId  = mutableListOf<String>()
 
     init {
         authenticatedUser = User(
@@ -241,22 +241,22 @@ class RemoteOrganizationDataSource @Inject constructor(
     }
 
 
-    override suspend fun getUserOrganizations(): Set<Organization> {
+    override suspend fun getUserOrganizations():
+            Set<Organization> {
         try {
-//            userCollection.whereEqualTo("email", authenticatedUser?.email)
-//                .get()
-//                .addOnSuccessListener {
-//                    it.documents.forEach { documentSnapshot ->
-//                        userCollection.document(documentSnapshot.id)
-//                            .collection(ORGANIZATIONS)
-//                            .get()
-//                            .addOnSuccessListener { querySnapShot ->
-//                                querySnapShot.documents.forEach { queryDocumentSnapshot ->
-//                                    organizationsId.add(
-//                                        queryDocumentSnapshot.getString("organization_id")!!
-//                                    )
-//                                }
-                                getOrganizationIds()
+            userCollection.whereEqualTo("email", authenticatedUser?.email)
+                .get()
+                .addOnSuccessListener {
+                    it.documents.forEach { documentSnapshot ->
+                        userCollection.document(documentSnapshot.id)
+                            .collection(ORGANIZATIONS)
+                            .get()
+                            .addOnSuccessListener { querySnapShot ->
+                                querySnapShot.documents.forEach { queryDocumentSnapshot ->
+                                    organizationsId.add(
+                                        queryDocumentSnapshot.getString("organization_id")!!
+                                    )
+                                }
                                 if (organizationsId.isNotEmpty()) {
                                     organizationsId.forEach { orgId ->
                                         organizationCollection.get()
@@ -276,11 +276,11 @@ class RemoteOrganizationDataSource @Inject constructor(
                                             }
                                     }
                                 }
-                                //
-//                            }.addOnFailureListener { Timber.e("Error obtaining org ids") }
-//                            .apply { CoroutineScope(Dispatchers.IO).launch { await() } }
-//                    }
-//                }.addOnFailureListener { Timber.e("Error obtaining user") }.await()
+
+                            }.addOnFailureListener { Timber.e("Error obtaining org ids") }
+                            .apply { CoroutineScope(Dispatchers.IO).launch { await() } }
+                    }
+                }.addOnFailureListener { Timber.e("Error obtaining user") }.await()
 
 //            if (organizationsId.isNotEmpty()) {
 //                organizationsId.forEach { orgId ->
@@ -340,7 +340,7 @@ class RemoteOrganizationDataSource @Inject constructor(
     }
 
 
-    private suspend fun getOrganizationIds() : List<String> {
+    override suspend fun getOrganizationsIds() : List<String> {
         try {
             userCollection.whereEqualTo("email", authenticatedUser?.email)
                 .get()
@@ -355,6 +355,9 @@ class RemoteOrganizationDataSource @Inject constructor(
                                         queryDocumentSnapshot.getString("organization_id")!!
                                     )
                                 }
+//                                CoroutineScope(Dispatchers.IO).launch {
+//                                    getUserOrganizations(organizationsId)
+//                                }
                             }
                     }
                 }.addOnFailureListener { Timber.e("Error retrieving organizations ids") }
@@ -362,6 +365,7 @@ class RemoteOrganizationDataSource @Inject constructor(
         } catch (e : Exception) {
             Timber.e(e.message.toString())
         }
+        Timber.d("MY IDS: $organizationsId")
         return organizationsId
     }
 

@@ -44,6 +44,7 @@ class OrganizationsActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
+        organizationViewModel.getOrgsIds()
         setUpRecyclerView()
 
         organizationViewModel.getAllOrganizations()
@@ -75,6 +76,11 @@ class OrganizationsActivity : AppCompatActivity() {
             }
 
         })
+
+//        organizationViewModel.organizationsIds.observe(this) {
+//            organizationViewModel.getUserOrgs()
+//
+//        }
 
         organizationViewModel.userOrganizations.observe(this) { organizationList ->
             Timber.d("ORGANIZATION LIST = $organizationList")

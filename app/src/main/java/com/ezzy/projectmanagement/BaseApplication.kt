@@ -5,10 +5,7 @@ import android.app.Application
 import android.content.Context
 import android.os.Build
 import android.os.Process
-import com.ezzy.core.data.ProjectRepository
 import com.ezzy.projectmanagement.network.netmanager.ConnectivityProvider
-import com.ezzy.projectmanagement.util.ConnectionReceiverListener
-import com.ezzy.projectmanagement.util.NetworkMonitor
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 

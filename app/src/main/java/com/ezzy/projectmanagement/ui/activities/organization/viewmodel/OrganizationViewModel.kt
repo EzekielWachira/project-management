@@ -27,7 +27,8 @@ class OrganizationViewModel @Inject constructor(
     val getOrganizationProjects: RetrieveOrganizationProjects,
     val getOrganizationMembers: RetrieveOrganizationMembers,
     val getOrgId: GetOrgId,
-    val getUserOrganizations: GetUserOrganizations
+    val getUserOrganizations: GetUserOrganizations,
+    val getOrganizationsIds: GetOrganizationsIds
 ) : AndroidViewModel(app) {
 
     private val _isSuccess = MutableLiveData<Boolean>()
@@ -52,9 +53,13 @@ class OrganizationViewModel @Inject constructor(
     val orgId : LiveData<String> get() = _orgId
     private val _userOrganizations = MutableLiveData<Set<Organization>>()
     val userOrganizations : LiveData<Set<Organization>> get() = _userOrganizations
+    private var _organizationsIds = MutableLiveData<List<String>>()
+    val organizationsIds : LiveData<List<String>> get() = _organizationsIds
 
     init {
+        getUserOrgs()
         getAllOrganizations()
+        getOrgsIds()
     }
 
     fun addOrg(
@@ -85,6 +90,15 @@ class OrganizationViewModel @Inject constructor(
             }
         } catch (e : Exception) {
             _isOrgLoadingSuccess.postValue(false)
+        }
+    }
+
+    fun getOrgsIds() {
+        viewModelScope.launch {
+            val results = getOrganizationsIds()
+            if (results.isNotEmpty()){
+                Timber.d("ORG IDSSggg $results")
+            }
         }
     }
 

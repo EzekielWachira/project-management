@@ -49,5 +49,10 @@ class GetOrgId(private val repository: OrganizationRepository) {
 }
 
 class GetUserOrganizations(private val repository: OrganizationRepository) {
-    suspend operator fun invoke() = repository.getUserOrganizations()
+    suspend operator fun invoke(
+    ) = repository.getUserOrganizations()
+}
+
+class GetOrganizationsIds(private val repository: OrganizationRepository) {
+    suspend operator fun invoke() = repository.getOrganizationsIds()
 }

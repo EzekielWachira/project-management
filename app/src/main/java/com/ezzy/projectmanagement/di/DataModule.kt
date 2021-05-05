@@ -81,6 +81,10 @@ object DataModule {
     fun provideUserOrganizations(repository: OrganizationRepository)
         = GetUserOrganizations(repository)
 
+    @Provides
+    fun provideOrganizationsIds(repository: OrganizationRepository) =
+        GetOrganizationsIds(repository)
+
     //Project Use case dependencies
     @Provides
     fun provideAddProject(repository: ProjectRepository) =

@@ -50,13 +50,16 @@ class AllProjectsFragment : Fragment() {
         )
 
         organizationViewModel.getUserOrgs()
+        organizationViewModel.getOrgsIds()
+
+
         setUpRecyclerView()
 
         baseViewModel.getAllProjects()
 
-//        baseViewModel.allProjects.observe(viewLifecycleOwner, { projectsList ->
-//            allProjectsAdapter.differ.submitList(projectsList)
-//        })
+        baseViewModel.allProjects.observe(viewLifecycleOwner, { projectsList ->
+            allProjectsAdapter.differ.submitList(projectsList)
+        })
 
         baseViewModel.isProjectLoadSuccess.observe(viewLifecycleOwner, { isSuccess ->
             if (isSuccess) {
@@ -65,6 +68,7 @@ class AllProjectsFragment : Fragment() {
                 binding.progressBar.invisible()
             }
         })
+
 
         organizationViewModel.userOrganizations.observe(viewLifecycleOwner) { orgList ->
             Timber.d("Uzer Organizations:=== $orgList")
