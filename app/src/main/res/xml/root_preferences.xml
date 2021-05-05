@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory app:title="@string/messages_header">
 
@@ -21,14 +22,44 @@
 
         <SwitchPreferenceCompat
             app:key="sync"
-            app:title="@string/sync_title" />
+            app:icon="@drawable/ic_notifications"
+            app:title="@string/allow_notif" />
 
         <SwitchPreferenceCompat
-            app:dependency="sync"
+            android:key="backup"
+            app:icon="@drawable/ic_backup"
+            android:summary="Automatically backup my data"
+            app:title="Auto backup"/>
+
+        <ListPreference android:defaultValue="Never"
+            app:entries="@array/backup_frequency"
+            app:entryValues="@array/backup_values"
+            android:key="backup_frequency"
+            app:title="Select backup frequency"
+            app:icon="@drawable/ic_refresh"
+            app:useSimpleSummaryProvider="true"/>
+
+        <SwitchPreferenceCompat
+            android:key="auto_download"
+            app:title="Auto download files"
+            app:icon="@drawable/ic_arrow_circle"/>
+
+        <SwitchPreferenceCompat
+            app:dependency="auto_download"
             app:key="attachment"
+            app:icon="@drawable/ic_attachment"
             app:summaryOff="@string/attachment_summary_off"
             app:summaryOn="@string/attachment_summary_on"
             app:title="@string/attachment_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Appearance">
+
+        <SwitchPreferenceCompat
+            app:icon="@drawable/ic_dark_mode"
+            android:key="theme"
+            app:title="@string/dark_theme"/>
 
     </PreferenceCategory>
 

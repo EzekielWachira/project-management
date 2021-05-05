@@ -16,7 +16,10 @@ class SettingsActivity : AppCompatActivity() {
                 .replace(R.id.settings, SettingsFragment())
                 .commit()
         }
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.apply {
+            title = "Settings"
+            setDisplayHomeAsUpEnabled(true)
+        }
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {
