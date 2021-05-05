@@ -8,13 +8,18 @@ import android.view.ViewGroup
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.FragmentProfileBinding
 import com.ezzy.projectmanagement.ui.dialogs.UpdateProfileDialog
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
     private var _binding : FragmentProfileBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +35,9 @@ class ProfileFragment : Fragment() {
                 "Edit User"
             )
         }
+
+        binding.usernameTxt.text = firebaseAuth.currentUser?.displayName
+        binding.emailTxt.text = firebaseAuth.currentUser?.email
 
 
         return binding.root

@@ -7,8 +7,11 @@ import android.view.LayoutInflater
 import android.widget.Button
 import androidx.fragment.app.DialogFragment
 import com.ezzy.projectmanagement.R
+import com.firebase.ui.auth.data.model.User
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class UpdateProfileDialog : DialogFragment() {
@@ -17,6 +20,9 @@ class UpdateProfileDialog : DialogFragment() {
     private lateinit var emailEditText : TextInputEditText
     private lateinit var aboutEditText : TextInputEditText
     private lateinit var btnDone : Button
+
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
@@ -29,6 +35,9 @@ class UpdateProfileDialog : DialogFragment() {
             aboutEditText = view.findViewById(R.id.userAboutEditText)
             btnDone = view.findViewById(R.id.btnSave)
         }
+
+        nameEditText.setText(firebaseAuth.currentUser?.displayName)
+        emailEditText.setText(firebaseAuth.currentUser?.email)
 
         builder.setView(view)
         return builder.create()
