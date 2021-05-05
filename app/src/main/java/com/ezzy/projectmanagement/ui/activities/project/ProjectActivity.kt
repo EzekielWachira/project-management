@@ -56,8 +56,8 @@ class ProjectActivity : AppCompatActivity() {
 
         NetworkManager.networkStatus.observe(this) {
             when (it) {
-                CONNECTED -> showSnackBar("Back online")
-                DISCONNECTED -> showSnackBar("You are offline")
+                CONNECTED -> showSnackBar("Back online", "OK")
+                DISCONNECTED -> showSnackBar("You are offline", "Retry")
             }
         }
 
@@ -177,13 +177,13 @@ class ProjectActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun showSnackBar(message : String) {
+    private fun showSnackBar(message : String, action : String) {
         Snackbar.make(
             binding.projectLayout,
             message,
             Snackbar.LENGTH_INDEFINITE
         ).apply {
-            setAction("Retry"){
+            setAction(action){
                 makeToast("Connecting")
             }
             setActionTextColor(resources.getColor(R.color.green))
