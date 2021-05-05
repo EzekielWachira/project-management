@@ -63,4 +63,5 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="members">Members</string>
+    <string name="your_name">Your name</string>
 </resources>

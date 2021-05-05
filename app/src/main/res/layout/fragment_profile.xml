@@ -264,6 +264,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_edit"
         app:tint="@color/white"
+        android:id="@+id/editFAB"
         app:backgroundTint="@color/orange"
         android:layout_gravity="end|bottom"
         android:layout_marginTop="@dimen/_10sdp"/>

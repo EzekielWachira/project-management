@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.FragmentProfileBinding
+import com.ezzy.projectmanagement.ui.dialogs.UpdateProfileDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,6 +23,15 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(
             inflater, container, false
         )
+
+        binding.editFAB.setOnClickListener {
+            UpdateProfileDialog().show(
+                activity?.supportFragmentManager!!,
+                "Edit User"
+            )
+        }
+
+
         return binding.root
     }
 
