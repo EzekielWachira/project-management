@@ -8,4 +8,5 @@ interface UserDataSource {
     suspend fun addMember(memberSet : Set<User>) : Set<User>
     suspend fun saveUserOrganizations(organizationId : String, email : String)
     suspend fun saveUserProjects(projectId : String, email: String)
+    suspend fun updateUserDetails(user: User) : Boolean
 }

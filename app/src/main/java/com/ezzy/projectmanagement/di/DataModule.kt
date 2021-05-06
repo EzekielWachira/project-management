@@ -127,4 +127,8 @@ object DataModule {
     @Provides
     fun provideSaveUserProjects(repository: UserRepository) =
         SaveUserProjects(repository)
+
+    @Provides
+    fun provideUpdateUser(repository: UserRepository) =
+        UpdateUser(repository)
 }

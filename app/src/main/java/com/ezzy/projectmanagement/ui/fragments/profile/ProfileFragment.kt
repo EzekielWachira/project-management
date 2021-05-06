@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.FragmentProfileBinding
 import com.ezzy.projectmanagement.ui.activities.SettingsActivity
@@ -22,6 +23,7 @@ class ProfileFragment : Fragment() {
 
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
+    private val profileViewModel : ProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

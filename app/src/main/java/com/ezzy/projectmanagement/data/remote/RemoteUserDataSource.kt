@@ -114,4 +114,25 @@ class RemoteUserDataSource @Inject constructor(
         }
     }
 
+    override suspend fun updateUserDetails(user: User) : Boolean{
+        var isUserUpdated = false
+        try {
+            userCollection.whereEqualTo("email", user.email)
+                .get()
+                .addOnSuccessListener {
+                    it.documents.forEach { documentSnapshot ->
+                        userCollection.document(documentSnapshot.id)
+                            .set(user)
+                            .addOnSuccessListener { _->
+                                isUserUpdated = true
+                            }
+                            .addOnFailureListener { isUserUpdated = false }
+                    }
+                }.addOnFailureListener { isUserUpdated = false }.await()
+        }catch (e : Exception) {
+            Timber.e("An error occurred while updating user")
+        }
+        return isUserUpdated
+    }
+
 }

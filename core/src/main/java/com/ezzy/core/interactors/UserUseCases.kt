@@ -30,3 +30,9 @@ class SaveUserProjects(private val repository: UserRepository) {
         email: String
     ) = repository.saveUserProjects(projectId, email)
 }
+
+class UpdateUser(private val repository: UserRepository) {
+    suspend operator fun invoke(
+        user: User
+    ) = repository.updateUserDetails(user)
+}

@@ -13,4 +13,5 @@ class UserRepository(
         = dataSource.saveUserOrganizations(organizationId, email)
     suspend fun saveUserProjects(projectId : String, email: String) =
         dataSource.saveUserProjects(projectId, email)
+    suspend fun updateUserDetails(user: User) = dataSource.updateUserDetails(user)
 }
