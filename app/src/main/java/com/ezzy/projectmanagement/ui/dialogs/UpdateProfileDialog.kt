@@ -5,12 +5,15 @@ import android.app.Dialog
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.ezzy.core.domain.User
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.ui.fragments.profile.ProfileViewModel
+import com.ezzy.projectmanagement.util.requestPermission
+import com.ezzy.projectmanagement.util.selectPicture
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,6 +26,7 @@ class UpdateProfileDialog : DialogFragment() {
     private lateinit var emailEditText : TextInputEditText
     private lateinit var aboutEditText : TextInputEditText
     private lateinit var btnDone : Button
+    private lateinit var userImageView : ImageView
 
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
@@ -38,6 +42,11 @@ class UpdateProfileDialog : DialogFragment() {
             emailEditText = view.findViewById(R.id.userEmailEditText)
             aboutEditText = view.findViewById(R.id.userAboutEditText)
             btnDone = view.findViewById(R.id.btnSave)
+            userImageView = view.findViewById(R.id.userImageView)
+        }
+
+        userImageView.setOnClickListener {
+
         }
 
         nameEditText.setText(firebaseAuth.currentUser?.displayName)
@@ -66,6 +75,18 @@ class UpdateProfileDialog : DialogFragment() {
 
         builder.setView(view)
         return builder.create()
+    }
+
+    private fun requestPermissions() {
+        activity?.let {
+            if (requestPermission<UpdateProfileDialog>(it)){
+                selectImage()
+            }
+        }
+    }
+
+    private fun selectImage() {
+        activity?.let { selectPicture<UpdateProfileDialog>(it) }
     }
 
     private fun updateUser(user: User) {

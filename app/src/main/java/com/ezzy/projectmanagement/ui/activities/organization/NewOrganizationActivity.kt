@@ -1,49 +1,29 @@
 package com.ezzy.projectmanagement.ui.activities.organization
 
-import android.Manifest.permission
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import com.ezzy.projectmanagement.R
-import com.ezzy.projectmanagement.databinding.ActivityNewOrganizationBinding
 import com.ezzy.core.domain.Organization
 import com.ezzy.core.domain.User
+import com.ezzy.projectmanagement.R
+import com.ezzy.projectmanagement.databinding.ActivityNewOrganizationBinding
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
-import com.ezzy.projectmanagement.ui.dialogs.AddMembersDialog
 import com.ezzy.projectmanagement.ui.dialogs.AddMembersToOrgDialog
-import com.ezzy.projectmanagement.util.Constants.CANCEL
-import com.ezzy.projectmanagement.util.Constants.CHOOSE_IMAGE
-import com.ezzy.projectmanagement.util.Constants.PICK_FROM_GALLERY
+import com.ezzy.projectmanagement.util.*
 import com.ezzy.projectmanagement.util.Constants.PICK_PHOTO_REQUEST_CODE
-import com.ezzy.projectmanagement.util.Constants.REQUEST_PERMISSION_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_IMAGE_REQUEST_CODE
-import com.ezzy.projectmanagement.util.Constants.TAKE_PHOTO
-import com.ezzy.projectmanagement.util.convertToUri
-import com.ezzy.projectmanagement.util.getNameFromUri
-import com.ezzy.projectmanagement.util.requestPermission
-import com.ezzy.projectmanagement.util.selectPicture
 import com.google.android.material.chip.Chip
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import javax.inject.Inject
 
 private const val TAG = "NewOrganizationActivity"
 @AndroidEntryPoint
@@ -153,31 +133,37 @@ class NewOrganizationActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != RESULT_CANCELED){
-            when(requestCode){
-                TAKE_IMAGE_REQUEST_CODE -> {
-                    data?.let {
-                        if (resultCode == RESULT_OK) {
-                            val bitMap = data.extras?.get("data") as Bitmap
-                            binding.orgImage.setImageBitmap(bitMap)
-                            picImageUri = bitMap.convertToUri(this, bitMap)
-                            Timber.d("PHOTO: $picImageUri")
-                        }
-                    }
-                }
-                PICK_PHOTO_REQUEST_CODE -> {
-                    data?.data?.let { it ->
-                        if (resultCode == RESULT_OK) {
-                            val imageUri : Uri = it
-                            imageUri.let { uri ->
-                                binding.orgImage.setImageURI(uri)
-                                picImageUri = uri
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        picImageUri = imageResult<NewOrganizationActivity>(
+            requestCode, resultCode, data, this,
+            binding.orgImage
+        )
+//        if (resultCode != RESULT_CANCELED){
+//            when(requestCode){
+//                TAKE_IMAGE_REQUEST_CODE -> {
+//                    data?.let {
+//                        if (resultCode == RESULT_OK) {
+//                            val bitMap = data.extras?.get("data") as Bitmap
+//                            binding.orgImage.setImageBitmap(bitMap)
+//                            picImageUri = bitMap.convertToUri(this, bitMap)
+//                            Timber.i("IMAGE URI: $picImageUri")
+//                            Timber.d("PHOTO: $picImageUri")
+//                        }
+//                    }
+//                }
+//                PICK_PHOTO_REQUEST_CODE -> {
+//                    data?.data?.let { it ->
+//                        if (resultCode == RESULT_OK) {
+//                            val imageUri : Uri = it
+//                            imageUri.let { uri ->
+//                                binding.orgImage.setImageURI(uri)
+//                                picImageUri = uri
+//                                Timber.i("IMAGE URI: $uri")
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun requestPermissions() {
