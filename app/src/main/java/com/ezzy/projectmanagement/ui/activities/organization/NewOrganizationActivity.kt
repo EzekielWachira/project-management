@@ -36,6 +36,7 @@ import com.ezzy.projectmanagement.util.Constants.TAKE_IMAGE_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_PHOTO
 import com.ezzy.projectmanagement.util.convertToUri
 import com.ezzy.projectmanagement.util.getNameFromUri
+import com.ezzy.projectmanagement.util.requestPermission
 import com.ezzy.projectmanagement.util.selectPicture
 import com.google.android.material.chip.Chip
 import com.google.firebase.firestore.FirebaseFirestore
@@ -180,20 +181,23 @@ class NewOrganizationActivity : AppCompatActivity() {
     }
 
     private fun requestPermissions() {
-        val permissions = arrayOf(
-            permission.READ_EXTERNAL_STORAGE,
-            permission.WRITE_EXTERNAL_STORAGE,
-            permission.CAMERA
-        )
-        if (ContextCompat.checkSelfPermission(
-                applicationContext, permissions[0]) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(this, permissions[1]) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(this, permissions[2]) == PackageManager.PERMISSION_GRANTED
-        ) {
+        if (requestPermission<NewOrganizationActivity>(this)) {
             selectImage()
-        } else {
-            ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSION_CODE)
         }
+//        val permissions = arrayOf(
+//            permission.READ_EXTERNAL_STORAGE,
+//            permission.WRITE_EXTERNAL_STORAGE,
+//            permission.CAMERA
+//        )
+//        if (ContextCompat.checkSelfPermission(
+//                applicationContext, permissions[0]) == PackageManager.PERMISSION_GRANTED &&
+//                    ContextCompat.checkSelfPermission(this, permissions[1]) == PackageManager.PERMISSION_GRANTED &&
+//                    ContextCompat.checkSelfPermission(this, permissions[2]) == PackageManager.PERMISSION_GRANTED
+//        ) {
+//            selectImage()
+//        } else {
+//            ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSION_CODE)
+//        }
 
     }
 

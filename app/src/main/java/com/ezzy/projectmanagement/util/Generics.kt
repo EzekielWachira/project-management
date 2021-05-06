@@ -1,14 +1,20 @@
 package com.ezzy.projectmanagement.util
 
+import android.Manifest
+import android.Manifest.*
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.provider.MediaStore
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.ezzy.projectmanagement.util.Constants.CANCEL
 import com.ezzy.projectmanagement.util.Constants.PICK_FROM_GALLERY
 import com.ezzy.projectmanagement.util.Constants.PICK_PHOTO_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_IMAGE_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_PHOTO
+import com.ezzy.projectmanagement.util.Constants.REQUEST_PERMISSION_CODE
 
 fun<T> selectPicture(activity: Activity) {
     val options = arrayOf(
@@ -41,4 +47,24 @@ fun<T> selectPicture(activity: Activity) {
         }
         show()
     }
+}
+
+fun<T> requestPermission(activity: Activity) : Boolean {
+    val isPermissionsGranted: Boolean
+    val permissions = arrayOf(
+        permission.READ_EXTERNAL_STORAGE,
+        permission.WRITE_EXTERNAL_STORAGE,
+        permission.CAMERA
+    )
+    if (ContextCompat.checkSelfPermission(
+            activity.applicationContext, permissions[0]) == PackageManager.PERMISSION_GRANTED &&
+        ContextCompat.checkSelfPermission(activity, permissions[1]) == PackageManager.PERMISSION_GRANTED &&
+        ContextCompat.checkSelfPermission(activity, permissions[2]) == PackageManager.PERMISSION_GRANTED
+    ) {
+        isPermissionsGranted = true
+    } else {
+        ActivityCompat.requestPermissions(activity, permissions, REQUEST_PERMISSION_CODE)
+        isPermissionsGranted = false
+    }
+    return isPermissionsGranted
 }
