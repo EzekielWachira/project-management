@@ -2,15 +2,18 @@ package com.ezzy.projectmanagement.ui.dialogs
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.ui.fragments.profile.ProfileViewModel
 import com.ezzy.core.domain.User
 import com.ezzy.projectmanagement.databinding.UpdateUserProfileBinding
+import com.ezzy.projectmanagement.util.showSnackBar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,6 +55,16 @@ class UpdateProfileDialog : DialogFragment() {
             )
             profileViewModel.updateAuthUser(user)
             dialog?.dismiss()
+            showDialog()
+        }
+
+        profileViewModel.isUserUpdateSuccess.observe(viewLifecycleOwner) {
+            isSuccess ->
+                if (isSuccess) {
+                    dialog?.dismiss()
+                    makeToast("User updated")
+                }
+                else { showDialog() }
         }
 
         builder.setView(view)
@@ -60,6 +73,20 @@ class UpdateProfileDialog : DialogFragment() {
 
     private fun updateUser(user: User) {
         profileViewModel.updateAuthUser(user)
+    }
+
+    private fun showDialog() {
+        val dialog = ProgressDialog(activity)
+        dialog.apply {
+            setTitle("Saving")
+            setMessage("Saving your data...")
+            setCanceledOnTouchOutside(false)
+            show()
+        }
+    }
+
+    private fun makeToast(message : String) {
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
 }
