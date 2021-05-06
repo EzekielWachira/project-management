@@ -36,6 +36,7 @@ import com.ezzy.projectmanagement.util.Constants.TAKE_IMAGE_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_PHOTO
 import com.ezzy.projectmanagement.util.convertToUri
 import com.ezzy.projectmanagement.util.getNameFromUri
+import com.ezzy.projectmanagement.util.selectPicture
 import com.google.android.material.chip.Chip
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -116,36 +117,37 @@ class NewOrganizationActivity : AppCompatActivity() {
     }
 
     private fun selectImage() {
-        val options = arrayOf(
-            TAKE_PHOTO, PICK_FROM_GALLERY, CANCEL
-        )
-        val builder = AlertDialog.Builder(this)
-        builder.apply {
-            title = CHOOSE_IMAGE
-            setItems(options) { dialog, which ->
-                when (options[which]) {
-                    TAKE_PHOTO -> {
-                        Intent(
-                            MediaStore.ACTION_IMAGE_CAPTURE
-                        ).apply {
-                            startActivityIfNeeded(this, TAKE_IMAGE_REQUEST_CODE)
-                        }
-                    }
-                    PICK_FROM_GALLERY -> {
-                        Intent(
-                            Intent.ACTION_GET_CONTENT
-                        ).apply {
-                            type = "image/*"
-                            startActivityIfNeeded(this, PICK_PHOTO_REQUEST_CODE)
-                        }
-                    }
-                    CANCEL -> {
-                        dialog?.dismiss()
-                    }
-                }
-            }
-            show()
-        }
+        selectPicture<NewOrganizationActivity>(this)
+//        val options = arrayOf(
+//            TAKE_PHOTO, PICK_FROM_GALLERY, CANCEL
+//        )
+//        val builder = AlertDialog.Builder(this)
+//        builder.apply {
+//            title = CHOOSE_IMAGE
+//            setItems(options) { dialog, which ->
+//                when (options[which]) {
+//                    TAKE_PHOTO -> {
+//                        Intent(
+//                            MediaStore.ACTION_IMAGE_CAPTURE
+//                        ).apply {
+//                            startActivityIfNeeded(this, TAKE_IMAGE_REQUEST_CODE)
+//                        }
+//                    }
+//                    PICK_FROM_GALLERY -> {
+//                        Intent(
+//                            Intent.ACTION_GET_CONTENT
+//                        ).apply {
+//                            type = "image/*"
+//                            startActivityIfNeeded(this, PICK_PHOTO_REQUEST_CODE)
+//                        }
+//                    }
+//                    CANCEL -> {
+//                        dialog?.dismiss()
+//                    }
+//                }
+//            }
+//            show()
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
