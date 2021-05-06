@@ -31,6 +31,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/editImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/wheat_bg"
+                android:padding="@dimen/_2sdp"
+                android:src="@drawable/ic_edit"
+                app:layout_constraintBottom_toBottomOf="@+id/userImageView"
+                app:layout_constraintStart_toEndOf="@+id/userImageView"
+                app:layout_constraintTop_toTopOf="@+id/userImageView"
+                app:layout_constraintVertical_bias="0.90999997" />
+
             <TextView
                 android:id="@+id/usernameTxt"
                 android:layout_width="wrap_content"

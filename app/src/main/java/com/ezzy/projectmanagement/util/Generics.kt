@@ -96,7 +96,7 @@ fun<T> imageResult(
                 }
             }
             PICK_PHOTO_REQUEST_CODE -> {
-                data?.data?.let { it ->
+                data?.data?.let {
                     if (resultCode == RESULT_OK) {
                         val imageUri : Uri = it
                         imageUri.let { uri ->

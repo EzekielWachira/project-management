@@ -195,4 +195,11 @@ class ProjectActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        supportFragmentManager.fragments.forEach {
+            it.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
 }
