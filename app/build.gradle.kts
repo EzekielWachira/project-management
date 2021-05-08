@@ -103,4 +103,7 @@ dependencies {
     implementation(Dependencies.dataStore)
     implementation(Dependencies.typedDataStore)
 
+//    implementation(Dependencies.skydoveProgress)
+    implementation(Dependencies.skydoveProgress)
+
 }

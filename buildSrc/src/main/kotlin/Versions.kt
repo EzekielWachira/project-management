@@ -19,4 +19,6 @@ object Versions {
     const val coroutinesForFirebaseVersion = "1.1.1"
     const val sweetAlertVersion = "1.4.0"
     const val dataStoreVersion = "1.0.0-alpha08"
+    const val kmProgressVersion = "V2.0"
+    const val skydoveVersion = "1.1.1"
 }
