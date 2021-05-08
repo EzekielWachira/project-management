@@ -75,6 +75,7 @@ fun<T> requestPermission(activity: Activity) : Boolean {
     return isPermissionsGranted
 }
 
+
 fun<T> imageResult(
     requestCode: Int,
     resultCode: Int,

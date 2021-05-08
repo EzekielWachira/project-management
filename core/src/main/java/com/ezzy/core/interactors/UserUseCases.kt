@@ -2,6 +2,7 @@ package com.ezzy.core.interactors
 
 import com.ezzy.core.data.UserRepository
 import com.ezzy.core.domain.User
+import java.net.URI
 
 class GetAllUser(private val repository: UserRepository) {
     suspend operator fun invoke() = repository.getAllUsers()
@@ -35,4 +36,11 @@ class UpdateUser(private val repository: UserRepository) {
     suspend operator fun invoke(
         user: User
     ) = repository.updateUserDetails(user)
+}
+
+class SaveUserImage(private val repository: UserRepository) {
+    suspend operator fun invoke(
+        uri: URI,
+        fileName : String
+    ) = repository.saveUserImage(uri, fileName)
 }

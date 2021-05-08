@@ -1,5 +1,6 @@
 package com.ezzy.projectmanagement.data.remote
 
+import android.net.Uri
 import com.ezzy.core.data.UserDataSource
 import com.ezzy.core.domain.User
 import com.ezzy.projectmanagement.util.Constants
@@ -7,13 +8,16 @@ import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
 import com.ezzy.projectmanagement.util.Constants.USERS
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
+import java.net.URI
 import java.util.*
 import javax.inject.Inject
 
 class RemoteUserDataSource @Inject constructor(
-    val firestore: FirebaseFirestore
+    val firestore: FirebaseFirestore,
+    val firebaseStorage: FirebaseStorage
 ) : UserDataSource {
 
     private val userCollection = firestore.collection(USERS)
@@ -133,6 +137,24 @@ class RemoteUserDataSource @Inject constructor(
             Timber.e("An error occurred while updating user")
         }
         return isUserUpdated
+    }
+
+    override suspend fun saveUserImage(uri: URI, fileName: String): String? {
+        var imagePath : String? = null
+        try {
+            val imageUri = Uri.parse(uri.toString())
+            val storageRef = firebaseStorage.reference.child("images/users/$fileName")
+            storageRef.putFile(imageUri)
+                .addOnSuccessListener {
+                    storageRef.downloadUrl.addOnSuccessListener { imgUri ->
+                        imagePath = imgUri.toString()
+                    }.addOnFailureListener { Timber.e("error getting dowload url") }
+                }.addOnFailureListener{ Timber.e("Error uploading user image") }
+                .await()
+        } catch (e : Exception){
+            Timber.e(e.message.toString())
+        }
+        return imagePath
     }
 
 }

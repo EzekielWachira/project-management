@@ -43,8 +43,10 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(fireStore: FirebaseFirestore)
-        = UserRepository(RemoteUserDataSource(fireStore))
+    fun provideUserRepository(
+        fireStore: FirebaseFirestore, 
+        storage: FirebaseStorage
+    ) = UserRepository(RemoteUserDataSource(fireStore, storage))
 
     @Provides
     fun provideAddOrganization(repository: OrganizationRepository) =
@@ -131,4 +133,8 @@ object DataModule {
     @Provides
     fun provideUpdateUser(repository: UserRepository) =
         UpdateUser(repository)
+
+    @Provides
+    fun provideSaveUserImage(repository: UserRepository) =
+        SaveUserImage(repository)
 }

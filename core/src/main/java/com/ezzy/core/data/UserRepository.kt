@@ -1,6 +1,7 @@
 package com.ezzy.core.data
 
 import com.ezzy.core.domain.User
+import java.net.URI
 
 class UserRepository(
     private val dataSource: UserDataSource
@@ -14,4 +15,6 @@ class UserRepository(
     suspend fun saveUserProjects(projectId : String, email: String) =
         dataSource.saveUserProjects(projectId, email)
     suspend fun updateUserDetails(user: User) = dataSource.updateUserDetails(user)
+    suspend fun saveUserImage(uri: URI, fileName : String) =
+        dataSource.saveUserImage(uri, fileName)
 }

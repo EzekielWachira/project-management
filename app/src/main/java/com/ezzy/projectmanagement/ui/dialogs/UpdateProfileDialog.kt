@@ -12,18 +12,17 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.*
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.ezzy.core.domain.User
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.ui.activities.organization.NewOrganizationActivity
 import com.ezzy.projectmanagement.ui.fragments.profile.ProfileViewModel
+import com.ezzy.projectmanagement.util.*
 import com.ezzy.projectmanagement.util.Constants.PICK_PHOTO_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_IMAGE_REQUEST_CODE
-import com.ezzy.projectmanagement.util.convertToUri
-import com.ezzy.projectmanagement.util.imageResult
-import com.ezzy.projectmanagement.util.requestPermission
-import com.ezzy.projectmanagement.util.selectPicture
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,14 +62,27 @@ class UpdateProfileDialog : DialogFragment() {
         nameEditText.setText(firebaseAuth.currentUser?.displayName)
         emailEditText.setText(firebaseAuth.currentUser?.email)
 
-        btnDone.setOnClickListener {
-            val user = User(
-                nameEditText.text.toString(),
-                emailEditText.text.toString(),
-                aboutEditText.text.toString(),
-                ""
-            )
-            profileViewModel.updateAuthUser(user)
+        btnDone.setOnClickListener { _->
+            var user : User? = null
+            picImageUri?.let { imageUri ->
+                activity?.let {
+                    profileViewModel.saveUserImg(imageUri, imageUri.getNameFromUri(
+                        it.applicationContext, imageUri
+                    ))
+                }
+                profileViewModel.imagePath.observe(this) { imagePath ->
+                    user = User(
+                        nameEditText.text.toString(),
+                        emailEditText.text.toString(),
+                        aboutEditText.text.toString(),
+                        imagePath
+                    )
+                }
+            }
+            user?.let {
+                Timber.d("USR: $user")
+                profileViewModel.updateAuthUser(it)
+            }
             dialog?.dismiss()
             showDialog()
         }
@@ -109,35 +121,6 @@ class UpdateProfileDialog : DialogFragment() {
             )
         }
 
-//        if (resultCode != RESULT_CANCELED){
-//            when(requestCode){
-//                TAKE_IMAGE_REQUEST_CODE -> {
-//                    data?.let {
-//                        if (resultCode == RESULT_OK) {
-//                            val bitMap = data.extras?.get("data") as Bitmap
-//                            userImageView.setImageBitmap(bitMap)
-//                            picImageUri = activity?.let { it1 ->
-//                                bitMap.convertToUri(it1.applicationContext, bitMap)
-//                            }
-//                            Timber.i("IMAGE URI: $picImageUri")
-//                            Timber.d("PHOTO: $picImageUri")
-//                        }
-//                    }
-//                }
-//                PICK_PHOTO_REQUEST_CODE -> {
-//                    data?.data?.let {
-//                        if (resultCode == RESULT_OK) {
-//                            val imageUri : Uri = it
-//                            imageUri.let { uri ->
-//                                userImageView.setImageURI(uri)
-//                                picImageUri = uri
-//                                Timber.i("IMAGE URI: $uri")
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
     }
 
     override fun onRequestPermissionsResult(

@@ -15,4 +15,8 @@
     <color name="lightestGrey">#424242</color>
     <color name="wheat">#F8F8F8</color>
     <color name="blue">#03A9F4</color>
+    <color name="lightBlue">#D800F2FA</color>
+    <color name="yellow">#E9FFD249</color>
+    <color name="whitish">#E9EDEDED</color>
+
 </resources>

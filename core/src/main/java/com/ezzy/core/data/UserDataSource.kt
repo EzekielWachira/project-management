@@ -1,6 +1,7 @@
 package com.ezzy.core.data
 
 import com.ezzy.core.domain.User
+import java.net.URI
 
 interface UserDataSource {
     suspend fun getAllUsers() : List<User>
@@ -9,4 +10,5 @@ interface UserDataSource {
     suspend fun saveUserOrganizations(organizationId : String, email : String)
     suspend fun saveUserProjects(projectId : String, email: String)
     suspend fun updateUserDetails(user: User) : Boolean
+    suspend fun saveUserImage(uri: URI, fileName : String) : String?
 }
