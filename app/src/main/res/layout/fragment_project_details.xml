@@ -278,7 +278,7 @@
                 android:padding="@dimen/_5sdp">
 
                 <ImageView
-                    android:id="@+id/imageView7"
+                    android:id="@+id/taskImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_check_box"
@@ -288,14 +288,14 @@
                     app:tint="@color/white" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/taskTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
                     android:text="Task Done"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_15ssp"
-                    app:layout_constraintStart_toEndOf="@+id/imageView7"
+                    app:layout_constraintStart_toEndOf="@+id/taskImageView"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -305,9 +305,9 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/textView5"
-                    app:layout_constraintStart_toStartOf="@+id/textView5"
-                    app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                    app:layout_constraintEnd_toEndOf="@+id/taskTextView"
+                    app:layout_constraintStart_toStartOf="@+id/taskTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/taskTextView" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -323,7 +323,7 @@
                 android:padding="@dimen/_5sdp">
 
                 <ImageView
-                    android:id="@+id/imageView5"
+                    android:id="@+id/bugImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_bug"
@@ -333,14 +333,14 @@
                     app:tint="@color/white" />
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/bugTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
                     android:text="Bugs reported"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_15ssp"
-                    app:layout_constraintStart_toEndOf="@+id/imageView5"
+                    app:layout_constraintStart_toEndOf="@+id/bugImageView"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -350,9 +350,9 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/textView6"
-                    app:layout_constraintStart_toStartOf="@+id/textView6"
-                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                    app:layout_constraintEnd_toEndOf="@+id/bugTextView"
+                    app:layout_constraintStart_toStartOf="@+id/bugTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/bugTextView" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

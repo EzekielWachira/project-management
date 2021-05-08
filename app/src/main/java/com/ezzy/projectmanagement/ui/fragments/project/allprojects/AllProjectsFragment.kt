@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ezzy.core.domain.Organization
 import com.ezzy.projectmanagement.adapters.AllProjectsViewHolder
@@ -83,6 +84,16 @@ class AllProjectsFragment : Fragment() {
         }
 
         baseViewModel.getAuthUserProjects(userOrganizations.toList())
+
+        allProjectsAdapter.setOnClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("project", it)
+            }
+            findNavController().navigate(
+                R.id.action_projectFragment2_to_projectDetailsFragment,
+                bundle
+            )
+        }
 
         return binding.root
     }
