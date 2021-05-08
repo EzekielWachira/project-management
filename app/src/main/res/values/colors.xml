@@ -18,5 +18,6 @@
     <color name="lightBlue">#D800F2FA</color>
     <color name="yellow">#E9FFD249</color>
     <color name="whitish">#E9EDEDED</color>
+    <color name="red">#F44336</color>
 
 </resources>
