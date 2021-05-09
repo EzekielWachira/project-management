@@ -9,6 +9,7 @@ import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.adapters.CommonViewHolder
 import com.ezzy.core.domain.Organization
 import com.ezzy.core.domain.User
+import com.ezzy.projectmanagement.util.applyImage
 import de.hdodenhof.circleimageview.CircleImageView
 
 class SearchMemberViewHolder(
@@ -20,11 +21,15 @@ class SearchMemberViewHolder(
 
     private val userNameTextView : TextView = rootView.findViewById(R.id.memberName)
     private val userEmailTextView : TextView = rootView.findViewById(R.id.memberEmail)
+    private val userImage : CircleImageView = rootView.findViewById(R.id.memberImg)
 
     override fun bindItem(item: User?) {
         item?.let { user ->
             userNameTextView.text = user.name
             userEmailTextView.text = user.email
+            user.imageSrc?.let {
+                userImage.applyImage(it)
+            }
         }
     }
 }

@@ -16,7 +16,7 @@
         android:layout_marginTop="@dimen/_5sdp"
         android:src="@drawable/ezzy"
         app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/memberImage"
+        android:id="@+id/memberImg"
         app:layout_constraintTop_toTopOf="parent"/>
 
 
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="@dimen/_3sdp"
         android:layout_marginStart="@dimen/_5sdp"
-        app:layout_constraintStart_toEndOf="@+id/memberImage" />
+        app:layout_constraintStart_toEndOf="@+id/memberImg" />
 
     <TextView
         android:layout_width="wrap_content"

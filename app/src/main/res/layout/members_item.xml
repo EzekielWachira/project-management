@@ -16,7 +16,7 @@
         android:padding="@dimen/_5sdp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/memberImage"
+            android:id="@+id/memberImageView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30sdp"
             android:scaleType="centerCrop"

@@ -108,11 +108,12 @@ class OrganizationDataSourceImpl @Inject constructor(
                     if (it.isSuccessful) {
                         val results = mutableListOf<Organization>()
                         it.result!!.forEach { documentSnapshot ->
-                            val organization = Organization(
-                                documentSnapshot.getString("name"),
-                                documentSnapshot.getString("imageSrc"),
-                                documentSnapshot.getString("about")
-                            )
+                            val organization = documentSnapshot.toObject(Organization::class.java)
+//                                Organization(
+//                                documentSnapshot.getString("name"),
+//                                documentSnapshot.getString("imageSrc"),
+//                                documentSnapshot.getString("about")
+//                            )
                             results.add(organization)
                         }
                         orgs = results
@@ -139,11 +140,12 @@ class OrganizationDataSourceImpl @Inject constructor(
                 .get()
                 .addOnCompleteListener {
                     it.result!!.forEach { documentSnapshot ->
-                        val organization = Organization(
-                            documentSnapshot.getString("name"),
-                            documentSnapshot.getString("imageUrl"),
-                            documentSnapshot.getString("about")
-                        )
+                        val organization = documentSnapshot.toObject(Organization::class.java)
+//                            Organization(
+//                            documentSnapshot.getString("name"),
+//                            documentSnapshot.getString("imageUrl"),
+//                            documentSnapshot.getString("about")
+//                        )
 
                         orgs.add(organization)
                     }
@@ -174,10 +176,11 @@ class OrganizationDataSourceImpl @Inject constructor(
                 .addOnCompleteListener {
                     if (it.isSuccessful){
                         it.result!!.forEach { docSnapshot ->
-                            val member = User(
-                                docSnapshot.getString("name"),
-                                docSnapshot.getString("email")
-                            )
+                            val member = docSnapshot.toObject(User::class.java)
+//                                User(
+//                                docSnapshot.getString("name"),
+//                                docSnapshot.getString("email")
+//                            )
                             members.add(member)
                         }
                     }
@@ -200,13 +203,14 @@ class OrganizationDataSourceImpl @Inject constructor(
                 .addOnCompleteListener {
                     if (it.isSuccessful){
                         it.result!!.forEach { docSnapShot ->
-                            val project = Project(
-                                docSnapShot.getString("projectTitle"),
-                                docSnapShot.getString("projectDescription"),
-                                docSnapShot.getString("projectStage"),
-                                docSnapShot.getString("startDate"),
-                                docSnapShot.getString("endDate"),
-                            )
+                            val project = docSnapShot.toObject(Project::class.java)
+//                                Project(
+//                                docSnapShot.getString("projectTitle"),
+//                                docSnapShot.getString("projectDescription"),
+//                                docSnapShot.getString("projectStage"),
+//                                docSnapShot.getString("startDate"),
+//                                docSnapShot.getString("endDate"),
+//                            )
                             projects.add(project)
                         }
                     }
@@ -263,12 +267,13 @@ class OrganizationDataSourceImpl @Inject constructor(
                                             .addOnSuccessListener { querySnapShot ->
                                                 querySnapShot.documents.forEach { documentSnapshot ->
                                                     if (documentSnapshot.id == orgId){
-                                                        val organization = Organization(
-                                                            documentSnapshot.getString("name"),
-                                                            documentSnapshot.getString("imageSrc"),
-                                                            documentSnapshot.getString("about")
-                                                        )
-                                                        userOrganizations.add(organization)
+                                                        val organization = documentSnapshot.toObject(Organization::class.java)
+//                                                            Organization(
+//                                                            documentSnapshot.getString("name"),
+//                                                            documentSnapshot.getString("imageSrc"),
+//                                                            documentSnapshot.getString("about")
+//                                                        )
+                                                        userOrganizations.add(organization!!)
                                                     }
                                                 }
                                             }.addOnFailureListener {
