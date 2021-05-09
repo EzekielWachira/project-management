@@ -4,11 +4,14 @@ import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.ezzy.projectmanagement.R
 import com.google.android.material.snackbar.Snackbar
@@ -115,12 +118,22 @@ fun View.showSnackBar(message : String) {
 fun ImageView.applyImage(imageUrl : String) {
     Glide.with(context)
         .load(imageUrl)
+        .placeholder(
+            ContextCompat.getDrawable(
+                context, R.drawable.placeholder
+            )
+        )
         .into(this)
 }
 
 fun CircleImageView.applyImage(imageUrl: String) {
     Glide.with(context)
         .load(imageUrl)
+        .placeholder(
+            ContextCompat.getDrawable(
+                context, R.drawable.placeholder
+            )
+        )
         .into(this)
 }
 
