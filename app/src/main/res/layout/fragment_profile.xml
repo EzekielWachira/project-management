@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/_10sdp"
     tools:context=".ui.fragments.profile.ProfileFragment">
 
@@ -12,9 +12,9 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/userDetailsCardView"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_2sdp"
-        android:layout_marginEnd="@dimen/_2sdp"
-        android:layout_height="wrap_content">
+        android:layout_marginEnd="@dimen/_2sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -197,38 +197,36 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/userAboutCardView"
         android:layout_width="match_parent"
-        android:layout_marginEnd="@dimen/_2sdp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_2sdp"
         android:layout_marginTop="@dimen/_10sdp"
-        android:layout_height="wrap_content">
+        android:layout_marginEnd="@dimen/_2sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:padding="@dimen/_5sdp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="@dimen/_5sdp">
 
 
             <TextView
+                android:id="@+id/abtTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="About"
-                android:id="@+id/abtTxt"
                 android:textSize="@dimen/_12ssp"
                 android:textStyle="italic"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/userAboutTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/abtTxt"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:textSize="@dimen/_13ssp"
-                android:id="@+id/userAboutTextView"
                 android:layout_marginTop="@dimen/_5sdp"
-                />
+                android:textSize="@dimen/_13ssp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/abtTxt" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -237,50 +235,49 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/settinsCardView"
         android:layout_width="match_parent"
-        android:layout_marginEnd="@dimen/_2sdp"
+        android:layout_height="@dimen/_50sdp"
         android:layout_marginStart="@dimen/_2sdp"
         android:layout_marginTop="@dimen/_10sdp"
-        android:layout_height="@dimen/_50sdp">
+        android:layout_marginEnd="@dimen/_2sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:padding="@dimen/_5sdp"
-            android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/settingsLayout"
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toTopOf="parent"
-            android:gravity="center_vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            >
+            android:padding="@dimen/_5sdp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Open Settings"
-                android:drawableStart="@drawable/ic_settings"
-                android:drawablePadding="@dimen/_10sdp"
-                android:textSize="@dimen/_14ssp"/>
+            <LinearLayout
+                android:id="@+id/settingsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_settings"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:text="Open Settings"
+                    android:textSize="@dimen/_14ssp" />
 
 
-        </LinearLayout>
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/editFAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_edit"
-        app:tint="@color/white"
-        android:id="@+id/editFAB"
-        app:backgroundTint="@color/orange"
         android:layout_gravity="end|bottom"
-        android:layout_marginTop="@dimen/_10sdp"/>
+        android:layout_marginTop="@dimen/_10sdp"
+        android:src="@drawable/ic_edit"
+        app:backgroundTint="@color/orange"
+        app:tint="@color/white" />
 
 </LinearLayout>

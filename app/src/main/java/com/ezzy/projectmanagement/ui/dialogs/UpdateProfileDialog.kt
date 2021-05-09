@@ -76,19 +76,7 @@ class UpdateProfileDialog : DialogFragment() {
                         it.applicationContext, imageUri
                     ), user)
                 }
-//                profileViewModel.imagePath.observe(this) { imagePath ->
-//                    user = User(
-//                        nameEditText.text.toString(),
-//                        emailEditText.text.toString(),
-//                        aboutEditText.text.toString(),
-//                        imagePath
-//                    )
-//                }
             }
-//            user?.let {
-//                Timber.d("USR: $user")
-//                profileViewModel.updateAuthUser(it)
-//            }
             dialog?.dismiss()
             showDialog()
         }
