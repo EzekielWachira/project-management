@@ -7,7 +7,10 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.view.View
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
@@ -105,4 +108,16 @@ fun View.visible() {
 
 fun View.showSnackBar(message : String) {
     Snackbar.make(this, message, Snackbar.LENGTH_LONG)
+}
+
+fun ImageView.applyImage(imageUrl : String) {
+    Glide.with(context)
+        .load(imageUrl)
+        .into(this)
+}
+
+fun CircleImageView.applyImage(imageUrl: String) {
+    Glide.with(context)
+        .load(imageUrl)
+        .into(this)
 }

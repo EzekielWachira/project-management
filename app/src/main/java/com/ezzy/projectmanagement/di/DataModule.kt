@@ -45,8 +45,9 @@ object DataModule {
     @Singleton
     fun provideUserRepository(
         fireStore: FirebaseFirestore, 
-        storage: FirebaseStorage
-    ) = UserRepository(UserDataSourceImpl(fireStore, storage))
+        storage: FirebaseStorage,
+        firebaseAuth: FirebaseAuth
+    ) = UserRepository(UserDataSourceImpl(fireStore, storage, firebaseAuth))
 
     @Provides
     fun provideAddOrganization(repository: OrganizationRepository) =
@@ -137,4 +138,8 @@ object DataModule {
     @Provides
     fun provideSaveUserImage(repository: UserRepository) =
         SaveUserImage(repository)
+
+    @Provides
+    fun provideGetUserDetails(repository: UserRepository) =
+        GetUserDetails(repository)
 }

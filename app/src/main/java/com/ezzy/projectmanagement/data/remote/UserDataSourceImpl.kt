@@ -8,6 +8,7 @@ import com.ezzy.core.interactors.UpdateUser
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
 import com.ezzy.projectmanagement.util.Constants.USERS
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class UserDataSourceImpl @Inject constructor(
     val firestore: FirebaseFirestore,
     val firebaseStorage: FirebaseStorage,
+    val firebaseAuth: FirebaseAuth
 ) : UserDataSource {
 
     private val userCollection = firestore.collection(USERS)
@@ -140,6 +142,7 @@ class UserDataSourceImpl @Inject constructor(
                             .update(userHashMap)
                             .addOnSuccessListener {
                                 isUserUpdated = true
+                                firebaseAuth.currentUser?.updateEmail(user.email!!)
                             }
                             .addOnFailureListener { isUserUpdated = false }
                     }
@@ -170,6 +173,25 @@ class UserDataSourceImpl @Inject constructor(
             Timber.e(e.message.toString())
         }
         return isUserUpdateSuccess
+    }
+
+    override suspend fun getUserDetails(): User {
+        var user : User? = null
+        val userEmail = firebaseAuth.currentUser?.email
+        try {
+            userCollection.whereEqualTo("email", userEmail)
+                .get().addOnSuccessListener {
+                    it.documents.forEach{ documentSnapshot ->
+                        user = documentSnapshot.toObject(User::class.java)
+                        Timber.i("USER HERE:  $user")
+                    }
+                }.addOnFailureListener{ Timber.e("error getting user details") }
+                .await()
+        } catch (e : Exception) {
+            Timber.e("exception getting user details: ${e.message.toString()}")
+        }
+        Timber.i("USER HERE AGAIN:  $user")
+        return user!!
     }
 
 }

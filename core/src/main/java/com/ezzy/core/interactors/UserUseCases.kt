@@ -46,3 +46,7 @@ class SaveUserImage(private val repository: UserRepository) {
         user : User
     ) = repository.saveUserImage(uri, fileName, user)
 }
+
+class GetUserDetails(private val repository: UserRepository) {
+    suspend operator fun invoke() = repository.getUserDetails()
+}

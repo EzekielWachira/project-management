@@ -18,4 +18,5 @@ class UserRepository(
         dataSource.updateUserDetails(imageUri, user)
     suspend fun saveUserImage(uri: URI, fileName : String, user: User) =
         dataSource.saveUserImage(uri, fileName, user)
+    suspend fun getUserDetails() = dataSource.getUserDetails()
 }

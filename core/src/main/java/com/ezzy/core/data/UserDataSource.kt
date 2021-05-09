@@ -11,4 +11,5 @@ interface UserDataSource {
     suspend fun saveUserProjects(projectId : String, email: String)
     suspend fun updateUserDetails(imageUri : String?, user: User) : Boolean
     suspend fun saveUserImage(uri: URI, fileName : String, user: User) : Boolean
+    suspend fun getUserDetails() : User
 }

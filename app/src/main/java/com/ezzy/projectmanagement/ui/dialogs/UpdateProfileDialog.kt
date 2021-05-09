@@ -57,6 +57,8 @@ class UpdateProfileDialog : DialogFragment() {
             userImageView = view.findViewById(R.id.userImgView)
         }
 
+        profileViewModel.getUserInfo()
+
         userImageView.setOnClickListener { requestPermissions() }
 
         nameEditText.setText(firebaseAuth.currentUser?.displayName)
@@ -89,6 +91,11 @@ class UpdateProfileDialog : DialogFragment() {
 //            }
             dialog?.dismiss()
             showDialog()
+        }
+
+        profileViewModel.user.observe(this) {
+            aboutEditText.setText(it.about)
+            userImageView.applyImage(it.imageSrc!!)
         }
 
         profileViewModel.isUserUpdateSuccess.observe(this) {

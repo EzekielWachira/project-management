@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ezzy.core.domain.User
+import com.ezzy.core.interactors.GetUserDetails
 import com.ezzy.core.interactors.SaveUserImage
 import com.ezzy.core.interactors.UpdateUser
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,13 +18,16 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     val updateUser: UpdateUser,
-    val saveUserImage: SaveUserImage
+    val saveUserImage: SaveUserImage,
+    val getUserDetails: GetUserDetails
 ) : ViewModel() {
 
     private var _isUserUpdateSuccess = MutableLiveData<Boolean>()
     val isUserUpdateSuccess : LiveData<Boolean> get() = _isUserUpdateSuccess
     private var _imagePath = MutableLiveData<String>()
     val imagePath : LiveData<String> get() = _imagePath
+    private val _user = MutableLiveData<User>()
+    val user : LiveData<User> get() = _user
 
     fun updateAuthUser(imageUri: String?, user : User) {
         viewModelScope.launch {
@@ -46,6 +50,11 @@ class ProfileViewModel @Inject constructor(
                 _isUserUpdateSuccess.postValue(false)
             }
         }
+    }
+
+    fun getUserInfo() = viewModelScope.launch {
+        val results = getUserDetails()
+        _user.postValue(results)
     }
 
 
