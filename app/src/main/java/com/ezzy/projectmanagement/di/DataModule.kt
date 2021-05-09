@@ -4,9 +4,9 @@ import com.ezzy.core.data.OrganizationRepository
 import com.ezzy.core.data.ProjectRepository
 import com.ezzy.core.data.UserRepository
 import com.ezzy.core.interactors.*
-import com.ezzy.projectmanagement.data.remote.RemoteOrganizationDataSource
-import com.ezzy.projectmanagement.data.remote.RemoteProjectDataSource
-import com.ezzy.projectmanagement.data.remote.RemoteUserDataSource
+import com.ezzy.projectmanagement.data.remote.OrganizationDataSourceImpl
+import com.ezzy.projectmanagement.data.remote.ProjectDataSourceImpl
+import com.ezzy.projectmanagement.data.remote.UserDataSourceImpl
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -27,7 +27,7 @@ object DataModule {
         storage: FirebaseStorage,
         saveUserOrganizations: SaveUserOrganizations,
         firebaseAuth: FirebaseAuth
-    ) = OrganizationRepository(RemoteOrganizationDataSource(
+    ) = OrganizationRepository(OrganizationDataSourceImpl(
         fireStore, storage, saveUserOrganizations, firebaseAuth
     ))
 
@@ -38,7 +38,7 @@ object DataModule {
         saveUserProjects: SaveUserProjects,
         firebaseAuth: FirebaseAuth
     ) = ProjectRepository(
-        RemoteProjectDataSource(fireStore, saveUserProjects, firebaseAuth)
+        ProjectDataSourceImpl(fireStore, saveUserProjects, firebaseAuth)
     )
 
     @Provides
@@ -46,7 +46,7 @@ object DataModule {
     fun provideUserRepository(
         fireStore: FirebaseFirestore, 
         storage: FirebaseStorage
-    ) = UserRepository(RemoteUserDataSource(fireStore, storage))
+    ) = UserRepository(UserDataSourceImpl(fireStore, storage))
 
     @Provides
     fun provideAddOrganization(repository: OrganizationRepository) =

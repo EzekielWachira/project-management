@@ -34,13 +34,15 @@ class SaveUserProjects(private val repository: UserRepository) {
 
 class UpdateUser(private val repository: UserRepository) {
     suspend operator fun invoke(
+        imageUri : String?,
         user: User
-    ) = repository.updateUserDetails(user)
+    ) = repository.updateUserDetails(imageUri, user)
 }
 
 class SaveUserImage(private val repository: UserRepository) {
     suspend operator fun invoke(
         uri: URI,
-        fileName : String
-    ) = repository.saveUserImage(uri, fileName)
+        fileName : String,
+        user : User
+    ) = repository.saveUserImage(uri, fileName, user)
 }

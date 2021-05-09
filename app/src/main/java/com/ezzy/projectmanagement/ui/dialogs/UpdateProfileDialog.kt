@@ -63,26 +63,30 @@ class UpdateProfileDialog : DialogFragment() {
         emailEditText.setText(firebaseAuth.currentUser?.email)
 
         btnDone.setOnClickListener { _->
-            var user : User? = null
             picImageUri?.let { imageUri ->
                 activity?.let {
-                    profileViewModel.saveUserImg(imageUri, imageUri.getNameFromUri(
-                        it.applicationContext, imageUri
-                    ))
-                }
-                profileViewModel.imagePath.observe(this) { imagePath ->
-                    user = User(
+                    val user = User(
                         nameEditText.text.toString(),
                         emailEditText.text.toString(),
-                        aboutEditText.text.toString(),
-                        imagePath
+                        aboutEditText.text.toString()
                     )
+                    profileViewModel.saveUserImg(imageUri, imageUri.getNameFromUri(
+                        it.applicationContext, imageUri
+                    ), user)
                 }
+//                profileViewModel.imagePath.observe(this) { imagePath ->
+//                    user = User(
+//                        nameEditText.text.toString(),
+//                        emailEditText.text.toString(),
+//                        aboutEditText.text.toString(),
+//                        imagePath
+//                    )
+//                }
             }
-            user?.let {
-                Timber.d("USR: $user")
-                profileViewModel.updateAuthUser(it)
-            }
+//            user?.let {
+//                Timber.d("USR: $user")
+//                profileViewModel.updateAuthUser(it)
+//            }
             dialog?.dismiss()
             showDialog()
         }
@@ -130,10 +134,6 @@ class UpdateProfileDialog : DialogFragment() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         requestPermissions()
-    }
-
-    private fun updateUser(user: User) {
-        profileViewModel.updateAuthUser(user)
     }
 
     private fun showDialog() {

@@ -20,7 +20,7 @@ import timber.log.Timber
 import java.lang.Exception
 import javax.inject.Inject
 
-class RemoteProjectDataSource @Inject constructor(
+class ProjectDataSourceImpl @Inject constructor(
     val firestore: FirebaseFirestore,
     val saveUserProjects: SaveUserProjects,
     firebaseAuth: FirebaseAuth

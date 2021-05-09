@@ -21,7 +21,7 @@ import java.net.URI
 import java.util.*
 import javax.inject.Inject
 
-class RemoteOrganizationDataSource @Inject constructor(
+class OrganizationDataSourceImpl @Inject constructor(
     val firestore: FirebaseFirestore,
     val firebaseStorage: FirebaseStorage,
     val saveUserOrganizations: SaveUserOrganizations,

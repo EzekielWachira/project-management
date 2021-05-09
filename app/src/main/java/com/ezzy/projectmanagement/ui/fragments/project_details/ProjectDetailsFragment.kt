@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
+import com.ezzy.core.domain.Project
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.databinding.FragmentProjectDetailsBinding
 
@@ -26,7 +27,16 @@ class ProjectDetailsFragment : Fragment() {
 
         val project = args.project
 
+        setUpViews(project)
+
         return binding.root
+    }
+
+    private fun setUpViews(project : Project) {
+        binding.projectName.text = project.projectTitle
+        binding.projectStartDate.text = project.startDate
+        binding.projectEndDate.text = project.endDate
+        binding.statusChip.text = project.projectStage
     }
 
     override fun onDestroy() {

@@ -1,6 +1,7 @@
 package com.ezzy.projectmanagement.ui.fragments.profile
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,20 +25,26 @@ class ProfileViewModel @Inject constructor(
     private var _imagePath = MutableLiveData<String>()
     val imagePath : LiveData<String> get() = _imagePath
 
-    fun updateAuthUser(user : User) = viewModelScope.launch {
-        val result = updateUser(user)
-        if (result) {
-            _isUserUpdateSuccess.postValue(true)
-        } else {
-            _isUserUpdateSuccess.postValue(false)
+    fun updateAuthUser(imageUri: String?, user : User) {
+        viewModelScope.launch {
+            val result = updateUser(imageUri, user)
+            if (result) {
+                _isUserUpdateSuccess.postValue(true)
+            } else {
+                _isUserUpdateSuccess.postValue(false)
+            }
         }
     }
 
-    fun saveUserImg(imageUri : Uri, fileName : String) = viewModelScope.launch {
-        val imgURI = URI.create(imageUri.toString())
-        val result = saveUserImage(imgURI, fileName)
-        if (result != null) {
-            _imagePath.postValue(result!!)
+    fun saveUserImg(imageUri : Uri, fileName : String, user: User){
+        viewModelScope.launch {
+            val imgURI = URI.create(imageUri.toString())
+            val result = saveUserImage(imgURI, fileName, user)
+            if (result){
+                _isUserUpdateSuccess.postValue(true)
+            } else {
+                _isUserUpdateSuccess.postValue(false)
+            }
         }
     }
 
