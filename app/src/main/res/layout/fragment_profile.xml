@@ -213,6 +213,7 @@
                 android:layout_height="wrap_content"
                 android:text="About"
                 android:id="@+id/abtTxt"
+                android:textSize="@dimen/_12ssp"
                 android:textStyle="italic"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -224,9 +225,9 @@
                 app:layout_constraintTop_toBottomOf="@id/abtTxt"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="@dimen/_13ssp"
+                android:id="@+id/userAboutTextView"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:text="The experience that I have gained means that I will get up and running in this role very quickly. Before I applied for the positions I read careful the requirements that were needed for it to make sure that I was confident I would meet the requirements of the role.
-                            I'm also good working around teams and I understand the benefits of working around a diverse team. "
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

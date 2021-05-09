@@ -69,4 +69,5 @@
     <string name="dark_theme">Dark theme</string>
     <string name="default_message">Default Reply Message</string>
     <string name="developr">Developer</string>
+    <string name="no_about">No About Found, you can update your profile about</string>
 </resources>

@@ -8,7 +8,9 @@ import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.ezzy.projectmanagement.R
 import com.google.android.material.snackbar.Snackbar
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
@@ -120,4 +122,10 @@ fun CircleImageView.applyImage(imageUrl: String) {
     Glide.with(context)
         .load(imageUrl)
         .into(this)
+}
+
+fun TextView.noText() {
+    this.apply {
+        text = context.getString(R.string.no_about)
+    }
 }

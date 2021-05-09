@@ -13,9 +13,7 @@ import com.ezzy.projectmanagement.databinding.FragmentProfileBinding
 import com.ezzy.projectmanagement.ui.activities.SettingsActivity
 import com.ezzy.projectmanagement.ui.activities.organization.NewOrganizationActivity
 import com.ezzy.projectmanagement.ui.dialogs.UpdateProfileDialog
-import com.ezzy.projectmanagement.util.imageResult
-import com.ezzy.projectmanagement.util.requestPermission
-import com.ezzy.projectmanagement.util.selectPicture
+import com.ezzy.projectmanagement.util.*
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -40,6 +38,8 @@ class ProfileFragment : Fragment() {
             inflater, container, false
         )
 
+        profileViewModel.getUserInfo()
+
         binding.editFAB.setOnClickListener {
             UpdateProfileDialog().show(
                 activity?.supportFragmentManager!!,
@@ -47,15 +47,21 @@ class ProfileFragment : Fragment() {
             )
         }
 
-        binding.usernameTxt.text = firebaseAuth.currentUser?.displayName
-        binding.emailTxt.text = firebaseAuth.currentUser?.email
-
         binding.settingsLayout.setOnClickListener {
             startActivity(Intent(activity, SettingsActivity::class.java))
         }
 
         binding.editImageView.setOnClickListener{
             requestPermissions()
+        }
+
+        profileViewModel.user.observe(viewLifecycleOwner) {
+            binding.userImageView.applyImage(it.imageSrc!!)
+            binding.usernameTxt.text = it.name
+            binding.emailTxt.text = it.email
+            if (it.about!!.isNotEmpty()){
+                binding.userAboutTextView.text = it.about
+            } else { binding.userAboutTextView.noText() }
         }
 
 

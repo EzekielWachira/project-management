@@ -57,7 +57,7 @@ class UpdateProfileDialog : DialogFragment() {
             userImageView = view.findViewById(R.id.userImgView)
         }
 
-        profileViewModel.getUserInfo()
+//        profileViewModel.getUserInfo()
 
         userImageView.setOnClickListener { requestPermissions() }
 
@@ -157,6 +157,16 @@ class UpdateProfileDialog : DialogFragment() {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
+
+    override fun onStart() {
+        super.onStart()
+        profileViewModel.getUserInfo()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        profileViewModel.getUserInfo()
+    }
 
 
 }
