@@ -78,7 +78,6 @@ class OrganizationViewModel @Inject constructor(
     }
 
     fun getAllOrganizations() =  viewModelScope.launch {
-        try {
             _isSuccess.postValue(true)
             val results = retrieveOrganizations()
             if(results.isNotEmpty()){
@@ -88,9 +87,6 @@ class OrganizationViewModel @Inject constructor(
                 _isSuccess.postValue(false)
                 _isOrgLoadingSuccess.postValue(false)
             }
-        } catch (e : Exception) {
-            _isOrgLoadingSuccess.postValue(false)
-        }
     }
 
     fun getOrgsIds() {
@@ -103,11 +99,13 @@ class OrganizationViewModel @Inject constructor(
     }
 
     fun getUserOrgs() = viewModelScope.launch {
+        _isSuccess.postValue(true)
         val results = getUserOrganizations()
         Timber.d("BREE ($results)")
         if (results.isNotEmpty()){
+            _isSuccess.postValue(false)
             _userOrganizations.postValue(results)
-        }
+        } else _isSuccess.postValue(true)
     }
 
     fun searchOrgs(keyword : String) {

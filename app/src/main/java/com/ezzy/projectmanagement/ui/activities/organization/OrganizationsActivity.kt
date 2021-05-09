@@ -17,6 +17,8 @@ import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.Organizat
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.ezzy.projectmanagement.util.Directions
 import com.ezzy.projectmanagement.util.ItemDecorator
+import com.ezzy.projectmanagement.util.invisible
+import com.ezzy.projectmanagement.util.visible
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -87,12 +89,9 @@ class OrganizationsActivity : AppCompatActivity() {
             organizationsAdapter.differ.submitList(organizationList.toList())
         }
 
-        organizationViewModel.isOrgLoadingSuccess.observe(this) { isSuccess ->
-            if (isSuccess) {
-                binding.orgProgressBar.visibility = View.INVISIBLE
-            } else {
-                binding.orgProgressBar.visibility = View.VISIBLE
-            }
+        organizationViewModel.isSuccess.observe(this) { isSuccess ->
+            if (isSuccess) { binding.orgProgressBar.visible() }
+            else binding.orgProgressBar.invisible()
         }
 
         organizationViewModel.orgsSearched.observe(this) { orgsList ->
