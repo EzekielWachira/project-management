@@ -9,7 +9,9 @@ interface ActivityDataSource {
         activity: Activity,
         action: Action,
         type: String?,
-        status: String?
+        status: String?,
+        organizationName: String?,
+        projectName: String?
     ): Boolean
 
     suspend fun getActivities(): List<Activity>

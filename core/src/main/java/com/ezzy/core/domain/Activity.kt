@@ -10,7 +10,8 @@ enum class Action{
     ADDED_ISSUE,
     UPDATED,
     ADDED_TASK,
-    SET_STATUS
+    SET_STATUS,
+    CREATED_ORGANIZATION
 }
 
 data class Activity(
@@ -19,5 +20,4 @@ data class Activity(
     val creation_date : Timestamp? = null,
     val creatorName : String? = null,
     val creatorImage: String? = null,
-    val projectTitle : String? = null,
 )

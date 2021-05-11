@@ -4,30 +4,18 @@ import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.ezzy.projectmanagement.R
 import com.google.android.material.snackbar.Snackbar
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.channels.produce
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.util.*
-import java.util.concurrent.Flow
 
 private val PUNCTUATION = listOf(", ", "; ", ": ", " ")
 
@@ -143,30 +131,34 @@ fun TextView.noText() {
     }
 }
 
-fun String.createdProject(userName : String, projectName : String) : String{
+fun createdProject(userName: String, projectName: String) : String{
     return "$userName created $projectName"
 }
 
-fun String.commented(userName: String, type : String) : String {
+fun commented(userName: String, type: String) : String {
     return "$userName commented on $type"
 }
 
-fun String.reportedBug(userName: String, projectName: String) : String {
+fun reportedBug(userName: String, projectName: String) : String {
     return "$userName reported bug on $projectName"
 }
 
-fun String.addedIssue(userName: String, projectName: String) : String {
+fun addedIssue(userName: String, projectName: String) : String {
     return "$userName reported issue on $projectName"
 }
 
-fun String.updated(userName: String, projectName: String) : String {
+fun updated(userName: String, projectName: String) : String {
     return "$userName updated $projectName"
 }
 
-fun String.addedTask(userName: String, projectName: String) : String {
+fun addedTask(userName: String, projectName: String) : String {
     return "$userName added task to $projectName"
 }
 
-fun String.setProjectStatus(userName: String, projectName: String, status : String): String {
+fun setProjectStatus(userName: String, projectName: String, status: String): String {
     return "$userName set project $projectName as $status"
+}
+
+fun createdOrganization(userName: String, organizationName: String) : String {
+    return "$userName created $organizationName organization"
 }

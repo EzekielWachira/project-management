@@ -30,11 +30,21 @@ class ActivityFragmentViewModel @Inject constructor(
         }
     }
 
-    fun addNewActivity(activity: Activity, action: Action, type: String?, status: String?) {
+    fun addNewActivity(
+        activity: Activity,
+        action: Action,
+        type: String?,
+        status: String?,
+        organizationName: String?,
+        projectName: String?
+    ) {
         viewModelScope.launch {
-            val results = addActivity(activity, action, type, status)
-            if (results){ _isActivityAddedSuccess.postValue(true) }
-            else _isActivityAddedSuccess.postValue(false)
+            val results = addActivity(
+                activity, action, type, status, organizationName, projectName
+            )
+            if (results) {
+                _isActivityAddedSuccess.postValue(true)
+            } else _isActivityAddedSuccess.postValue(false)
         }
     }
 

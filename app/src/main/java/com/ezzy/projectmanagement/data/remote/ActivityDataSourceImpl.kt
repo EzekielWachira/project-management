@@ -22,42 +22,49 @@ class ActivityDataSourceImpl @Inject constructor(
         activity: Activity,
         action: Action,
         type: String?,
-        status: String?
+        status: String?,
+        organizationName: String?,
+        projectName: String?
     ): Boolean {
         var isActivityAddedSuccess = false
         try {
             when (action) {
                 Action.ADDED_ISSUE -> {
-                    activity.activityTitle = "".addedIssue(
-                        activity.creatorName!!, activity.projectTitle!!
+                    activity.activityTitle = addedIssue(
+                        activity.creatorName!!, projectName!!
                     )
                 }
                 Action.ADDED_TASK -> {
-                    activity.activityTitle = "".addedTask(
-                        activity.creatorName!!, activity.projectTitle!!
+                    activity.activityTitle = addedTask(
+                        activity.creatorName!!, projectName!!
                     )
                 }
                 Action.COMMENTED -> {
-                    activity.activityTitle = "".commented(
+                    activity.activityTitle = commented(
                         activity.creatorName!!, type!!
                     )
                 }
                 Action.CREATED_PROJECT -> {
-                    activity.activityTitle = "".createdProject(
-                        activity.creatorName!!, activity.projectTitle!!
+                    activity.activityTitle = createdProject(
+                        activity.creatorName!!, projectName!!
                     )
                 }
                 Action.REPORTED_BUG -> {
-                    activity.activityTitle = "".reportedBug(
-                        activity.creatorName!!, activity.projectTitle!!
+                    activity.activityTitle = reportedBug(
+                        activity.creatorName!!, projectName!!
                     )
                 }
                 Action.SET_STATUS -> {
-                    activity.activityTitle = "".setProjectStatus(
-                        activity.creatorName!!, activity.projectTitle!!, status!!
+                    activity.activityTitle = setProjectStatus(
+                        activity.creatorName!!, projectName!!, status!!
                     )
                 }
-                Action.UPDATED -> "".updated(activity.projectTitle!!, activity.projectTitle!!)
+                Action.UPDATED -> updated(activity.creatorName!!, projectName!!)
+                Action.CREATED_ORGANIZATION -> {
+                    activity.activityTitle = createdOrganization(
+                        activity.creatorName!!, organizationName!!
+                    )
+                }
             }
             activityCollection.add(activity).addOnSuccessListener {
                 isActivityAddedSuccess = true
@@ -84,7 +91,7 @@ class ActivityDataSourceImpl @Inject constructor(
             }.addOnFailureListener {
                 Timber.e("Error getting activities: ${it.message.toString()}")
             }.apply { await() }
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Timber.e("Exception retrieving activities: ${e.message.toString()}")
         }
         return activities

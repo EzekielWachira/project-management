@@ -9,8 +9,12 @@ class ActivityUseCase(private val activityRepository: ActivityRepository) {
         activity: Activity,
         action: Action,
         type: String?,
-        status: String?
-    ) = activityRepository.addActivity(activity, action, type, status)
+        status: String?,
+        organizationName: String?,
+        projectName: String?
+    ) = activityRepository.addActivity(
+        activity, action, type, status, organizationName, projectName
+    )
 }
 
 class GetActivities(private val activityRepository: ActivityRepository) {

@@ -6,8 +6,16 @@ import com.ezzy.core.domain.Activity
 class ActivityRepository(
     private val dataSource: ActivityDataSource
 ) {
-    suspend fun addActivity(activity: Activity, action: Action, type : String?, status : String?)
-    = dataSource.addActivity(activity, action, type, status)
+    suspend fun addActivity(
+        activity: Activity,
+        action: Action,
+        type: String?,
+        status: String?,
+        organizationName: String?,
+        projectName: String?
+    ) = dataSource.addActivity(
+        activity, action, type, status, organizationName, projectName
+    )
 
     suspend fun getActivities() = dataSource.getActivities()
 }
