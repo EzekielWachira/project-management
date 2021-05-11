@@ -23,7 +23,8 @@ class ActivityDataSourceImpl @Inject constructor(
         action: Action,
         type: String?,
         status: String?
-    ) {
+    ): Boolean {
+        var isActivityAddedSuccess = false
         try {
             when (action) {
                 Action.ADDED_ISSUE -> {
@@ -59,13 +60,17 @@ class ActivityDataSourceImpl @Inject constructor(
                 Action.UPDATED -> "".updated(activity.projectTitle!!, activity.projectTitle!!)
             }
             activityCollection.add(activity).addOnSuccessListener {
+                isActivityAddedSuccess = true
                 Timber.i("Activity added")
             }.addOnFailureListener {
+                isActivityAddedSuccess = false
                 Timber.e("cannot add activity: ${it.message.toString()}")
             }.apply { await() }
         } catch (e: Exception) {
+            isActivityAddedSuccess = false
             Timber.e("activity exception ${e.message.toString()}")
         }
+        return isActivityAddedSuccess
     }
 
     override suspend fun getActivities(): List<Activity> {

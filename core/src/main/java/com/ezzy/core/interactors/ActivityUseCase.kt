@@ -1,6 +1,5 @@
 package com.ezzy.core.interactors
 
-import com.ezzy.core.data.ActivityDataSource
 import com.ezzy.core.data.ActivityRepository
 import com.ezzy.core.domain.Action
 import com.ezzy.core.domain.Activity
