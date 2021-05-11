@@ -1,9 +1,11 @@
 package com.ezzy.projectmanagement.di
 
+import com.ezzy.core.data.ActivityRepository
 import com.ezzy.core.data.OrganizationRepository
 import com.ezzy.core.data.ProjectRepository
 import com.ezzy.core.data.UserRepository
 import com.ezzy.core.interactors.*
+import com.ezzy.projectmanagement.data.remote.ActivityDataSourceImpl
 import com.ezzy.projectmanagement.data.remote.OrganizationDataSourceImpl
 import com.ezzy.projectmanagement.data.remote.ProjectDataSourceImpl
 import com.ezzy.projectmanagement.data.remote.UserDataSourceImpl
@@ -48,6 +50,13 @@ object DataModule {
         storage: FirebaseStorage,
         firebaseAuth: FirebaseAuth
     ) = UserRepository(UserDataSourceImpl(fireStore, storage, firebaseAuth))
+
+    @Singleton
+    @Provides
+    fun provideActivityRepository(
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore
+    ) = ActivityRepository(ActivityDataSourceImpl(firebaseAuth, fireStore))
 
     @Provides
     fun provideAddOrganization(repository: OrganizationRepository) =
@@ -142,4 +151,13 @@ object DataModule {
     @Provides
     fun provideGetUserDetails(repository: UserRepository) =
         GetUserDetails(repository)
+
+    //activity usecase
+    @Provides
+    fun provideAddActivity(repository: ActivityRepository) =
+        ActivityUseCase(repository)
+
+    @Provides
+    fun provideGetActivities(repository: ActivityRepository) =
+        GetActivities(repository)
 }

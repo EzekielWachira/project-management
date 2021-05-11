@@ -21,4 +21,5 @@ object Constants {
     const val USERS = "users"
     const val CONNECTED = 1
     const val DISCONNECTED = 0
+    const val ACTIVITY = "activities"
 }

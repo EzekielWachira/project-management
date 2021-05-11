@@ -14,10 +14,10 @@ enum class Action{
 }
 
 data class Activity(
-    private val creation_date : Timestamp? = null,
-    private val creatorName : String? = null,
-    private val creatorImage: String? = null,
-    private val projectTitle : String? = null,
-    private val content : String? = null,
-    private val action: Action? = null
+    var activityTitle : String? = null,
+    val content : String? = null,
+    val creation_date : Timestamp? = null,
+    val creatorName : String? = null,
+    val creatorImage: String? = null,
+    val projectTitle : String? = null,
 )
