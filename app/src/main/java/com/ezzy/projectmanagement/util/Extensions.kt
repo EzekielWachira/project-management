@@ -142,3 +142,31 @@ fun TextView.noText() {
         text = context.getString(R.string.no_about)
     }
 }
+
+fun String.createdProject(userName : String, projectName : String) : String{
+    return "$userName created $projectName"
+}
+
+fun String.commented(userName: String, type : String) : String {
+    return "$userName commented on $type"
+}
+
+fun String.reportedBug(userName: String, projectName: String) : String {
+    return "$userName reported bug on $projectName"
+}
+
+fun String.addedIssue(userName: String, projectName: String) : String {
+    return "$userName reported issue on $projectName"
+}
+
+fun String.updated(userName: String, projectName: String) : String {
+    return "$userName updated $projectName"
+}
+
+fun String.addedTask(userName: String, projectName: String) : String {
+    return "$userName added task to $projectName"
+}
+
+fun String.setProjectStatus(userName: String, projectName: String, status : String): String {
+    return "$userName set project $projectName as $status"
+}

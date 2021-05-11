@@ -103,7 +103,9 @@ dependencies {
     implementation(Dependencies.dataStore)
     implementation(Dependencies.typedDataStore)
 
-//    implementation(Dependencies.skydoveProgress)
     implementation(Dependencies.skydoveProgress)
+
+    implementation("com.google.firebase.firebase-firestore:22.1.2@aar")
+//    implementation(Dependencies.skydoveProgress)
 
 }
