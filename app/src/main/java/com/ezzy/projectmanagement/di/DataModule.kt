@@ -1,12 +1,14 @@
 package com.ezzy.projectmanagement.di
 
+import com.ezzy.core.data.ActivityRepository
 import com.ezzy.core.data.OrganizationRepository
 import com.ezzy.core.data.ProjectRepository
 import com.ezzy.core.data.UserRepository
 import com.ezzy.core.interactors.*
-import com.ezzy.projectmanagement.data.remote.RemoteOrganizationDataSource
-import com.ezzy.projectmanagement.data.remote.RemoteProjectDataSource
-import com.ezzy.projectmanagement.data.remote.RemoteUserDataSource
+import com.ezzy.projectmanagement.data.remote.ActivityDataSourceImpl
+import com.ezzy.projectmanagement.data.remote.OrganizationDataSourceImpl
+import com.ezzy.projectmanagement.data.remote.ProjectDataSourceImpl
+import com.ezzy.projectmanagement.data.remote.UserDataSourceImpl
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -26,8 +28,11 @@ object DataModule {
         fireStore: FirebaseFirestore,
         storage: FirebaseStorage,
         saveUserOrganizations: SaveUserOrganizations,
-    ) = OrganizationRepository(RemoteOrganizationDataSource(
-        fireStore, storage, saveUserOrganizations
+        firebaseAuth: FirebaseAuth,
+        addActivityUseCase: ActivityUseCase
+    ) = OrganizationRepository(OrganizationDataSourceImpl(
+        fireStore, storage, saveUserOrganizations, firebaseAuth,
+        addActivityUseCase
     ))
 
     @Provides
@@ -35,14 +40,25 @@ object DataModule {
     fun provideProjectRepository(
         fireStore: FirebaseFirestore,
         saveUserProjects: SaveUserProjects,
+        firebaseAuth: FirebaseAuth
     ) = ProjectRepository(
-        RemoteProjectDataSource(fireStore, saveUserProjects)
+        ProjectDataSourceImpl(fireStore, saveUserProjects, firebaseAuth)
     )
 
     @Provides
     @Singleton
-    fun provideUserRepository(fireStore: FirebaseFirestore)
-        = UserRepository(RemoteUserDataSource(fireStore))
+    fun provideUserRepository(
+        fireStore: FirebaseFirestore, 
+        storage: FirebaseStorage,
+        firebaseAuth: FirebaseAuth
+    ) = UserRepository(UserDataSourceImpl(fireStore, storage, firebaseAuth))
+
+    @Singleton
+    @Provides
+    fun provideActivityRepository(
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore
+    ) = ActivityRepository(ActivityDataSourceImpl(firebaseAuth, fireStore))
 
     @Provides
     fun provideAddOrganization(repository: OrganizationRepository) =
@@ -79,6 +95,10 @@ object DataModule {
     fun provideUserOrganizations(repository: OrganizationRepository)
         = GetUserOrganizations(repository)
 
+    @Provides
+    fun provideOrganizationsIds(repository: OrganizationRepository) =
+        GetOrganizationsIds(repository)
+
     //Project Use case dependencies
     @Provides
     fun provideAddProject(repository: ProjectRepository) =
@@ -95,6 +115,10 @@ object DataModule {
     @Provides
     fun provideAttachMembers(repository: ProjectRepository) =
         AttachMembers(repository)
+
+    @Provides
+    fun provideGetUserProjects(repository: ProjectRepository) =
+        GetUserProjects(repository)
 
 
     //User use case
@@ -117,4 +141,25 @@ object DataModule {
     @Provides
     fun provideSaveUserProjects(repository: UserRepository) =
         SaveUserProjects(repository)
+
+    @Provides
+    fun provideUpdateUser(repository: UserRepository) =
+        UpdateUser(repository)
+
+    @Provides
+    fun provideSaveUserImage(repository: UserRepository) =
+        SaveUserImage(repository)
+
+    @Provides
+    fun provideGetUserDetails(repository: UserRepository) =
+        GetUserDetails(repository)
+
+    //activity usecase
+    @Provides
+    fun provideAddActivity(repository: ActivityRepository) =
+        ActivityUseCase(repository)
+
+    @Provides
+    fun provideGetActivities(repository: ActivityRepository) =
+        GetActivities(repository)
 }

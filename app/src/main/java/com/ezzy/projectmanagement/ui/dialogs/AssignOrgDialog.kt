@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
@@ -23,6 +24,9 @@ import com.ezzy.core.domain.Organization
 import com.ezzy.projectmanagement.ui.activities.newproject.NewProjectActivity
 import com.ezzy.projectmanagement.ui.activities.newproject.viewmodel.NewProjectViewModel
 import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
+import com.ezzy.projectmanagement.util.gone
+import com.ezzy.projectmanagement.util.invisible
+import com.ezzy.projectmanagement.util.visible
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
@@ -37,6 +41,8 @@ class AssignOrgDialog : DialogFragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var orgSearchEditText : TextInputEditText
     private lateinit var orgChipGroup : ChipGroup
+    private lateinit var orgProgressBar : ProgressBar
+
     private val organizationViewModel : OrganizationViewModel by viewModels()
     private val newProjectViewModel : NewProjectViewModel by activityViewModels()
     private lateinit var orgAdapter : CommonRecyclerViewAdapter<Organization>
@@ -52,6 +58,7 @@ class AssignOrgDialog : DialogFragment() {
             recyclerView = view.findViewById(R.id.peopleRecyclerview)
             orgSearchEditText = view.findViewById(R.id.searchOrgEditText)
             orgChipGroup = view.findViewById(R.id.orgChipGroup)
+            orgProgressBar = view.findViewById(R.id.orgProgress)
         }
 
         setUpRecyclerView()
@@ -93,6 +100,11 @@ class AssignOrgDialog : DialogFragment() {
         organizationViewModel.orgsSearched.observe(this, {
             orgAdapter.differ.submitList(it)
         })
+
+        organizationViewModel.isSuccess.observe(this) { isSuccess ->
+            if (isSuccess) { orgProgressBar.visible() }
+            else orgProgressBar.invisible()
+        }
 
         organizationViewModel.orgsSelected.observe(this, { orgs ->
             if (orgs.isNotEmpty()){

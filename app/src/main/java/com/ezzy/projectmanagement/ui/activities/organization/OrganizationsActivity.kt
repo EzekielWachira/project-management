@@ -17,10 +17,13 @@ import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.Organizat
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.ezzy.projectmanagement.util.Directions
 import com.ezzy.projectmanagement.util.ItemDecorator
+import com.ezzy.projectmanagement.util.invisible
+import com.ezzy.projectmanagement.util.visible
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -43,10 +46,11 @@ class OrganizationsActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
+        organizationViewModel.getOrgsIds()
         setUpRecyclerView()
 
         organizationViewModel.getAllOrganizations()
-        organizationViewModel.getUserOrgs(firebaseAuth.currentUser!!.email!!)
+        organizationViewModel.getUserOrgs()
 
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -75,16 +79,19 @@ class OrganizationsActivity : AppCompatActivity() {
 
         })
 
-        organizationViewModel.organizations.observe(this) { organizationList ->
-            organizationsAdapter.differ.submitList(organizationList)
+//        organizationViewModel.organizationsIds.observe(this) {
+//            organizationViewModel.getUserOrgs()
+//
+//        }
+
+        organizationViewModel.userOrganizations.observe(this) { organizationList ->
+            Timber.d("ORGANIZATION LIST = $organizationList")
+            organizationsAdapter.differ.submitList(organizationList.toList())
         }
 
-        organizationViewModel.isOrgLoadingSuccess.observe(this) { isSuccess ->
-            if (isSuccess) {
-                binding.orgProgressBar.visibility = View.INVISIBLE
-            } else {
-                binding.orgProgressBar.visibility = View.VISIBLE
-            }
+        organizationViewModel.isSuccess.observe(this) { isSuccess ->
+            if (isSuccess) { binding.orgProgressBar.visible() }
+            else binding.orgProgressBar.invisible()
         }
 
         organizationViewModel.orgsSearched.observe(this) { orgsList ->

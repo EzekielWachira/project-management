@@ -1,19 +1,29 @@
 package com.ezzy.projectmanagement.data.remote
 
+import android.net.Uri
 import com.ezzy.core.data.UserDataSource
 import com.ezzy.core.domain.User
-import com.ezzy.projectmanagement.util.Constants
+import com.ezzy.core.interactors.GetAllUser
+import com.ezzy.core.interactors.UpdateUser
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
 import com.ezzy.projectmanagement.util.Constants.USERS
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
+import java.net.URI
 import java.util.*
 import javax.inject.Inject
 
-class RemoteUserDataSource @Inject constructor(
-    val firestore: FirebaseFirestore
+class UserDataSourceImpl @Inject constructor(
+    val firestore: FirebaseFirestore,
+    val firebaseStorage: FirebaseStorage,
+    val firebaseAuth: FirebaseAuth
 ) : UserDataSource {
 
     private val userCollection = firestore.collection(USERS)
@@ -21,7 +31,7 @@ class RemoteUserDataSource @Inject constructor(
     override suspend fun getAllUsers(): List<User> {
         val users = mutableListOf<User>()
         try {
-            firestore.collection(Constants.USERS)
+            firestore.collection(USERS)
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful){
@@ -45,15 +55,16 @@ class RemoteUserDataSource @Inject constructor(
     override suspend fun searchMembers(name: String): List<User> {
         val users = mutableListOf<User>()
         try {
-            firestore.collection(Constants.USERS).whereEqualTo("name", name)
+            firestore.collection(USERS).whereEqualTo("name", name)
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful){
                         for (snapshot in it.result!!){
-                            val member = User(
-                                snapshot.getString("name"),
-                                snapshot.getString("email")
-                            )
+                            val member = snapshot.toObject(User::class.java)
+//                                User(
+//                                snapshot.getString("name"),
+//                                snapshot.getString("email")
+//                            )
                             users.add(member)
                         }
                         Timber.d("USERS ==>> $users")
@@ -112,6 +123,75 @@ class RemoteUserDataSource @Inject constructor(
         } catch (e : Exception) {
             Timber.e("Error saving user projects")
         }
+    }
+
+    override suspend fun updateUserDetails(imageUri: String?, user: User): Boolean {
+        var isUserUpdated = false
+        val userHashMap = mapOf(
+            "name" to user.name,
+            "email" to user.email,
+            "about" to user.about,
+            "imageSrc" to imageUri
+        )
+        try {
+            userCollection.whereEqualTo("email", user.email)
+                .get()
+                .addOnSuccessListener {
+                    it.documents.forEach { documentSnapshot ->
+                        userCollection.document(documentSnapshot.id)
+                            .update(userHashMap)
+                            .addOnSuccessListener {
+                                isUserUpdated = true
+                                firebaseAuth.currentUser?.updateEmail(user.email!!)
+                            }
+                            .addOnFailureListener { isUserUpdated = false }
+                    }
+                }.addOnFailureListener { isUserUpdated = false }.await()
+        }catch (e : Exception) {
+            Timber.e("An error occurred while updating user")
+        }
+        return isUserUpdated
+    }
+
+    var imagePath : String = ""
+    override suspend fun saveUserImage(uri: URI, fileName: String, user: User) : Boolean {
+        var isUserUpdateSuccess = false
+        try {
+            val imageUri = Uri.parse(uri.toString())
+            val storageRef = firebaseStorage.reference.child("images/users/$fileName")
+            storageRef.putFile(imageUri)
+                .addOnSuccessListener {
+                    storageRef.downloadUrl.addOnSuccessListener { imgUri ->
+                        imagePath = imgUri.toString()
+                        CoroutineScope(Dispatchers.IO).launch {
+                            isUserUpdateSuccess = updateUserDetails(imgUri.toString(), user)
+                        }
+                    }.addOnFailureListener { Timber.e("error getting dowload url") }
+                }.addOnFailureListener{ Timber.e("Error uploading user image") }
+                .await()
+        } catch (e : Exception){
+            Timber.e(e.message.toString())
+        }
+        return isUserUpdateSuccess
+    }
+
+    override suspend fun getUserDetails(): User {
+        var user : User? = null
+        val userEmail = firebaseAuth.currentUser?.email
+        try {
+            userCollection.whereEqualTo("email", userEmail)
+                .get().addOnSuccessListener {
+                    it.documents.forEach{ documentSnapshot ->
+                        user = documentSnapshot.toObject(User::class.java)
+                        Timber.i("USER HERE:  $user")
+                    }
+                }.addOnFailureListener{ Timber.e("error getting user details") }
+                .await()
+        } catch (e : Exception) {
+            Timber.e("exception getting user details: ${e.message.toString()}")
+        }
+        Timber.i("USER HERE AGAIN:  $user")
+        return user!!
     }
 
 }

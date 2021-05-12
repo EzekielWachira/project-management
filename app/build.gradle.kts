@@ -48,6 +48,7 @@ dependencies {
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.appCompat)
     implementation(Dependencies.materialComponents)
+    implementation("androidx.preference:preference:1.1.1")
     testImplementation(TestLibraries.jUnit)
     androidTestImplementation(TestLibraries.testRunner)
     androidTestImplementation(TestLibraries.espresso)
@@ -101,5 +102,9 @@ dependencies {
     //data store
     implementation(Dependencies.dataStore)
     implementation(Dependencies.typedDataStore)
+
+    implementation(Dependencies.skydoveProgress)
+
+//    implementation(Dependencies.skydoveProgress)
 
 }

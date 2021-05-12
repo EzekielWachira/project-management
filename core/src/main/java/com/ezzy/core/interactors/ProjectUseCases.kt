@@ -28,3 +28,9 @@ class AttachMembers(private val repository: ProjectRepository) {
         membersSet: Set<User>
     ) = repository.addMembers(membersSet)
 }
+
+class GetUserProjects(private val repository: ProjectRepository) {
+    suspend operator fun invoke(
+        organizations : List<Organization>
+    ) = repository.getUserProjects(organizations)
+}

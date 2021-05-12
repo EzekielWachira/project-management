@@ -63,4 +63,11 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="members">Members</string>
+    <string name="your_name">Your name</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="allow_notif">Allow Notifications</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="default_message">Default Reply Message</string>
+    <string name="developr">Developer</string>
+    <string name="no_about">No About Found, you can update your profile about</string>
 </resources>

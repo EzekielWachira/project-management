@@ -27,7 +27,8 @@ class OrganizationViewModel @Inject constructor(
     val getOrganizationProjects: RetrieveOrganizationProjects,
     val getOrganizationMembers: RetrieveOrganizationMembers,
     val getOrgId: GetOrgId,
-    val getUserOrganizations: GetUserOrganizations
+    val getUserOrganizations: GetUserOrganizations,
+    val getOrganizationsIds: GetOrganizationsIds
 ) : AndroidViewModel(app) {
 
     private val _isSuccess = MutableLiveData<Boolean>()
@@ -50,11 +51,15 @@ class OrganizationViewModel @Inject constructor(
     val organizationProjects : LiveData<List<Project>> get() = _organizationProjects
     private var _orgId = MutableLiveData<String>()
     val orgId : LiveData<String> get() = _orgId
-    private val _userOrganizations = MutableLiveData<List<Organization>>()
-    val userOrganizations : LiveData<List<Organization>> get() = _userOrganizations
+    private val _userOrganizations = MutableLiveData<Set<Organization>>()
+    val userOrganizations : LiveData<Set<Organization>> get() = _userOrganizations
+    private var _organizationsIds = MutableLiveData<List<String>>()
+    val organizationsIds : LiveData<List<String>> get() = _organizationsIds
 
     init {
+        getUserOrgs()
         getAllOrganizations()
+        getOrgsIds()
     }
 
     fun addOrg(
@@ -73,7 +78,6 @@ class OrganizationViewModel @Inject constructor(
     }
 
     fun getAllOrganizations() =  viewModelScope.launch {
-        try {
             _isSuccess.postValue(true)
             val results = retrieveOrganizations()
             if(results.isNotEmpty()){
@@ -83,16 +87,25 @@ class OrganizationViewModel @Inject constructor(
                 _isSuccess.postValue(false)
                 _isOrgLoadingSuccess.postValue(false)
             }
-        } catch (e : Exception) {
-            _isOrgLoadingSuccess.postValue(false)
+    }
+
+    fun getOrgsIds() {
+        viewModelScope.launch {
+            val results = getOrganizationsIds()
+            if (results.isNotEmpty()){
+                Timber.d("ORG IDSSggg $results")
+            }
         }
     }
 
-    fun getUserOrgs(email : String) = viewModelScope.launch {
-        val results = getUserOrganizations(email)
+    fun getUserOrgs() = viewModelScope.launch {
+        _isSuccess.postValue(true)
+        val results = getUserOrganizations()
+        Timber.d("BREE ($results)")
         if (results.isNotEmpty()){
+            _isSuccess.postValue(false)
             _userOrganizations.postValue(results)
-        }
+        } else _isSuccess.postValue(true)
     }
 
     fun searchOrgs(keyword : String) {

@@ -14,7 +14,6 @@ class AllProjectsViewHolder(
 ){
 
     private val projectTitleTextView : TextView = rootView.findViewById(R.id.projectNameTextView)
-    private val projectAboutTextView : TextView = rootView.findViewById(R.id.projectAboutTextView)
     private val startDateTextView : TextView = rootView.findViewById(R.id.startDateTextView)
     private val endDateTextView : TextView = rootView.findViewById(R.id.endDateTextView)
 
@@ -22,7 +21,6 @@ class AllProjectsViewHolder(
     override fun bindItem(item: Project?) {
         item?.let {
             projectTitleTextView.text = it.projectTitle
-            projectAboutTextView.text = it.projectDescription
             startDateTextView.text = it.startDate
             endDateTextView.text = it.endDate
         }

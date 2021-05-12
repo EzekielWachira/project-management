@@ -10,10 +10,8 @@ interface ProjectDataSource {
         project : Project,
         membersSet : Set<User>
     )
-
     suspend fun getAll() : List<Project>
-
     suspend fun addMembers(membersSet : Set<User>) : Set<User>
-
     suspend fun attachOrganizations(organizationSet: Set<Organization>) : Set<Organization>
+    suspend fun getUserProjects(organizations : List<Organization>) : List<Project>
 }
