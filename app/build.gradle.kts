@@ -105,7 +105,6 @@ dependencies {
 
     implementation(Dependencies.skydoveProgress)
 
-    implementation("com.google.firebase.firebase-firestore:22.1.2@aar")
 //    implementation(Dependencies.skydoveProgress)
 
 }

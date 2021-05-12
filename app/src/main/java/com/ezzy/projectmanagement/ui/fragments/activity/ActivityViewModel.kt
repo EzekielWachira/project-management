@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ActivityFragmentViewModel @Inject constructor(
+class ActivityViewModel @Inject constructor(
     val getAllActivities: GetActivities,
     val addActivity: ActivityUseCase
 ) : ViewModel() {
