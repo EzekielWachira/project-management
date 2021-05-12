@@ -1,5 +1,6 @@
 package com.ezzy.projectmanagement.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -15,6 +16,7 @@ import com.ezzy.projectmanagement.R
 import com.google.android.material.snackbar.Snackbar
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
 import java.util.*
 
 private val PUNCTUATION = listOf(", ", "; ", ": ", " ")
@@ -129,6 +131,13 @@ fun TextView.noText() {
     this.apply {
         text = context.getString(R.string.no_about)
     }
+}
+
+@SuppressLint("SimpleDateFormat")
+fun Long.formatTimeToDate() : String {
+    val date = Date(this)
+    val format = SimpleDateFormat("dd/MM/yyyy hh:mm:ss")
+    return format.format(date)
 }
 
 fun createdProject(userName: String, projectName: String) : String{

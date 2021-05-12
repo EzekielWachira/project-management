@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.ezzy.core.domain.Activity
 import com.ezzy.projectmanagement.R
-import com.ezzy.projectmanagement.util.applyImage
+import com.ezzy.projectmanagement.util.*
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ActivityViewHolder(
@@ -22,8 +22,11 @@ class ActivityViewHolder(
         item?.let {
             creatorImageView.applyImage(it.creatorImage!!)
             activityTitle.text = it.activityTitle
-            activityDate.text = it.creation_date.toString()
-            activityContent.text = it.content
+            activityDate.text = it.creation_date?.formatTimeToDate()
+            if (it.content!!.isNotEmpty()){
+                activityContent.text = it.content
+                activityContent.visible()
+            } else activityContent.gone()
         }
     }
 }
