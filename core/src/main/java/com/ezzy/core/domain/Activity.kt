@@ -1,5 +1,6 @@
 package com.ezzy.core.domain
 
+
 import java.sql.Timestamp
 import java.util.*
 
@@ -17,7 +18,7 @@ enum class Action{
 data class Activity(
     var activityTitle : String? = null,
     val content : String? = null,
-    val creation_date : Timestamp? = null,
+    val creation_date : Long? = null,
     val creatorName : String? = null,
-    val creatorImage: String? = null,
+    var creatorImage: String? = null,
 )

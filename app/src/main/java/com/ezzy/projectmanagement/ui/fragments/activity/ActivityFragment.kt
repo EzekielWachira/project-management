@@ -36,6 +36,8 @@ class ActivityFragment : Fragment() {
             inflater, container, false
         )
 
+        activityViewModel.getActivities()
+
         setUpRecyclerView()
 
         activityViewModel.activities.observe(viewLifecycleOwner) {

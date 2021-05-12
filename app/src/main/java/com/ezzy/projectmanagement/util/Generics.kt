@@ -111,3 +111,7 @@ fun<T> imageResult(
     }
     return picImageUri
 }
+
+fun<T> addActivity(content: String){
+
+}

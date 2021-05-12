@@ -28,9 +28,11 @@ object DataModule {
         fireStore: FirebaseFirestore,
         storage: FirebaseStorage,
         saveUserOrganizations: SaveUserOrganizations,
-        firebaseAuth: FirebaseAuth
+        firebaseAuth: FirebaseAuth,
+        addActivityUseCase: ActivityUseCase
     ) = OrganizationRepository(OrganizationDataSourceImpl(
-        fireStore, storage, saveUserOrganizations, firebaseAuth
+        fireStore, storage, saveUserOrganizations, firebaseAuth,
+        addActivityUseCase
     ))
 
     @Provides

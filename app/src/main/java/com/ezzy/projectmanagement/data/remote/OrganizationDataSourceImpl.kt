@@ -3,14 +3,15 @@ package com.ezzy.projectmanagement.data.remote
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.ezzy.core.data.OrganizationDataSource
-import com.ezzy.core.domain.Organization
-import com.ezzy.core.domain.Project
-import com.ezzy.core.domain.User
+import com.ezzy.core.domain.*
+import com.ezzy.core.interactors.ActivityUseCase
 import com.ezzy.core.interactors.SaveUserOrganizations
 import com.ezzy.projectmanagement.util.Constants.MEMBERS
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
 import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
 import com.ezzy.projectmanagement.util.Constants.USERS
+import com.ezzy.projectmanagement.util.createdOrganization
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -25,7 +26,8 @@ class OrganizationDataSourceImpl @Inject constructor(
     val firestore: FirebaseFirestore,
     val firebaseStorage: FirebaseStorage,
     val saveUserOrganizations: SaveUserOrganizations,
-    val firebaseAuth: FirebaseAuth
+    val firebaseAuth: FirebaseAuth,
+    val addActivity : ActivityUseCase
 ) : OrganizationDataSource{
 
     val organizations = MutableLiveData<List<Organization>>()
@@ -77,6 +79,12 @@ class OrganizationDataSourceImpl @Inject constructor(
                                                                 docReference.id,
                                                                 member.email!!,
                                                             )
+                                                            val activity = saveActivity("")
+                                                            addActivity(
+                                                                activity, Action.CREATED_ORGANIZATION,
+                                                                null, null, organization.name,
+                                                                null
+                                                            )
                                                         }
                                                     }
                                                     Timber.d("SUCCESS")
@@ -97,6 +105,28 @@ class OrganizationDataSourceImpl @Inject constructor(
         } catch (e: Exception) {
             Timber.d("An error occured")
         }
+    }
+
+    private suspend fun saveActivity(
+        content: String?,
+    ) : Activity{
+        var activity : Activity? = null
+        var creatorImage : String? = null
+        var creatorName: String? = null
+        val creationDate: Long = System.currentTimeMillis()
+        userCollection.whereEqualTo("email", firebaseAuth.currentUser!!.email)
+            .get().addOnSuccessListener {
+                it.documents.forEach { documentSnapshot ->
+                    creatorImage = documentSnapshot.getString("imageSrc")
+                    creatorName = documentSnapshot.getString("name")
+                }
+            }.addOnFailureListener { Timber.e("error getting user image") }
+            .apply { await() }
+        activity = Activity(
+            null, content,
+            creationDate, creatorName, creatorImage
+        )
+        return activity
     }
 
     override suspend fun retrieveOrganizations(): List<Organization> {
