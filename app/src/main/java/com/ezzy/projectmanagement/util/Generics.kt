@@ -1,7 +1,6 @@
 package com.ezzy.projectmanagement.util
 
-import android.Manifest
-import android.Manifest.*
+import android.Manifest.permission
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,25 +9,24 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatActivity.*
+import androidx.appcompat.app.AppCompatActivity.RESULT_CANCELED
+import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.ezzy.core.domain.Activity as UserActivity
 import com.ezzy.core.domain.Action
 import com.ezzy.projectmanagement.util.Constants.ACTIVITY
 import com.ezzy.projectmanagement.util.Constants.CANCEL
 import com.ezzy.projectmanagement.util.Constants.PICK_FROM_GALLERY
 import com.ezzy.projectmanagement.util.Constants.PICK_PHOTO_REQUEST_CODE
+import com.ezzy.projectmanagement.util.Constants.REQUEST_PERMISSION_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_IMAGE_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_PHOTO
-import com.ezzy.projectmanagement.util.Constants.REQUEST_PERMISSION_CODE
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
+import com.ezzy.core.domain.Activity as UserActivity
 
-fun<T> selectPicture(activity: Activity) {
+fun <T> selectPicture(activity: Activity) {
     val options = arrayOf(
         TAKE_PHOTO, PICK_FROM_GALLERY, CANCEL
     )
@@ -61,7 +59,7 @@ fun<T> selectPicture(activity: Activity) {
     }
 }
 
-fun<T> requestPermission(activity: Activity) : Boolean {
+fun <T> requestPermission(activity: Activity): Boolean {
     val isPermissionsGranted: Boolean
     val permissions = arrayOf(
         permission.READ_EXTERNAL_STORAGE,
@@ -69,9 +67,16 @@ fun<T> requestPermission(activity: Activity) : Boolean {
         permission.CAMERA
     )
     if (ContextCompat.checkSelfPermission(
-            activity.applicationContext, permissions[0]) == PackageManager.PERMISSION_GRANTED &&
-        ContextCompat.checkSelfPermission(activity, permissions[1]) == PackageManager.PERMISSION_GRANTED &&
-        ContextCompat.checkSelfPermission(activity, permissions[2]) == PackageManager.PERMISSION_GRANTED
+            activity.applicationContext, permissions[0]
+        ) == PackageManager.PERMISSION_GRANTED &&
+        ContextCompat.checkSelfPermission(
+            activity,
+            permissions[1]
+        ) == PackageManager.PERMISSION_GRANTED &&
+        ContextCompat.checkSelfPermission(
+            activity,
+            permissions[2]
+        ) == PackageManager.PERMISSION_GRANTED
     ) {
         isPermissionsGranted = true
     } else {
@@ -82,16 +87,16 @@ fun<T> requestPermission(activity: Activity) : Boolean {
 }
 
 
-fun<T> imageResult(
+fun <T> imageResult(
     requestCode: Int,
     resultCode: Int,
     data: Intent?,
     activity: Activity,
     imageView: ImageView
-) : Uri? {
+): Uri? {
     var picImageUri: Uri? = null
-    if (resultCode != RESULT_CANCELED){
-        when(requestCode){
+    if (resultCode != RESULT_CANCELED) {
+        when (requestCode) {
             TAKE_IMAGE_REQUEST_CODE -> {
                 data?.let {
                     if (resultCode == RESULT_OK) {
@@ -105,7 +110,7 @@ fun<T> imageResult(
             PICK_PHOTO_REQUEST_CODE -> {
                 data?.data?.let {
                     if (resultCode == RESULT_OK) {
-                        val imageUri : Uri = it
+                        val imageUri: Uri = it
                         imageUri.let { uri ->
                             imageView.setImageURI(uri)
                             picImageUri = uri
@@ -118,18 +123,17 @@ fun<T> imageResult(
     return picImageUri
 }
 
-suspend fun<T> saveActivity(
-    firebaseAuth: FirebaseAuth,
+suspend fun <T> saveActivity(
     fireStore: FirebaseFirestore,
     activity: UserActivity,
-    action : Action,
-    type : String?,
+    action: Action,
+    type: String?,
     status: String?,
     organizationName: String?,
     projectName: String?
-) : Boolean {
+): Boolean {
     var isActivityAddedSuccess = false
-    var activityCollection = fireStore.collection(ACTIVITY)
+    val activityCollection = fireStore.collection(ACTIVITY)
     try {
         when (action) {
             Action.ADDED_ISSUE -> {
