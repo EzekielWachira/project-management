@@ -1,6 +1,7 @@
 package com.ezzy.core.domain
 
 
+import java.io.Serializable
 import java.sql.Timestamp
 import java.util.*
 
@@ -21,4 +22,4 @@ data class Activity(
     val creation_date : Long? = null,
     val creatorName : String? = null,
     var creatorImage: String? = null,
-)
+) : Serializable

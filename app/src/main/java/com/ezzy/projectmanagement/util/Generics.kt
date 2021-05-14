@@ -14,12 +14,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatActivity.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.ezzy.core.domain.Activity as UserActivity
+import com.ezzy.core.domain.Action
+import com.ezzy.projectmanagement.util.Constants.ACTIVITY
 import com.ezzy.projectmanagement.util.Constants.CANCEL
 import com.ezzy.projectmanagement.util.Constants.PICK_FROM_GALLERY
 import com.ezzy.projectmanagement.util.Constants.PICK_PHOTO_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_IMAGE_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_PHOTO
 import com.ezzy.projectmanagement.util.Constants.REQUEST_PERMISSION_CODE
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
 fun<T> selectPicture(activity: Activity) {
@@ -112,6 +118,67 @@ fun<T> imageResult(
     return picImageUri
 }
 
-fun<T> addActivity(content: String){
-
+suspend fun<T> saveActivity(
+    firebaseAuth: FirebaseAuth,
+    fireStore: FirebaseFirestore,
+    activity: UserActivity,
+    action : Action,
+    type : String?,
+    status: String?,
+    organizationName: String?,
+    projectName: String?
+) : Boolean {
+    var isActivityAddedSuccess = false
+    var activityCollection = fireStore.collection(ACTIVITY)
+    try {
+        when (action) {
+            Action.ADDED_ISSUE -> {
+                activity.activityTitle = addedIssue(
+                    activity.creatorName!!, projectName!!
+                )
+            }
+            Action.ADDED_TASK -> {
+                activity.activityTitle = addedTask(
+                    activity.creatorName!!, projectName!!
+                )
+            }
+            Action.COMMENTED -> {
+                activity.activityTitle = commented(
+                    activity.creatorName!!, type!!
+                )
+            }
+            Action.CREATED_PROJECT -> {
+                activity.activityTitle = createdProject(
+                    activity.creatorName!!, projectName!!
+                )
+            }
+            Action.REPORTED_BUG -> {
+                activity.activityTitle = reportedBug(
+                    activity.creatorName!!, projectName!!
+                )
+            }
+            Action.SET_STATUS -> {
+                activity.activityTitle = setProjectStatus(
+                    activity.creatorName!!, projectName!!, status!!
+                )
+            }
+            Action.UPDATED -> updated(activity.creatorName!!, projectName!!)
+            Action.CREATED_ORGANIZATION -> {
+                activity.activityTitle = createdOrganization(
+                    activity.creatorName!!, organizationName!!
+                )
+            }
+        }
+        activityCollection.add(activity).addOnSuccessListener {
+            isActivityAddedSuccess = true
+            Timber.i("Activity added")
+        }.addOnFailureListener {
+            isActivityAddedSuccess = false
+            Timber.e("cannot add activity: ${it.message.toString()}")
+        }.apply { await() }
+    } catch (e: Exception) {
+        isActivityAddedSuccess = false
+        Timber.e("activity exception ${e.message.toString()}")
+    }
+    return isActivityAddedSuccess
 }
