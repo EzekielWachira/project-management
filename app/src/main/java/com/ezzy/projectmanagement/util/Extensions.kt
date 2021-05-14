@@ -50,20 +50,20 @@ fun String.smartTruncate(length : Int) : String {
 }
 
 
-fun Bitmap.convertToUri(context: Context, bitmap: Bitmap) : Uri {
+fun Bitmap.convertToUri(context: Context) : Uri {
     val bytes = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+    this.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
     val path : String = MediaStore.Images.Media.insertImage(
-        context.contentResolver, bitmap, "photo", null
+        context.contentResolver, this, "photo", null
     )
     return Uri.parse(path)
 }
 
-fun Uri.getNameFromUri(context: Context, uri: Uri) : String {
+fun Uri.getNameFromUri(context: Context) : String {
     var name : String? = null
-    if (uri.scheme.equals("content")) {
+    if (this.scheme.equals("content")) {
         val cursor: Cursor? = context.contentResolver.query(
-            uri, null, null, null, null
+            this, null, null, null, null
         )
         try {
             cursor?.let {
@@ -76,7 +76,7 @@ fun Uri.getNameFromUri(context: Context, uri: Uri) : String {
         }
     }
     if (name == null) {
-        name = uri.path
+        name = this.path
         val cut = name?.lastIndexOf("/")
         if (cut != -1) {
             name = name?.substring(cut!!.plus(1))
@@ -85,8 +85,8 @@ fun Uri.getNameFromUri(context: Context, uri: Uri) : String {
     return name.toString()
 }
 
-fun String.makeLowerCase(s : String) : String{
-    return s.toLowerCase(Locale.getDefault())
+fun String.makeLowerCase() : String{
+    return this.toLowerCase(Locale.getDefault())
 }
 
 fun View.invisible() {

@@ -102,7 +102,7 @@ fun <T> imageResult(
                     if (resultCode == RESULT_OK) {
                         val bitMap = data.extras?.get("data") as Bitmap
                         imageView.setImageBitmap(bitMap)
-                        picImageUri = bitMap.convertToUri(activity, bitMap)
+                        picImageUri = bitMap.convertToUri(activity)
                         Timber.d("PHOTO: $picImageUri")
                     }
                 }

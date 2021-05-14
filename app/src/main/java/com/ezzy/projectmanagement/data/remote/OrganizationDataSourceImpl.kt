@@ -79,12 +79,6 @@ class OrganizationDataSourceImpl @Inject constructor(
                                                                 docReference.id,
                                                                 member.email!!,
                                                             )
-                                                            val activity = saveActivity("")
-                                                            addActivity(
-                                                                activity, Action.CREATED_ORGANIZATION,
-                                                                null, null, organization.name,
-                                                                null
-                                                            )
                                                         }
                                                     }
                                                     Timber.d("SUCCESS")
@@ -93,6 +87,14 @@ class OrganizationDataSourceImpl @Inject constructor(
                                         .addOnFailureListener {
                                             Timber.d("FAILURE")
                                         }
+                                }
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    val activity = saveActivity("")
+                                    addActivity(
+                                        activity, Action.CREATED_ORGANIZATION,
+                                        null, null, organization.name,
+                                        null
+                                    )
                                 }
                                 Timber.d("SUCCESS")
                             }.addOnFailureListener {

@@ -2,8 +2,6 @@ package com.ezzy.core.domain
 
 
 import java.io.Serializable
-import java.sql.Timestamp
-import java.util.*
 
 enum class Action{
     CREATED_PROJECT,
