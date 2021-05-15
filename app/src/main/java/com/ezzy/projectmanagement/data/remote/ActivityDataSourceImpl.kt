@@ -76,7 +76,7 @@ class ActivityDataSourceImpl @Inject constructor(
 //            isActivityAddedSuccess = false
 //            Timber.e("activity exception ${e.message.toString()}")
 //        }
-        return saveActivity<ActivityDataSourceImpl>(
+        return addActivity<ActivityDataSourceImpl>(
             firestore, activity, action, type, status, organizationName, projectName
         )
     }

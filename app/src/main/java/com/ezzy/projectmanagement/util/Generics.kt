@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.ezzy.core.domain.Action
+import com.ezzy.core.domain.User
 import com.ezzy.projectmanagement.util.Constants.ACTIVITY
 import com.ezzy.projectmanagement.util.Constants.CANCEL
 import com.ezzy.projectmanagement.util.Constants.PICK_FROM_GALLERY
@@ -21,6 +22,8 @@ import com.ezzy.projectmanagement.util.Constants.PICK_PHOTO_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.REQUEST_PERMISSION_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_IMAGE_REQUEST_CODE
 import com.ezzy.projectmanagement.util.Constants.TAKE_PHOTO
+import com.ezzy.projectmanagement.util.Constants.USERS
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
@@ -123,7 +126,7 @@ fun <T> imageResult(
     return picImageUri
 }
 
-suspend fun <T> saveActivity(
+suspend fun <T> addActivity(
     fireStore: FirebaseFirestore,
     activity: UserActivity,
     action: Action,
@@ -185,4 +188,29 @@ suspend fun <T> saveActivity(
         Timber.e("activity exception ${e.message.toString()}")
     }
     return isActivityAddedSuccess
+}
+
+suspend fun <T> saveActivity(
+    firebaseAuth: FirebaseAuth,
+    fireStore: FirebaseFirestore,
+    content: String?
+): UserActivity {
+    var activity: UserActivity? = null
+    var creatorImage: String? = null
+    var creatorName: String? = null
+    val creationDate: Long = System.currentTimeMillis()
+    val userCollection = fireStore.collection(USERS)
+    userCollection.whereEqualTo("email", firebaseAuth.currentUser!!.email)
+        .get().addOnSuccessListener {
+            it.documents.forEach { documentSnapshot ->
+                creatorImage = documentSnapshot.getString("imageSrc")
+                creatorName = documentSnapshot.getString("name")
+            }
+        }.addOnFailureListener { Timber.e("error getting user image") }
+        .apply { await() }
+    activity = UserActivity(
+        null, content,
+        creationDate, creatorName, creatorImage
+    )
+    return activity
 }

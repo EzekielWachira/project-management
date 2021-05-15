@@ -12,6 +12,7 @@ import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
 import com.ezzy.projectmanagement.util.Constants.USERS
 import com.ezzy.projectmanagement.util.createdOrganization
 import com.google.firebase.Timestamp
+import com.ezzy.projectmanagement.util.saveActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -27,15 +28,15 @@ class OrganizationDataSourceImpl @Inject constructor(
     val firebaseStorage: FirebaseStorage,
     val saveUserOrganizations: SaveUserOrganizations,
     val firebaseAuth: FirebaseAuth,
-    val addActivity : ActivityUseCase
-) : OrganizationDataSource{
+    val addActivity: ActivityUseCase
+) : OrganizationDataSource {
 
     val organizations = MutableLiveData<List<Organization>>()
     private val userCollection = firestore.collection(USERS)
     private val organizationCollection = firestore.collection(ORGANIZATIONS)
-    private var authenticatedUser : User? = null
+    private var authenticatedUser: User? = null
     private val userOrganizations = mutableSetOf<Organization>()
-    val organizationsId  = mutableListOf<String>()
+    val organizationsId = mutableListOf<String>()
 
     init {
         authenticatedUser = User(
@@ -55,7 +56,8 @@ class OrganizationDataSourceImpl @Inject constructor(
         try {
             var imagePath: String?
             val imgUri = Uri.parse(imageUri.toString())
-            val storageReference = firebaseStorage.reference.child("images/$ORGANIZATIONS/$fileName")
+            val storageReference =
+                firebaseStorage.reference.child("images/$ORGANIZATIONS/$fileName")
             val organizationReference = firestore.collection(ORGANIZATIONS)
 
             storageReference.putFile(imgUri)
@@ -72,7 +74,7 @@ class OrganizationDataSourceImpl @Inject constructor(
                                         .addOnSuccessListener {
                                             userCollection.whereEqualTo("email", member.email)
                                                 .get()
-                                                .addOnSuccessListener {  querySnapshot ->
+                                                .addOnSuccessListener { querySnapshot ->
                                                     querySnapshot.documents.forEach { _ ->
                                                         CoroutineScope(Dispatchers.IO).launch {
                                                             saveUserOrganizations(
@@ -89,12 +91,15 @@ class OrganizationDataSourceImpl @Inject constructor(
                                         }
                                 }
                                 CoroutineScope(Dispatchers.IO).launch {
-                                    val activity = saveActivity("")
-                                    addActivity(
-                                        activity, Action.CREATED_ORGANIZATION,
-                                        null, null, organization.name,
-                                        null
-                                    )
+                                    saveActivity<OrganizationDataSourceImpl>(
+                                        firebaseAuth, firestore, ""
+                                    ).apply {
+                                        addActivity(
+                                            this, Action.CREATED_ORGANIZATION,
+                                            null, null, organization.name,
+                                            null
+                                        )
+                                    }
                                 }
                                 Timber.d("SUCCESS")
                             }.addOnFailureListener {
@@ -109,27 +114,27 @@ class OrganizationDataSourceImpl @Inject constructor(
         }
     }
 
-    private suspend fun saveActivity(
-        content: String?,
-    ) : Activity{
-        var activity : Activity? = null
-        var creatorImage : String? = null
-        var creatorName: String? = null
-        val creationDate: Long = System.currentTimeMillis()
-        userCollection.whereEqualTo("email", firebaseAuth.currentUser!!.email)
-            .get().addOnSuccessListener {
-                it.documents.forEach { documentSnapshot ->
-                    creatorImage = documentSnapshot.getString("imageSrc")
-                    creatorName = documentSnapshot.getString("name")
-                }
-            }.addOnFailureListener { Timber.e("error getting user image") }
-            .apply { await() }
-        activity = Activity(
-            null, content,
-            creationDate, creatorName, creatorImage
-        )
-        return activity
-    }
+//    private suspend fun saveActivity(
+//        content: String?,
+//    ) : Activity{
+//        var activity : Activity? = null
+//        var creatorImage : String? = null
+//        var creatorName: String? = null
+//        val creationDate: Long = System.currentTimeMillis()
+//        userCollection.whereEqualTo("email", firebaseAuth.currentUser!!.email)
+//            .get().addOnSuccessListener {
+//                it.documents.forEach { documentSnapshot ->
+//                    creatorImage = documentSnapshot.getString("imageSrc")
+//                    creatorName = documentSnapshot.getString("name")
+//                }
+//            }.addOnFailureListener { Timber.e("error getting user image") }
+//            .apply { await() }
+//        activity = Activity(
+//            null, content,
+//            creationDate, creatorName, creatorImage
+//        )
+//        return activity
+//    }
 
     override suspend fun retrieveOrganizations(): List<Organization> {
         var orgs = mutableListOf<Organization>()
@@ -157,7 +162,7 @@ class OrganizationDataSourceImpl @Inject constructor(
                     Timber.e("An error occurred!!!!")
                 }.await()
 
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Timber.e("An error occurred!!!!")
         }
         Timber.d("BLUUM: >> $orgs")
@@ -184,7 +189,7 @@ class OrganizationDataSourceImpl @Inject constructor(
                 }.addOnFailureListener {
                     Timber.d(it.message.toString())
                 }.await()
-        } catch ( e : Exception ){
+        } catch (e: Exception) {
             Timber.d(e.message.toString())
         }
         return orgs
@@ -206,7 +211,7 @@ class OrganizationDataSourceImpl @Inject constructor(
                 .collection(MEMBERS)
                 .get()
                 .addOnCompleteListener {
-                    if (it.isSuccessful){
+                    if (it.isSuccessful) {
                         it.result!!.forEach { docSnapshot ->
                             val member = docSnapshot.toObject(User::class.java)
 //                                User(
@@ -219,7 +224,7 @@ class OrganizationDataSourceImpl @Inject constructor(
                 }.addOnFailureListener {
                     Timber.e(it.message.toString())
                 }.await()
-        } catch (e : Exception){
+        } catch (e: Exception) {
             Timber.e(e.message.toString())
         }
         return members.toList()
@@ -233,7 +238,7 @@ class OrganizationDataSourceImpl @Inject constructor(
                 .collection(PROJECT_COLLECTION)
                 .get()
                 .addOnCompleteListener {
-                    if (it.isSuccessful){
+                    if (it.isSuccessful) {
                         it.result!!.forEach { docSnapShot ->
                             val project = docSnapShot.toObject(Project::class.java)
 //                                Project(
@@ -249,7 +254,7 @@ class OrganizationDataSourceImpl @Inject constructor(
                 }.addOnFailureListener {
                     Timber.e("ERROr querying organization projects")
                 }.await()
-        } catch (e : Exception){
+        } catch (e: Exception) {
             Timber.e("Error querying organization projects")
         }
         return projects
@@ -270,7 +275,7 @@ class OrganizationDataSourceImpl @Inject constructor(
                     Timber.e(it.message.toString())
                 }
                 .await()
-        }catch (e : Exception){
+        } catch (e: Exception) {
             Timber.e(e.message.toString())
         }
         return organizationId
@@ -298,8 +303,9 @@ class OrganizationDataSourceImpl @Inject constructor(
                                         organizationCollection.get()
                                             .addOnSuccessListener { querySnapShot ->
                                                 querySnapShot.documents.forEach { documentSnapshot ->
-                                                    if (documentSnapshot.id == orgId){
-                                                        val organization = documentSnapshot.toObject(Organization::class.java)
+                                                    if (documentSnapshot.id == orgId) {
+                                                        val organization =
+                                                            documentSnapshot.toObject(Organization::class.java)
 //                                                            Organization(
 //                                                            documentSnapshot.getString("name"),
 //                                                            documentSnapshot.getString("imageSrc"),
@@ -339,7 +345,7 @@ class OrganizationDataSourceImpl @Inject constructor(
 //                }
 //            }
 
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Timber.e("Error getting logged in user organizations")
         }
 
@@ -377,7 +383,7 @@ class OrganizationDataSourceImpl @Inject constructor(
     }
 
 
-    override suspend fun getOrganizationsIds() : List<String> {
+    override suspend fun getOrganizationsIds(): List<String> {
         try {
             userCollection.whereEqualTo("email", authenticatedUser?.email)
                 .get()
@@ -399,7 +405,7 @@ class OrganizationDataSourceImpl @Inject constructor(
                     }
                 }.addOnFailureListener { Timber.e("Error retrieving organizations ids") }
                 .apply { await() }
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Timber.e(e.message.toString())
         }
         Timber.d("MY IDS: $organizationsId")
