@@ -21,14 +21,14 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
-    private var _binding : FragmentProfileBinding? = null
+    private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
-    private var picImageUri : Uri? = null
+    private var picImageUri: Uri? = null
 
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
-    private val profileViewModel : ProfileViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,19 +51,28 @@ class ProfileFragment : Fragment() {
             startActivity(Intent(activity, SettingsActivity::class.java))
         }
 
-        binding.editImageView.setOnClickListener{
+        binding.editImageView.setOnClickListener {
             requestPermissions()
         }
 
         profileViewModel.user.observe(viewLifecycleOwner) {
-            binding.userImageView.applyImage(it.imageSrc!!)
-            binding.usernameTxt.text = it.name
-            binding.emailTxt.text = it.email
-            if (it.about!!.isNotEmpty()){
-                binding.userAboutTextView.text = it.about
-            } else { binding.userAboutTextView.noText() }
-        }
 
+            if (firebaseAuth.currentUser!!.email!!.isNotEmpty() &&
+                firebaseAuth.currentUser!!.displayName!!.isNotEmpty()
+            ) {
+                binding.usernameTxt.text = firebaseAuth.currentUser!!.displayName
+                binding.emailTxt.text = firebaseAuth.currentUser!!.email
+            } else {
+                binding.userImageView.applyImage(it.imageSrc!!)
+                binding.usernameTxt.text = it.name
+                binding.emailTxt.text = it.email
+                if (it.about!!.isNotEmpty()) {
+                    binding.userAboutTextView.text = it.about
+                } else {
+                    binding.userAboutTextView.noText()
+                }
+            }
+        }
 
         return binding.root
     }
@@ -93,7 +102,7 @@ class ProfileFragment : Fragment() {
 
     private fun requestPermissions() {
         activity?.let {
-            if (requestPermission<ProfileFragment>(it)){
+            if (requestPermission<ProfileFragment>(it)) {
                 selectImage()
             }
         }

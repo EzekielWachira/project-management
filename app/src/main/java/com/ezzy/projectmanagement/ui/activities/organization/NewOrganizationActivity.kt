@@ -213,7 +213,7 @@ class NewOrganizationActivity : AppCompatActivity() {
                     orgViewModel.addOrg(
                         organization,
                         members,
-                        imageUri.getNameFromUri(this, imageUri),
+                        imageUri.getNameFromUri(this),
                         imageUri
                     )
                 }

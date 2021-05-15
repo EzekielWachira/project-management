@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun createLoginUi () {
-        val providers = arrayListOf<AuthUI.IdpConfig>(
+        val providers = arrayListOf(
             AuthUI.IdpConfig.GoogleBuilder().build(),
             AuthUI.IdpConfig.PhoneBuilder().build(),
             AuthUI.IdpConfig.EmailBuilder().build()
@@ -63,6 +63,7 @@ class LoginActivity : AppCompatActivity() {
                         putExtra("user", user)
                     }
                 )
+                finish()
             } else {
                 if (response == null){
                     finish()
