@@ -1,15 +1,19 @@
 package com.ezzy.projectmanagement.data.remote
 
 import com.ezzy.core.data.ProjectDataSource
+import com.ezzy.core.domain.Action
 import com.ezzy.core.domain.Organization
 import com.ezzy.core.domain.Project
 import com.ezzy.core.domain.User
+import com.ezzy.core.interactors.ActivityUseCase
 import com.ezzy.core.interactors.SaveUserProjects
 import com.ezzy.projectmanagement.util.Constants
 import com.ezzy.projectmanagement.util.Constants.MEMBERS
 import com.ezzy.projectmanagement.util.Constants.PROJECT_COLLECTION
 import com.ezzy.projectmanagement.util.Constants.USERS
 import com.ezzy.projectmanagement.util.Constants.ORGANIZATIONS
+import com.ezzy.projectmanagement.util.addActivity
+import com.ezzy.projectmanagement.util.saveActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
@@ -23,7 +27,8 @@ import javax.inject.Inject
 class ProjectDataSourceImpl @Inject constructor(
     val firestore: FirebaseFirestore,
     val saveUserProjects: SaveUserProjects,
-    firebaseAuth: FirebaseAuth
+    val firebaseAuth: FirebaseAuth,
+    val addActivity : ActivityUseCase
 ) : ProjectDataSource {
 
     private val userCollection = firestore.collection(USERS)
@@ -95,6 +100,17 @@ class ProjectDataSourceImpl @Inject constructor(
                     }
                     .await()
 
+            }
+            CoroutineScope(Dispatchers.IO).launch {
+                saveActivity<ProjectDataSourceImpl>(
+                    firebaseAuth, firestore, ""
+                ).apply {
+                    addActivity(
+                        this, Action.CREATED_PROJECT,
+                        null, null, null,
+                        project.projectTitle
+                    )
+                }
             }
         } catch (e : Exception) {
             Timber.e("CATCHED EXCEPTION: ${e.message.toString()}")
