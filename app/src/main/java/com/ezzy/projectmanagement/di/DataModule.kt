@@ -40,9 +40,15 @@ object DataModule {
     fun provideProjectRepository(
         fireStore: FirebaseFirestore,
         saveUserProjects: SaveUserProjects,
-        firebaseAuth: FirebaseAuth
+        firebaseAuth: FirebaseAuth,
+        addActivity: ActivityUseCase
     ) = ProjectRepository(
-        ProjectDataSourceImpl(fireStore, saveUserProjects, firebaseAuth)
+        ProjectDataSourceImpl(
+            fireStore,
+            saveUserProjects,
+            firebaseAuth,
+            addActivity
+        )
     )
 
     @Provides
