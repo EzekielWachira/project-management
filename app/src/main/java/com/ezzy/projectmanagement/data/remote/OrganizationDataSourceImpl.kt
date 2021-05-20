@@ -39,10 +39,11 @@ class OrganizationDataSourceImpl @Inject constructor(
     val organizationsId = mutableListOf<String>()
 
     init {
-        authenticatedUser = User(
-            firebaseAuth.currentUser!!.displayName,
-            firebaseAuth.currentUser!!.email
-        )
+        firebaseAuth.currentUser?.let {
+            authenticatedUser = User(
+                it.displayName, it.email
+            )
+        }
 
         Timber.d("AUTHENTICATED USER: $authenticatedUser")
     }

@@ -32,10 +32,11 @@ class ProjectDataSourceImpl @Inject constructor(
     private var authenticatedUser: User? = null
 
     init {
-        authenticatedUser = User(
-            firebaseAuth.currentUser!!.displayName,
-            firebaseAuth.currentUser!!.email
-        )
+        firebaseAuth.currentUser?.let {
+            authenticatedUser = User(
+                it.displayName, it.email
+            )
+        }
     }
 
     override suspend fun add(
