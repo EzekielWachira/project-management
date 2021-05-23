@@ -49,7 +49,7 @@ class OrganizationsActivity : AppCompatActivity() {
         organizationViewModel.getOrgsIds()
         setUpRecyclerView()
 
-        organizationViewModel.getAllOrganizations()
+//        organizationViewModel.getAllOrganizations()
         organizationViewModel.getUserOrgs()
 
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
