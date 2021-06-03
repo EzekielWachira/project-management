@@ -20,7 +20,7 @@
 
         <menu>
             <item android:id="@+id/actionNewOrg"
-                android:icon="@drawable/ic_business"
+                android:icon="@drawable/ic_building"
                 android:iconTint="@color/lightestGrey"
                 android:title="@string/new_organization"
                 app:showAsAction="never"/>
@@ -28,18 +28,18 @@
 
             <item android:id="@+id/actionChatroom"
                 android:title="@string/chatroom"
-                android:icon="@drawable/ic_chat"
+                android:icon="@drawable/ic_conversation"
                 android:iconTint="@color/lightestGrey"
                 app:showAsAction="never">
 
                 <menu>
                     <item
                         android:title="@string/new_chatroom"
-                        android:icon="@drawable/ic_chat"
+                        android:icon="@drawable/ic_comment"
                         app:showAsAction="never"
                         android:id="@+id/actionNewChatroom"/>
                     <item android:title="@string/your_chatrooms"
-                        android:icon="@drawable/ic_chat_unread"
+                        android:icon="@drawable/ic_conversation"
                         app:showAsAction="never"
                         android:id="@+id/actionYourChatroom"/>
                 </menu>
@@ -47,7 +47,7 @@
             </item>
 
             <item android:id="@+id/actionOrganization"
-                android:icon="@drawable/ic_house"
+                android:icon="@drawable/ic_building"
                 android:iconTint="@color/lightestGrey"
                 android:title="@string/your_organizations"
                 app:showAsAction="never"/>
@@ -56,7 +56,7 @@
                 android:title="@string/logout"
                 android:iconTint="@color/lightestGrey"
                 app:showAsAction="never"
-                android:icon="@drawable/ic_login"/>
+                android:icon="@drawable/ic_logout_"/>
         </menu>
 
     </item>
