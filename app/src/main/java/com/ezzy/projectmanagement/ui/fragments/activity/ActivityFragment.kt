@@ -50,6 +50,11 @@ class ActivityFragment : Fragment() {
             }
         }
 
+        activityViewModel.areActivitiesLoading.observe(viewLifecycleOwner) {
+            if (it) binding.activitiesProgressBar.visible()
+            else { binding.activitiesProgressBar.invisible() }
+        }
+
         return binding.root
     }
 

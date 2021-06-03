@@ -283,19 +283,19 @@ class OrganizationDataSourceImpl @Inject constructor(
         return organizationId
     }
 
-    var myorgs = setOf<Organization>()
+    private var myorgs = setOf<Organization>()
+    var theOrgs = setOf<Organization>()
     override suspend fun getUserOrganizations(): Set<Organization> {
         var organizations = setOf<Organization>()
         CoroutineScope(Dispatchers.IO).launch {
-            organizations = getUserDetails()
-//            Timber.d("USERORGS: $organizations")
+            theOrgs = getUserDetails()
         }
 
-        return myorgs
+        return theOrgs
     }
 
-    private suspend fun getUserDetails() : Set<Organization> {
-        var organizations = setOf<Organization>()
+    var orgs = setOf<Organization>()
+    private suspend fun getUserDetails(): Set<Organization> {
         var snapshotId: String? = null
         userCollection.whereEqualTo("email", authenticatedUser?.email)
             .get()
@@ -304,20 +304,15 @@ class OrganizationDataSourceImpl @Inject constructor(
                     snapshotId = documentSnapshot.id
                 }
                 CoroutineScope(Dispatchers.IO).launch {
-                    organizations = getOrganizationsIds(snapshotId!!)
+                    orgs = getOrganizationsIds(snapshotId!!)
                 }
             }.addOnFailureListener { Timber.e("error getting user details") }
             .apply { await() }
-        return organizations
+        return orgs
     }
 
-    private fun printOrganizations(organizations : Set<Organization>) : List<Organization>{
-        myorgs = organizations
-        return organizations.toList()
-    }
-
-    suspend fun getOrganizationsIds(documentId: String) : Set<Organization> {
-        val organizationsIds = mutableListOf<String>()
+    val organizationsIds = mutableListOf<String>()
+    suspend fun getOrganizationsIds(documentId: String): Set<Organization> {
         var organizations = setOf<Organization>()
         userCollection.document(documentId)
             .collection(ORGANIZATIONS)
@@ -331,18 +326,18 @@ class OrganizationDataSourceImpl @Inject constructor(
                 if (organizationsIds.isNotEmpty()) {
                     CoroutineScope(Dispatchers.IO).launch {
                         organizations = getTheOrganizations(organizationsIds)
-                        printOrganizations(organizations)
+                        myorgs = organizations
                     }
 
                 }
             }.addOnFailureListener { Timber.e("Error getting organizations id") }
             .await()
-        return organizations
+        return myorgs
     }
 
     private suspend fun getTheOrganizations(
-        organizationIds : List<String>
-    ) : Set<Organization> {
+        organizationIds: List<String>
+    ): Set<Organization> {
         val organizations = mutableSetOf<Organization>()
         try {
             organizationIds.forEach { orgId ->
@@ -358,7 +353,7 @@ class OrganizationDataSourceImpl @Inject constructor(
                     }.addOnFailureListener { Timber.e("Error getting organizations") }
                     .apply { await() }
             }
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Timber.e(e.message.toString())
         }
         return organizations
@@ -464,7 +459,7 @@ class OrganizationDataSourceImpl @Inject constructor(
 //
 //    }
 
-    private suspend fun getOrgsIds(snapshotId : String) : List<String> {
+    private suspend fun getOrgsIds(snapshotId: String): List<String> {
         val ids = mutableListOf<String>()
         try {
             userCollection.document(snapshotId)
@@ -476,12 +471,14 @@ class OrganizationDataSourceImpl @Inject constructor(
                     }
                 }.addOnFailureListener { Timber.e(it.message.toString()) }
                 .apply { await() }
-        }catch (e: Exception){Timber.e(e.message.toString())}
+        } catch (e: Exception) {
+            Timber.e(e.message.toString())
+        }
         Timber.i("Sample Ids: $ids")
         return ids
     }
 
-        var ids = listOf<String>()
+    var ids = listOf<String>()
     override suspend fun getOrganizationsIds(): List<String> {
         val sampleIds = mutableListOf<String>()
         var snapshotId: String? = null

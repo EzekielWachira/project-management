@@ -5,10 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.ezzy.projectmanagement.R
 import com.ezzy.projectmanagement.adapters.viewpager.ProjectViewPagerAdapter
 import com.ezzy.projectmanagement.databinding.FragmentProfileBinding
 import com.ezzy.projectmanagement.databinding.FragmentProjectBinding
+import com.ezzy.projectmanagement.ui.activities.organization.viewmodel.OrganizationViewModel
 import com.ezzy.projectmanagement.util.Constants.TAB_TITLES
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -19,12 +21,15 @@ class ProjectFragment : Fragment() {
 
     private var _binding : FragmentProjectBinding? = null
     private val binding get() = _binding!!
+    private val organizationViewModel : OrganizationViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         _binding = FragmentProjectBinding.inflate(
             inflater, container, false
         )
+
+        organizationViewModel.getOrgsIds()
 
         binding.projectViewPager.apply {
             adapter = ProjectViewPagerAdapter(this@ProjectFragment)

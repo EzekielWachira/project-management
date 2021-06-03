@@ -106,6 +106,13 @@ class OrganizationsActivity : AppCompatActivity() {
         }
     }
 
+//    override fun onResume() {
+//        super.onResume()
+//        organizationViewModel.getUserOrgs()
+//    }
+
+
+
     private fun setUpRecyclerView() {
         organizationsAdapter = CommonRecyclerViewAdapter {
             OrganizationViewHolder(this, it)

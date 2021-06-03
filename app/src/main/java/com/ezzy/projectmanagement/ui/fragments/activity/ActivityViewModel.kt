@@ -22,11 +22,15 @@ class ActivityViewModel @Inject constructor(
     val activities: LiveData<List<Activity>> get() = _activities
     private var _isActivityAddedSuccess = MutableLiveData<Boolean>()
     val isActivityAddedSuccess: LiveData<Boolean> get() = _isActivityAddedSuccess
+    private var _areActivitiesLoading = MutableLiveData<Boolean>()
+    val areActivitiesLoading: LiveData<Boolean> get() = _areActivitiesLoading
 
     fun getActivities() = viewModelScope.launch {
+        _areActivitiesLoading.postValue(true)
         val results = getAllActivities()
         if (results.isNotEmpty()) {
             _activities.postValue(results)
+            _areActivitiesLoading.postValue(false)
         }
     }
 

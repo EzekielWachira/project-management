@@ -5,6 +5,5 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.project.assigned.AssignedFragment">
 
-    <include layout="@layout/practice_layout"/>
 
 </FrameLayout>
