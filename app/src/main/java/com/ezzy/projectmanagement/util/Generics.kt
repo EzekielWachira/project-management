@@ -30,9 +30,7 @@ import timber.log.Timber
 import com.ezzy.core.domain.Activity as UserActivity
 
 fun <T> selectPicture(activity: Activity) {
-    val options = arrayOf(
-        TAKE_PHOTO, PICK_FROM_GALLERY, CANCEL
-    )
+    val options = arrayOf( TAKE_PHOTO, PICK_FROM_GALLERY, CANCEL )
     val builder = AlertDialog.Builder(activity)
     builder.apply {
         setTitle(Constants.CHOOSE_IMAGE)
