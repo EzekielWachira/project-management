@@ -73,7 +73,7 @@ class UpdateProfileDialog : DialogFragment() {
                         aboutEditText.text.toString()
                     )
                     profileViewModel.saveUserImg(imageUri, imageUri.getNameFromUri(
-                        it.applicationContext, imageUri
+                        it.applicationContext
                     ), user)
                 }
             }
@@ -82,8 +82,12 @@ class UpdateProfileDialog : DialogFragment() {
         }
 
         profileViewModel.user.observe(this) {
-            aboutEditText.setText(it.about)
-            userImageView.applyImage(it.imageSrc!!)
+//            if (it.about!!.isNotEmpty() && it.imageSrc!!.isNotEmpty()) {
+//                aboutEditText.setText(it.about)
+//                userImageView.applyImage(it.imageSrc!!)
+//            }
+            it.about?.let { about -> aboutEditText.setText(about) }
+            it.imageSrc?.let { image -> userImageView.applyImage(image) }
         }
 
         profileViewModel.isUserUpdateSuccess.observe(this) {

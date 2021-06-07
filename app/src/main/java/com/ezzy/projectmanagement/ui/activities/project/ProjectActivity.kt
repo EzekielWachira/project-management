@@ -54,12 +54,12 @@ class ProjectActivity : AppCompatActivity() {
         binding = ActivityProjectBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        NetworkManager.networkStatus.observe(this) {
-            when (it) {
-                CONNECTED -> showSnackBar("Back online", "OK")
-                DISCONNECTED -> showSnackBar("You are offline", "Retry")
-            }
-        }
+//        NetworkManager.networkStatus.observe(this) {
+//            when (it) {
+//                CONNECTED -> showSnackBar("Back online", "OK")
+//                DISCONNECTED -> showSnackBar("You are offline", "Retry")
+//            }
+//        }
 
         if (firebaseAuth.currentUser == null){
             startActivity(

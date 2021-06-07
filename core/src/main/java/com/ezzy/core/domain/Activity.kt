@@ -1,8 +1,7 @@
 package com.ezzy.core.domain
 
 
-import java.sql.Timestamp
-import java.util.*
+import java.io.Serializable
 
 enum class Action{
     CREATED_PROJECT,
@@ -21,4 +20,4 @@ data class Activity(
     val creation_date : Long? = null,
     val creatorName : String? = null,
     var creatorImage: String? = null,
-)
+) : Serializable

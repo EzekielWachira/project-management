@@ -49,7 +49,7 @@ class OrganizationsActivity : AppCompatActivity() {
         organizationViewModel.getOrgsIds()
         setUpRecyclerView()
 
-        organizationViewModel.getAllOrganizations()
+//        organizationViewModel.getAllOrganizations()
         organizationViewModel.getUserOrgs()
 
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
@@ -105,6 +105,13 @@ class OrganizationsActivity : AppCompatActivity() {
             }
         }
     }
+
+//    override fun onResume() {
+//        super.onResume()
+//        organizationViewModel.getUserOrgs()
+//    }
+
+
 
     private fun setUpRecyclerView() {
         organizationsAdapter = CommonRecyclerViewAdapter {

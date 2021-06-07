@@ -21,12 +21,13 @@ class LoginActivity : AppCompatActivity() {
 
     @Inject
     lateinit var authUI: AuthUI
+
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
 //    @Inject
 //    lateinit var authUser: FirebaseUser
 
-    private lateinit var loginActivityBinding : ActivityLoginBinding
+    private lateinit var loginActivityBinding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +36,8 @@ class LoginActivity : AppCompatActivity() {
         createLoginUi()
     }
 
-    fun createLoginUi () {
-        val providers = arrayListOf<AuthUI.IdpConfig>(
+    fun createLoginUi() {
+        val providers = arrayListOf(
             AuthUI.IdpConfig.GoogleBuilder().build(),
             AuthUI.IdpConfig.PhoneBuilder().build(),
             AuthUI.IdpConfig.EmailBuilder().build()
@@ -49,28 +50,31 @@ class LoginActivity : AppCompatActivity() {
                 .setTheme(R.style.Theme_ProjectManagement)
                 .build(),
             SIGN_IN_REQUEST_CODE
-        )
+        ).also { finish() }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK){
+        if (requestCode == SIGN_IN_REQUEST_CODE) {
             val response = IdpResponse.fromResultIntent(data)
             if (resultCode == RESULT_OK) {
                 val user = firebaseAuth.currentUser
                 startActivity(
                     Intent(this, ProjectActivity::class.java).apply {
                         putExtra("user", user)
-                    }
+                    }.apply {
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    }.also { finish() }
                 )
             } else {
-                if (response == null){
+                if (response == null) {
                     finish()
                 }
-                if (response?.error?.errorCode == ErrorCodes.NO_NETWORK){
+                if (response?.error?.errorCode == ErrorCodes.NO_NETWORK) {
                     return
                 }
-                if (response?.error?.errorCode == ErrorCodes.UNKNOWN_ERROR){
+                if (response?.error?.errorCode == ErrorCodes.UNKNOWN_ERROR) {
                     makeToast(response?.error?.errorCode.toString())
                     return
                 }
@@ -78,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun makeToast(message : String){
+    private fun makeToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

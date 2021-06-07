@@ -26,58 +26,59 @@ class ActivityDataSourceImpl @Inject constructor(
         organizationName: String?,
         projectName: String?
     ): Boolean {
-        var isActivityAddedSuccess = false
-        try {
-            when (action) {
-                Action.ADDED_ISSUE -> {
-                    activity.activityTitle = addedIssue(
-                        activity.creatorName!!, projectName!!
-                    )
-                }
-                Action.ADDED_TASK -> {
-                    activity.activityTitle = addedTask(
-                        activity.creatorName!!, projectName!!
-                    )
-                }
-                Action.COMMENTED -> {
-                    activity.activityTitle = commented(
-                        activity.creatorName!!, type!!
-                    )
-                }
-                Action.CREATED_PROJECT -> {
-                    activity.activityTitle = createdProject(
-                        activity.creatorName!!, projectName!!
-                    )
-                }
-                Action.REPORTED_BUG -> {
-                    activity.activityTitle = reportedBug(
-                        activity.creatorName!!, projectName!!
-                    )
-                }
-                Action.SET_STATUS -> {
-                    activity.activityTitle = setProjectStatus(
-                        activity.creatorName!!, projectName!!, status!!
-                    )
-                }
-                Action.UPDATED -> updated(activity.creatorName!!, projectName!!)
-                Action.CREATED_ORGANIZATION -> {
-                    activity.activityTitle = createdOrganization(
-                        activity.creatorName!!, organizationName!!
-                    )
-                }
-            }
-            activityCollection.add(activity).addOnSuccessListener {
-                isActivityAddedSuccess = true
-                Timber.i("Activity added")
-            }.addOnFailureListener {
-                isActivityAddedSuccess = false
-                Timber.e("cannot add activity: ${it.message.toString()}")
-            }.apply { await() }
-        } catch (e: Exception) {
-            isActivityAddedSuccess = false
-            Timber.e("activity exception ${e.message.toString()}")
-        }
-        return isActivityAddedSuccess
+        //        try {
+//            when (action) {
+//                Action.ADDED_ISSUE -> {
+//                    activity.activityTitle = addedIssue(
+//                        activity.creatorName!!, projectName!!
+//                    )
+//                }
+//                Action.ADDED_TASK -> {
+//                    activity.activityTitle = addedTask(
+//                        activity.creatorName!!, projectName!!
+//                    )
+//                }
+//                Action.COMMENTED -> {
+//                    activity.activityTitle = commented(
+//                        activity.creatorName!!, type!!
+//                    )
+//                }
+//                Action.CREATED_PROJECT -> {
+//                    activity.activityTitle = createdProject(
+//                        activity.creatorName!!, projectName!!
+//                    )
+//                }
+//                Action.REPORTED_BUG -> {
+//                    activity.activityTitle = reportedBug(
+//                        activity.creatorName!!, projectName!!
+//                    )
+//                }
+//                Action.SET_STATUS -> {
+//                    activity.activityTitle = setProjectStatus(
+//                        activity.creatorName!!, projectName!!, status!!
+//                    )
+//                }
+//                Action.UPDATED -> updated(activity.creatorName!!, projectName!!)
+//                Action.CREATED_ORGANIZATION -> {
+//                    activity.activityTitle = createdOrganization(
+//                        activity.creatorName!!, organizationName!!
+//                    )
+//                }
+//            }
+//            activityCollection.add(activity).addOnSuccessListener {
+//                isActivityAddedSuccess = true
+//                Timber.i("Activity added")
+//            }.addOnFailureListener {
+//                isActivityAddedSuccess = false
+//                Timber.e("cannot add activity: ${it.message.toString()}")
+//            }.apply { await() }
+//        } catch (e: Exception) {
+//            isActivityAddedSuccess = false
+//            Timber.e("activity exception ${e.message.toString()}")
+//        }
+        return addActivity<ActivityDataSourceImpl>(
+            firestore, activity, action, type, status, organizationName, projectName
+        )
     }
 
     override suspend fun getActivities(): List<Activity> {

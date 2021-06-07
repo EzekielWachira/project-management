@@ -20,7 +20,8 @@ class ActivityViewHolder(
 
     override fun bindItem(item: Activity?) {
         item?.let {
-            creatorImageView.applyImage(it.creatorImage!!)
+            it.creatorImage?.let { image -> creatorImageView.applyImage(image) }
+//            creatorImageView.applyImage(it.creatorImage!!)
             activityTitle.text = it.activityTitle
             activityDate.text = it.creation_date?.formatTimeToDate()
             if (it.content!!.isNotEmpty()){
