@@ -2,8 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
+      <module name="project-management.buildSrc" target="11" />
       <module name="Project_Management.app" target="11" />
-      <module name="ProjectManagement.buildSrc" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
